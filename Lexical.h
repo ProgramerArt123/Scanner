@@ -12,7 +12,7 @@ public:
 	void SetContent(const std::string content);
 	const std::string &GetContent() const;
 	void SetParent(const Lexical *parent);
-	void ForeachTopLeftRigth(const Content &content);
+	void ForeachTopLeftRigth( Content &content);
 	uint64_t GetLineNO() const;
 	uint64_t GetColNO() const;
 	bool IsRoot() const;

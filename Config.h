@@ -10,7 +10,7 @@
 
 class Content;
 class Lexical;
-typedef void(*action)(const Lexical &lexical, const Content &content);
+typedef void(*action)(const Lexical &lexical,  Content &content);
 class Config {
 public:
 	explicit Config(const std::string fileName);
@@ -21,7 +21,7 @@ public:
 	Rule &GetRule(const std::string name);
 	void BindActionFunction(const std::string name, action func);	
 	
-	bool TryExecuteAction(const std::string name, const Lexical &lexical, const Content &content) const;
+	bool TryExecuteAction(const std::string name, const Lexical &lexical,  Content &content) const;
 	
 	uint64_t GetFlag() const;
 	
@@ -34,10 +34,10 @@ public:
 private:
 	
 	bool IsActionBind(const std::string name) const;
-	void ExecuteAction(const std::string name, const Lexical &lexical, const Content &content) const;
+	void ExecuteAction(const std::string name, const Lexical &lexical,  Content &content) const;
 	const std::string m_file_name;
 	std::map<std::string, std::unique_ptr<Rule>> m_rules;
-	std::map<std::string, std::function<void(const Lexical &, const Content &)>> m_actions;
+	std::map<std::string, std::function<void(const Lexical &,  Content &)>> m_actions;
 	uint64_t m_flag = 0;
 };
 

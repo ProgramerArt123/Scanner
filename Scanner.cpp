@@ -5,7 +5,7 @@
 #include "Config.h"
 #include "Content.h"
 
-void ProcDef(const Lexical &lexical, const Content &content) {
+void ProcDef(const Lexical &lexical,  Content &content) {
 	std::cout << "ProcDef:" << lexical.GetContent() << std::endl;
 }
 
