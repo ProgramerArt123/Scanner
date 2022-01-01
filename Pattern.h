@@ -54,7 +54,7 @@ public:
 	void MarkContent(const std::vector<char> &literal, size_t end);
 	void SetAction(const std::string action);
 	virtual const std::string ToString() const;
-	const std::string TimesToString() const;	
+	const std::string TimesToString(uint64_t minTimes, uint64_t maxTimes) const;	
 	void ForeachCheckDuplicate(const Pattern &other) const;
 	Rule &GetRule()const;
 	void BestMatchTracePrint() const;

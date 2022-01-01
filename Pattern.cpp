@@ -44,10 +44,12 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 		std::stringstream trace;
 		GetTraceInfo(trace);
 		if (times > minTimes) {
-			std::cout << "Match "  << "times:" << times - 1 << "," << *this << "===" << content.GetMemInfo(memento) << trace.str() << std::endl;
+			std::cout << "Match "  << "times:" << times - 1 << "," << *this << TimesToString(minTimes, maxTimes) <<
+				"===" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 		else {
-			std::cout << "UnMatch " << "times:" << times - 1 <<  "," << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
+			std::cout << "UnMatch " << "times:" << times - 1 <<  "," << *this << TimesToString(minTimes, maxTimes)  << 
+				"***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
 #endif
@@ -221,12 +223,12 @@ void Pattern::SetAction(const std::string action) {
 	"\tpattern" << m_flag << "->SetAction(\"" << action << "\");" << std::endl;
 }
 const std::string Pattern::ToString() const {
-	return '(' + m_content + ')' + TimesToString();
+	return '(' + m_content + ')';
 }
 
-const std::string Pattern::TimesToString() const {
-	return "{" + std::to_string(0) + 
-		"," + std::to_string(0) + "}";
+const std::string Pattern::TimesToString(uint64_t minTimes, uint64_t maxTimes) const {
+	return "{" + std::to_string(minTimes) + 
+		"," + std::to_string(maxTimes) + "}";
 }
 
 void Pattern::ForeachCheckDuplicate(const Pattern &other) const {

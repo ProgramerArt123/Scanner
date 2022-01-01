@@ -114,7 +114,7 @@ bool CharPattern::IsInRange(char from, char to, char c) const {
 	}
 }
 const std::string CharPattern::ToString() const {
-	return '\'' + m_content + '\'' + TimesToString();
+	return '\'' + m_content + '\'';
 }
 
 void CharPattern::CheckMultiValueRange(char pattern, bool isEscape) const {
