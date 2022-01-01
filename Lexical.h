@@ -17,6 +17,7 @@ public:
 	uint64_t GetLineNO() const;
 	uint64_t GetColNO() const;
 	bool IsRoot() const;
+	const Pattern &GetPattern() const;
 	size_t GetChildrenCount() const;
 	size_t GetBrotherCount() const;
 	const std::shared_ptr<Lexical> &GetChild(size_t index) const;

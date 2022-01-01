@@ -48,6 +48,9 @@ void Lexical::SetParent(const Lexical *parent) {
 bool Lexical::IsRoot() const {
 	return NULL == m_parent;
 }
+const Pattern &Lexical::GetPattern() const {
+	return *m_pattern;
+}
 size_t Lexical::GetChildrenCount() const {
 	return m_children.size();
 }

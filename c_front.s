@@ -188,7 +188,7 @@ return_s:@return@(@segmentation@@expression@)?
 
 goto:goto@label@
 
-proc_call:@variable@@round_left@@arguments@?@round_right@
+proc_call:(@variable@@round_left@@arguments@?@round_right@)#ProcCall#
 
 
 

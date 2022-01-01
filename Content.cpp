@@ -34,7 +34,7 @@ size_t Content::CursorsMemento::GetRealEndCursor() {
 	return m_real_end_cursor;
 }
 Content::Content(const std::string fileName, const Config &config):
-	m_file_name(fileName), m_config(config),m_lexical(new Lexical(0,0)){
+	m_file_name(fileName), m_config(config),m_lexical(new Lexical(0, 0)){
 }
 Content::~Content() {
 	
