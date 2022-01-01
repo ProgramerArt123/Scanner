@@ -30,6 +30,9 @@ size_t Content::CursorsMemento::GetCursor() {
 Content::Content(const std::string fileName, const Config &config):
 	m_file_name(fileName), m_config(config),m_lexical(new Lexical(0,0)){
 }
+Content::~Content() {
+	
+}
 void Content::Load() {
 	std::ifstream file(m_file_name);
 	if (!file.is_open()) {
@@ -141,5 +144,5 @@ const std::string Content::GetContent(size_t from, size_t to) const {
 	return content;
 }
 void Content::ForeachLexical() {
-	m_lexical->ForeachTopLeftRigth();
+	m_lexical->ForeachTopLeftRigth(*this);
 }

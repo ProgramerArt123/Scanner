@@ -19,12 +19,12 @@ void Lexical::SetContent(const std::string content) {
 const std::string &Lexical::GetContent() const {
 	return m_content;
 }
-void Lexical::ForeachTopLeftRigth() {
+void Lexical::ForeachTopLeftRigth(const Content &content) {
 	if (m_pattern) {
-		m_pattern->TryCommandAction(*this);
+		m_pattern->TryCommandAction(*this, content);
 	}
 	for (auto child : m_children) {
-		child->ForeachTopLeftRigth();
+		child->ForeachTopLeftRigth(content);
 	}
 }
 

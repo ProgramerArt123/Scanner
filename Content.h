@@ -24,6 +24,7 @@ public:
 		size_t m_line_NO = 1;
 	};
 	explicit Content(const std::string fileName, const Config &config);
+	virtual ~Content();
 	void Load();
 	void Parse();
 	char GetChar();

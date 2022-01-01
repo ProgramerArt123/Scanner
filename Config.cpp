@@ -90,10 +90,10 @@ void Config::BindActionFunction(const std::string name, action func) {
 	m_actions[name] = func;
 }
 
-bool Config::TryExecuteAction(const std::string name, const Lexical &lexical) const {
+bool Config::TryExecuteAction(const std::string name, const Lexical &lexical, const Content &content) const {
 	bool isActionBind = IsActionBind(name);
 	if (isActionBind) {
-		ExecuteAction(name, lexical);
+		ExecuteAction(name, lexical, content);
 	}
 	return isActionBind;
 }
@@ -101,8 +101,8 @@ bool Config::TryExecuteAction(const std::string name, const Lexical &lexical) co
 bool Config::IsActionBind(const std::string name) const {
 	return m_actions.find(name) != m_actions.end();
 }
-void Config::ExecuteAction(const std::string name, const Lexical &lexical) const {
-	m_actions.at(name)(lexical);
+void Config::ExecuteAction(const std::string name, const Lexical &lexical, const Content &content) const {
+	m_actions.at(name)(lexical, content);
 }
 
 uint64_t Config::GetFlag() const {

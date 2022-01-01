@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 class Pattern;
+class Content;
 class Lexical {
 public:
 	explicit Lexical(uint64_t lineNO, uint64_t colNO, const Pattern *pattern = NULL);
@@ -11,7 +12,7 @@ public:
 	void SetContent(const std::string content);
 	const std::string &GetContent() const;
 	void SetParent(const Lexical *parent);
-	void ForeachTopLeftRigth();
+	void ForeachTopLeftRigth(const Content &content);
 	uint64_t GetLineNO() const;
 	uint64_t GetColNO() const;
 	bool IsRoot() const;
