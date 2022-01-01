@@ -24,7 +24,7 @@ enum PATTERN_TYPE {
 };
 class Pattern {
 public:
-	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_AND);
+	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_NONE);
 	virtual ~Pattern();
 	MATCH_RESULT IsMatch(Content &content, Lexical &parent);
 	virtual bool IsMatchOnce(Content &content, Lexical &parent)const;
@@ -60,6 +60,7 @@ public:
 	size_t GetMementoCursor()const;
 	const std::string &GetActionName()const;
 	void TryCommandAction(const Lexical &lexical)const;
+	uint64_t GetFlag();
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
@@ -76,6 +77,7 @@ protected:
 	std::shared_ptr<Pattern> m_next;
 	PATTERN_TYPE m_type = PATTERN_TYPE_AND;
 	size_t m_memento_cursor = UINT64_MAX;
+	uint64_t m_flag = 0;
 private:
 	bool m_is_closed_loop = false;
 };

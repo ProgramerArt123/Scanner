@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Pattern.h"
 #include "Content.h"
+#include "CodeGenerate.h"
 #include "Config.h"
 
 Config::Config(const std::string fileName):
@@ -40,6 +41,7 @@ void Config::Parse() {
 		rule.second->Parse();
 	}
 	
+	CodeGenerate::GetInstance().MarkGenerate();
 }
 
 void Config::CheckDuplicate() {

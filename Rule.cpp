@@ -2,6 +2,7 @@
 #include "CharPattern.h"
 #include "StringPattern.h"
 #include "OrPattern.h"
+#include "AndPattern.h"
 #include "Config.h"
 #include "Content.h"
 #include "Rule.h"
@@ -23,7 +24,7 @@
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_config(config),m_name(name),
 	m_literal(literal.begin(), literal.end()),
-	m_pattern(new Pattern(*this, lineNO, 0)),
+	m_pattern(new AndPattern(*this, lineNO, 0)),
 	m_line_NO(lineNO){
 }
 
@@ -133,7 +134,7 @@ void Rule::LabelParse(Pattern &parent) {
 	throw std::string("Config Format Error, LABEL!");
 }
 void Rule::RoundParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new Pattern(*this, m_line_NO, m_index));
+	std::shared_ptr<Pattern> pattern(new AndPattern(*this, m_line_NO, m_index));
 	parent.AddChild(pattern);
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);

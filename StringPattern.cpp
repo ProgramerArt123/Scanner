@@ -1,10 +1,15 @@
 #include <string.h>
 #include <iostream>
 #include "Content.h"
+#include "CodeGenerate.h"
 #include "StringPattern.h"
 
 StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern): 
-	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {}
+	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {
+		std::cout << "std::shared_ptr<Pattern> pattern" << m_flag << "(new StringPattern(rule, " << lineNO << ", " << colNO << ", " << pattern << "));" << std::endl;
+		CodeGenerate::GetInstance().GetStream() <<
+		"std::shared_ptr<Pattern> pattern" << m_flag << "(new StringPattern(rule, " << lineNO << ", " << colNO << ", " << pattern << "));" << std::endl;
+	}
 StringPattern::~StringPattern() {}
 
 bool StringPattern::IsMatchOnce(Content &content, Lexical &parent) const {

@@ -1,9 +1,14 @@
 #include <iostream>
 #include "Content.h"
+#include "CodeGenerate.h"
 #include "OrPattern.h"
 OrPattern::OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
 	Pattern(rule, lineNO, colNO, PATTERN_TYPE_OR){
-	
+		std::cout << "std::shared_ptr<Pattern> pattern" << m_flag << "(new OrPattern(rule, " << lineNO << ", " << colNO << "));"
+			<< std::endl;
+		CodeGenerate::GetInstance().GetStream() <<
+		"std::shared_ptr<Pattern> pattern" << m_flag << "(new OrPattern(rule, " << lineNO << ", " << colNO << "));"
+		<< std::endl;
 }
 OrPattern::~OrPattern() {}
 	

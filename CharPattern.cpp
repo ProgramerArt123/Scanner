@@ -1,6 +1,7 @@
 #include <string.h>
 #include <iostream>
 #include "Content.h"
+#include "CodeGenerate.h"
 #include "CharPattern.h"
 
 #define NUMBER 'd'
@@ -39,6 +40,11 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 			}
 			m_to_pattern = m_from_pattern;
 		}
+		std::cout << "std::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
+		<< std::endl;
+		CodeGenerate::GetInstance().GetStream() <<
+		"std::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
+		<< std::endl;
 }
 CharPattern::~CharPattern() {}
 

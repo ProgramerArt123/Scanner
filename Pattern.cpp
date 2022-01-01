@@ -6,10 +6,13 @@
 #include "Config.h"
 #include "Rule.h"
 #include "Lexical.h"
+#include "CodeGenerate.h"
 #include "Pattern.h"
 
 Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type):
 	m_rule(rule),m_line_NO(lineNO), m_col_NO(colNO), m_type(type){
+		static uint64_t flag = 0;
+		m_flag = flag++;
 }
 Pattern::~Pattern() {
 	
@@ -92,6 +95,9 @@ void Pattern::AddChild(std::shared_ptr<Pattern> child) {
 	if (last && last->IsShortest()) {
 		last->m_next = child;
 	}
+	std::cout << "pattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");" << std::endl;
+	CodeGenerate::GetInstance().GetStream() <<
+	"pattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");"<< std::endl;
 }
 
 void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
@@ -299,4 +305,8 @@ void Pattern::TryCommandAction(const Lexical &lexical)const {
 			std::cout << "Warn:" << m_action << " un bind!" << std::endl;
 		}
 	}
+}
+
+uint64_t Pattern::GetFlag() {
+	return m_flag;
 }
