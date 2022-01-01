@@ -17,25 +17,41 @@ element:[("("@expression@")")@proc_call@@string@@variable@@numeric@@integer@@add
 
 sizeof:[(sizeof"("@expression@")")(sizeof@element@)]
 
-oper_two:[","@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
+oper_two:[","
+@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@
+@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@
+@oper_add_sub@@oper_mul_div@]
 
 oper_comma:","
+
 oper_assgin:["=""+=""-=""*=""/=""%=""&=""^=""|=""<<="">>="]
+
 oper_logic_or:"||"
+
 oper_logic_and:"&&"
+
 oper_bit_or:"|"
+
 oper_bit_xor:"^"
+
 oper_bit_and:"&"
+
 oper_equal:["==""!="]
+
 oper_rela:["<""<="">"">="]
+
 oper_mov:["<<"">>"]
+
 oper_add_sub:["+""-"]
+
 oper_mul_div:["*""/""%"]
 
 oper_one:["-""++""--""!""~""+""-""*""&"]
+
 type_cast:"("@label@")"
 
 oper_suffix:[".""->"]
+
 round:"("@expression@")"
 
 label:[_a-zA-Z][_a-zA-Z0-9]*
@@ -84,7 +100,8 @@ const_register_volatile<:[(@const@@segmentation@@register_volatile@)(@register_v
 
 const_register_volatile_type<:[(@const_register_volatile@@segmentation@@type@)(@type@@segmentation@@const_register_volatile@)]
 
-arbitrarily_type<:[@const_register_volatile_type@@extern_static_register_volatile_type@@extern_static_const_type@@register_volatile_type@@extern_static_type@@const_type@@type@]
+arbitrarily_type<:[@const_register_volatile_type@@extern_static_register_volatile_type@
+@extern_static_const_type@@register_volatile_type@@extern_static_type@@const_type@@type@]
 
 pointer:"*"
 

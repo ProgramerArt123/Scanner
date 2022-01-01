@@ -26,23 +26,28 @@ void Config::Parse() {
 	}
 	
 	uint64_t lineNO = 1;
+	std::stringstream ruleStream;
 	std::string line;
 	while (std::getline(config, line)) {
-		if (!line.empty()) {
-			const std::size_t pos = line.find_first_of(":");
-			if (std::string::npos == pos) {
-				throw "[" + line + "] is illegal rule!";
+		ruleStream << line;
+		if (line.empty() || config.eof()) {
+			const std::string &cleanString = CleanRule(ruleStream.str());
+			if (!cleanString.empty()) {
+				const std::size_t pos = cleanString.find_first_of(":");
+				if (std::string::npos == pos) {
+					throw "[" + cleanString + "] is illegal rule!";
+				}
+				std::string label = cleanString.substr(0, pos);
+				bool isSegmentation = CheckSegmentation(label);
+				bool isTerminate = CheckTerminate(label);
+				if (m_rules.end() != m_rules.find(label)) {
+					std::cout << label << " override!";
+				}
+				const std::string &pattern = cleanString.substr(pos + 1);
+				//std::cout << "label:" << label << ",pattern:" << pattern << std::endl;
+				SetRule(label, new Rule(*this, label, pattern, lineNO, isSegmentation, isTerminate));
+				ruleStream.str("");
 			}
-			std::string label = line.substr(0, pos);
-			bool isSegmentation = CheckSegmentation(label);
-			bool isTerminate = CheckTerminate(label);
-						
-			if (m_rules.end() != m_rules.find(label)) {
-				std::cout << label << " override!";
-			}
-			const std::string &pattern = line.substr(pos + 1);
-			//std::cout << "label:" << label << ",pattern:" << pattern << std::endl;
-			SetRule(label, new Rule(*this, label, pattern, lineNO, isSegmentation, isTerminate));
 		}
 		lineNO++;
 	}
@@ -136,6 +141,20 @@ bool Config::IsHaveIgnore() const {
 }
 Pattern &Config::GetIgnore() {
 	return *GetRule(IGNORE).GetPattern();
+}
+const std::string Config::CleanRule(const std::string &rule) {
+	std::unique_ptr<char[]> cleanRule(new char[rule.length() + 1]());
+	size_t index = 0, cleanIndex = 0;
+	while (index < rule.length()) {
+		if (rule[index] == ' ' || rule[index] == '\t' ||
+			rule[index] == '\r' || rule[index] == '\n') {
+			index++;
+		}
+		else {
+			cleanRule[cleanIndex++] = rule[index++];
+		}
+	}
+	return cleanRule.get();
 }
 bool Config::CheckSegmentation(std::string &name) {
 	const std::string head = IGNORE;

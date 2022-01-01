@@ -35,6 +35,7 @@ public:
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		end() {return m_rules.end();}
 private:
+	static const std::string CleanRule(const std::string &rule);
 	static bool CheckSegmentation(std::string &name);
 	static bool CheckTerminate(std::string &name);
 	bool IsActionBind(const std::string name) const;

@@ -62,7 +62,7 @@ public:
 	void TryCommandActionEnter(const Lexical &lexical,  Content &content)const;
 	void TryCommandActionExit(const Lexical &lexical, Content &content)const;
 	uint64_t GetFlag() const;
-	static const std::string  EscapeLiteral(const std::string &src);
+	static const std::string EscapeLiteral(const std::string &src);
 	bool IsIgnore() const;
 	bool IsSegmentation() const;
 	bool IsTerminate() const;
