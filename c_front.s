@@ -193,7 +193,7 @@ proc_call:@variable@@round_left@@arguments@?@round_right@
 
 round:@round_left@@expression@@round_right@
 
-statement:[@if_else_s@
+statement:[@if_else_s@@while_s@
 	([@do_while_s@@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
 
 block:@block_left@@statement@*@block_right@
