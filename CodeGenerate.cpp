@@ -15,7 +15,12 @@ CodeGenerate::~CodeGenerate() {
 	if (m_generate) {
 		std::ofstream out(m_file_name);
 		if (out.is_open()) {
-			out << m_stream.str();
+			const std::string &content = m_stream.str();
+#ifdef DEBUG
+			std::cout << content;
+#endif
+			out << content;
+			std::cout << "Output " << m_file_name << " success!" << std::endl;
 		}
 		else {
 			std::cerr << "Output " << m_file_name << " Failed!" << std::endl;

@@ -14,6 +14,7 @@ typedef void(*action)(const Lexical &lexical);
 class Config {
 public:
 	explicit Config(const std::string fileName);
+	~Config();
 	void Parse();
 	void CheckDuplicate();	
 	bool ParseContent(Content &content) const;

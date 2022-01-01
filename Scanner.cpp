@@ -11,14 +11,20 @@ void ProcDef(const Lexical &lexical) {
 
 int main(int argc, char *argv[]){
 	try{
-		Config config("c_front.s");
+		std::string configFileName = "c_front.s";
+		if (argc > 1) {
+			configFileName = argv[1];
+		}
+		Config config(configFileName);
 		config.Parse();
+#ifdef DEBUG
 		//config.CheckDuplicate();
 		Content content("test.p", config);
 		content.Load();
 		content.Parse();
 		config.BindActionFunction("ProcDef", &ProcDef);
 		content.ForeachLexical();
+#endif
 	}
 	catch (const std::string &e){
 		std::cerr << e;

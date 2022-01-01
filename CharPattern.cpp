@@ -40,10 +40,8 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 			}
 			m_to_pattern = m_from_pattern;
 		}
-		std::cout << "std::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
-		<< std::endl;
 		CodeGenerate::GetInstance().GetStream() <<
-		"std::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
+		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
 		<< std::endl;
 }
 CharPattern::~CharPattern() {}

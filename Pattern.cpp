@@ -95,9 +95,8 @@ void Pattern::AddChild(std::shared_ptr<Pattern> child) {
 	if (last && last->IsShortest()) {
 		last->m_next = child;
 	}
-	std::cout << "pattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");" << std::endl;
 	CodeGenerate::GetInstance().GetStream() <<
-	"pattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");"<< std::endl;
+	"\tpattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");" << std::endl;
 }
 
 void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {

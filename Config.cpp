@@ -9,10 +9,13 @@ Config::Config(const std::string fileName):
 	m_file_name(fileName) {
 		static uint64_t flag = 0;
 		m_flag = flag++;
-		std::cout << "std::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));" << std::endl;
 		CodeGenerate::GetInstance().GetStream() <<
-		"std::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));"
+		"std::shared_ptr<Config> GetConfig" << m_flag << "(){" << std::endl <<
+		"\tstd::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));"
 		<< std::endl;
+}
+Config::~Config() {
+	CodeGenerate::GetInstance().GetStream() << "\treturn config" << m_flag << ";" << std::endl << "}" << std::endl;
 }
 void Config::Parse() {
 	std::ifstream config(m_file_name);
@@ -106,8 +109,7 @@ uint64_t Config::GetFlag() const {
 
 void Config::SetRule(const std::string name, Rule *rule) {
 	m_rules[name].reset(rule);
-	std::cout << "config" << m_flag << "->SetRule(name, rule" <<rule->GetFlag()<<");" << std::endl;
 	CodeGenerate::GetInstance().GetStream() <<
-	"config" << m_flag << "->SetRule(rule" << rule->GetFlag() << ");"
+	"\tconfig" << m_flag << "->SetRule(rule" << rule->GetFlag() << ");"
 	<< std::endl;
 }
