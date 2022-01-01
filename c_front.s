@@ -252,9 +252,9 @@ else_s:@else@@scope@
 
 if_else_s:@if_s@@else_if_s@*@else_s@?
 
-do_while_s:@do@@once@@while@@round@
+do_while_s:(@do@@once@@while@@round@)#DoWhileState#
 
-while_s:@while@@round@@once@
+while_s:(@while@@round@@once@)#WhileState#
 
 for_s:(@for@@round_left@@element2@(@comma@@element2@)*
 	@semicolon@@comma_expression@@semicolon@@comma_expression@@round_right@@once@)#ForState#
