@@ -10,9 +10,9 @@ Config::Config(const std::string fileName):
 		static uint64_t flag = 0;
 		m_flag = flag++;
 		CodeGenerate::GetInstance().GetHeaderStream() <<
-		"std::shared_ptr<Config> GetConfig" << m_flag << "();" << std::endl;
+		"std::shared_ptr<Config> GenerateConfig" << m_flag << "();" << std::endl;
 		CodeGenerate::GetInstance().GetSourceStream() <<
-		"std::shared_ptr<Config> GetConfig" << m_flag << "(){" << std::endl <<
+		"std::shared_ptr<Config> GenerateConfig" << m_flag << "(){" << std::endl <<
 		"\tstd::shared_ptr<Config> config" << m_flag << "(new Config(\"" << fileName << "\"));"
 		<< std::endl;
 }
