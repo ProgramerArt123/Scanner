@@ -56,6 +56,15 @@ union TIME{
 
 int main(){
 		int x = 1 % 2 + 5 * 6 + 9 / 3;
+		if(0 == x){
+			printf("x == 0\n");
+		}
+		else if(1 == x){
+			printf("x == 1\n");
+		}
+		else{
+			printf("x != 0 && x != 1\n");
+		}
 		int y = 1 % 2 + 5 * (6 + 9) / 3;
 		int z = x + y;
         printf("x=%d, y=%d\\\", z=%d\n", x, y, z);

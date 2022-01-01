@@ -24,14 +24,17 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 	Content::CursorsMemento memento(content, *this);
 	uint64_t thisPos = UINT64_MAX;
 	uint64_t times = 0;
-	while (times++ < maxTimes) {
+	while (times < maxTimes) {
+		Content::CursorsMemento onece(content, *this);
 		if (!IsMatchOnce(content, *lexical)) {
 			break;
-		}		
+		}
+		onece.IsMatch(true);
+		times++;
 		if (!IsTerminate() && !IsIgnore() && GetRule().GetConfig().IsHaveIgnore()) {
 			GetRule().GetConfig().GetIgnore().IsMatch(0, UINT64_MAX, content, parent);
 		}
-		if (IsShortest() && m_next.m_pattern && times > minTimes) {
+		if (IsShortest() && m_next.m_pattern && times >= minTimes) {
 			if (m_next.m_pattern->IsMatch(m_next.m_min_times, 
 					m_next.m_max_times, content, parent)) {
 				thisPos = parent.GetChildrenCount();
@@ -43,19 +46,19 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 	if (!IsIgnore()) {
 		std::stringstream trace;
 		GetTraceInfo(trace);
-		if (times > minTimes) {
-			std::cout << "Match "  << "times:" << times - 1 << "," << *this << TimesToString(minTimes, maxTimes) <<
+		if (times >= minTimes) {
+			std::cout << "Match "  << "times:" << times << "," << *this << TimesToString(minTimes, maxTimes) <<
 				"===" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 		else {
-			std::cout << "UnMatch " << "times:" << times - 1 <<  "," << *this << TimesToString(minTimes, maxTimes)  << 
+			std::cout << "UnMatch " << "times:" << times <<  "," << *this << TimesToString(minTimes, maxTimes)  << 
 				"***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
 #endif
-	memento.IsMatch(UINT64_MAX != thisPos || times > minTimes);
+	memento.IsMatch(UINT64_MAX != thisPos || times >= minTimes);
 	if (UINT64_MAX == thisPos) {
-		if (times > minTimes) {
+		if (times >= minTimes) {
 			if (!IsIgnore() && !IsSegmentation()) {
 					lexical->SetContent(content.GetContent(
 					memento.GetCursor(),content.GetCursor()));

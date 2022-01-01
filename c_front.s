@@ -23,6 +23,10 @@ colon:":"
 
 oper_eq:"="
 
+oper_add:"+"
+
+oper_sub:"-"
+
 oper_inc:"++"
 
 oper_dec:"--"
@@ -55,21 +59,24 @@ oper_bit_and:"&"
 
 oper_equal:["==""!="]
 
-oper_rela:["<""<="">"">="]
+oper_rela:["<="">=""<"">"]
 
 oper_mov:["<<"">>"]
 
-oper_add_sub:["+""-"]
+oper_add_sub:[@oper_add@@oper_sub@]
 
 oper_mul_div:["*""/""%"]
 
-oper_one:["-"@oper_inc@@oper_dec@"!""~""+""-""*""&"]
+oper_one:[@oper_inc@@oper_dec@"!""~"@oper_add@@oper_sub@"*""&"]
 
 oper_suffix:[@oper_dot@"->"]
 
-oper_two:[@comma@@oper_assgin@@oper_logic_or@
+oper_two:[@comma@@oper_equal@@oper_assgin@@oper_logic_or@
 @oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@
-@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
+@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
+
+
+
 
 
 
@@ -184,15 +191,14 @@ proc_call:@variable@@round_left@@arguments@?@round_right@
 
 
 
-
-
 round:@round_left@@expression@@round_right@
 
-statement:[@return_s@@goto@@proc_call@@variable_def@@expression@]
+statement:[@if_else_s@
+	([@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
 
-block:@block_left@(@statement@@semicolon@)*@block_right@
+block:@block_left@@statement@*@block_right@
 
-scope:[@block@(@statement@)]
+scope:[@block@@statement@]
 
 comma_expression:@expression@(@comma@@expression@)*
 
@@ -234,9 +240,9 @@ if_s:@if@@round@@scope@
 
 else_if_s:@else@@if@@round@@scope@
 
-if_else_s:@if_s@(@else_if_s@)*(@else_s@)?
+else_s:@else@@scope@
 
-else_s:@else@@round@@scope@
+if_else_s:@if_s@@else_if_s@*@else_s@?
 
 do_while_s:@do@@once@@while@@round@
 
