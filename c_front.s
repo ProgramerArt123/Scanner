@@ -194,7 +194,7 @@ proc_call:@variable@@round_left@@arguments@?@round_right@
 round:@round_left@@expression@@round_right@
 
 statement:[@if_else_s@
-	([@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
+	([@do_while_s@@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
 
 block:@block_left@@statement@*@block_right@
 
@@ -226,11 +226,11 @@ default_s:@default@@branch@
 
 switch_case:@round@@block_left@@case_s@*@default_s@?@block_right@
 
-break_continue_statement:[@break@@continue@@statement@]
+break_continue_statement:[((@break@@continue@)@semicolon@)@statement@]
 
 break_continue_block:@block_left@@break_continue_statement@*@block_right@
 
-once:[@break_continue_block@(@break_continue_statement@)]
+once:[@break_continue_block@@break_continue_statement@]
 
 
 

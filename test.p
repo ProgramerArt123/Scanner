@@ -65,6 +65,11 @@ int main(){
 		else{
 			printf("x != 0 && x != 1\n");
 		}
+		
+		do{
+			printf("do while\n");
+			break;
+		}while(b);
 		int y = 1 % 2 + 5 * (6 + 9) / 3;
 		int z = x + y;
         printf("x=%d, y=%d\\\", z=%d\n", x, y, z);
