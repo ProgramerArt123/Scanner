@@ -307,14 +307,18 @@ size_t Pattern::GetMementoCursor()const {
 const std::string &Pattern::GetActionName()const {
 	return m_action;
 }
-void Pattern::TryCommandAction(const Lexical &lexical,  Content &content)const {
+void Pattern::TryCommandActionEnter(const Lexical &lexical, Content &content)const {
 	if (!m_action.empty()) {
-		if (!GetRule().GetConfig().TryExecuteAction(m_action, lexical, content)) {
+		if (!GetRule().GetConfig().TryExecuteActionEnter(m_action, lexical, content)) {
 			std::cout << "Warn:" << m_action << " un bind!" << std::endl;
 		}
 	}
 }
-
+void Pattern::TryCommandActionExit(const Lexical &lexical, Content &content)const {
+	if (!m_action.empty()) {
+		GetRule().GetConfig().TryExecuteActionExit(m_action, lexical, content);
+	}
+}
 uint64_t Pattern::GetFlag() const {
 	return m_flag;
 }

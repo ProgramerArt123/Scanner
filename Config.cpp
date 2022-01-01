@@ -86,14 +86,23 @@ Rule &Config::GetRule(const std::string name) {
 	return *m_rules[name];
 }
 
-void Config::BindActionFunction(const std::string name, action func) {
-	m_actions[name] = func;
+void Config::BindActionFunction(const std::string name, action enter, action exit) {
+	m_actions[name].first = enter;
+	m_actions[name].second = exit;
 }
 
-bool Config::TryExecuteAction(const std::string name, const Lexical &lexical,  Content &content) const {
+bool Config::TryExecuteActionEnter(const std::string name, const Lexical &lexical, Content &content) const {
 	bool isActionBind = IsActionBind(name);
 	if (isActionBind) {
-		ExecuteAction(name, lexical, content);
+		ExecuteActionEnter(name, lexical, content);
+	}
+	return isActionBind;
+}
+
+bool Config::TryExecuteActionExit(const std::string name, const Lexical &lexical, Content &content) const {
+	bool isActionBind = IsActionBind(name) && m_actions.at(name).second;
+	if (isActionBind) {
+		ExecuteActionExit(name, lexical, content);
 	}
 	return isActionBind;
 }
@@ -101,8 +110,11 @@ bool Config::TryExecuteAction(const std::string name, const Lexical &lexical,  C
 bool Config::IsActionBind(const std::string name) const {
 	return m_actions.find(name) != m_actions.end();
 }
-void Config::ExecuteAction(const std::string name, const Lexical &lexical,  Content &content) const {
-	m_actions.at(name)(lexical, content);
+void Config::ExecuteActionEnter(const std::string name, const Lexical &lexical,  Content &content) const {
+	m_actions.at(name).first(lexical, content);
+}
+void Config::ExecuteActionExit(const std::string name, const Lexical &lexical, Content &content) const {
+	m_actions.at(name).second(lexical, content);
 }
 
 uint64_t Config::GetFlag() const {

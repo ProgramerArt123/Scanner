@@ -21,10 +21,13 @@ const std::string &Lexical::GetContent() const {
 }
 void Lexical::ForeachTopLeftRigth( Content &content) {
 	if (m_pattern) {
-		m_pattern->TryCommandAction(*this, content);
+		m_pattern->TryCommandActionEnter(*this, content);
 	}
 	for (auto child : m_children) {
 		child->ForeachTopLeftRigth(content);
+	}
+	if (m_pattern) {
+		m_pattern->TryCommandActionExit(*this, content);
 	}
 }
 

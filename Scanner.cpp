@@ -5,8 +5,12 @@
 #include "Config.h"
 #include "Content.h"
 
-void ProcDef(const Lexical &lexical,  Content &content) {
-	std::cout << "ProcDef:" << lexical.GetContent() << std::endl;
+void ProcDefEnter(const Lexical &lexical,  Content &content) {
+	std::cout << "ProcDefEnter:" << lexical.GetContent() << std::endl;
+}
+
+void ProcDefExit(const Lexical &lexical, Content &content) {
+	std::cout << "ProcDefExit:" << lexical.GetContent() << std::endl;
 }
 
 int main(int argc, char *argv[]){
@@ -22,7 +26,7 @@ int main(int argc, char *argv[]){
 		Content content("test.p", config);
 		content.Load();
 		content.Parse();
-		config.BindActionFunction("ProcDef", &ProcDef);
+		config.BindActionFunction("ProcDef", &ProcDefEnter, &ProcDefExit);
 		content.ForeachLexical();
 #endif
 	}
