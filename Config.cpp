@@ -7,6 +7,12 @@
 
 Config::Config(const std::string fileName):
 	m_file_name(fileName) {
+		static uint64_t flag = 0;
+		m_flag = flag++;
+		std::cout << "std::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));" << std::endl;
+		CodeGenerate::GetInstance().GetStream() <<
+		"std::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));"
+		<< std::endl;
 }
 void Config::Parse() {
 	std::ifstream config(m_file_name);
@@ -92,4 +98,8 @@ bool Config::IsActionBind(const std::string name) const {
 }
 void Config::ExecuteAction(const std::string name, const Lexical &lexical) const {
 	m_actions.at(name)(lexical);
+}
+
+uint64_t Config::GetFlag() const {
+	return m_flag;
 }

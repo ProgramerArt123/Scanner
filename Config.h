@@ -22,6 +22,8 @@ public:
 	
 	bool TryExecuteAction(const std::string name, const Lexical &lexical) const;
 	
+	uint64_t GetFlag() const;
+	
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		begin() {return m_rules.begin();}
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
@@ -33,6 +35,7 @@ private:
 	const std::string m_file_name;
 	std::map<std::string, std::unique_ptr<Rule>> m_rules;
 	std::map<std::string, std::function<void(const Lexical &)>> m_actions;
+	uint64_t m_flag = 0;
 };
 
 #endif
