@@ -198,7 +198,7 @@ proc_call:(@variable@@round_left@@arguments@?@round_right@)#ProcCall#
 round:@round_left@@expression@@round_right@
 
 statement:[@if_else_s@@while_s@@switch_case_s@@for_s@
-	([@do_while_s@@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
+	([@do_while_s@@return_s@@goto@@variable_def@@expression@]@semicolon@)]
 
 block:@block_left@@statement@*@block_right@
 
@@ -244,11 +244,11 @@ element2:[@variable_def@@expression@]
 
 
 
-if_s:@if@@round@@scope@
+if_s:(@if@@round@@scope@)#IfState#
 
-else_if_s:@else@@if@@round@@scope@
+else_if_s:(@else@@if@@round@@scope@)#ElseIfState#
 
-else_s:@else@@scope@
+else_s:(@else@@scope@)#ElseState#
 
 if_else_s:@if_s@@else_if_s@*@else_s@?
 
