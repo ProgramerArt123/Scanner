@@ -18,6 +18,7 @@
 #define PLUS '+'
 #define QUESTION '?'
 #define RANGE '-'
+#define ACTION '#'
 
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_config(config),m_name(name),
@@ -139,7 +140,11 @@ void Rule::RoundParse(Pattern &parent) {
 		if (ROUND_R == m_literal[m_index]) {
 			pattern->MarkContent(m_literal, m_index);
 			m_index++;
-			TryActionParse(*pattern);
+			if (m_index < m_literal.size() &&
+				ACTION == m_literal[m_index]) {
+				m_index++;
+				TryActionParse(*pattern);
+			}
 			return;
 		}
 	}
@@ -192,7 +197,15 @@ void Rule::TryRangeParse(CharPattern &character) {
 	}
 }
 void Rule::TryActionParse(Pattern &round) {
-	
+	size_t begin = m_index;
+	while (m_index < m_literal.size()) {
+		if (ACTION == m_literal[m_index++]) {
+			const std::string action(m_literal.data() + begin, m_index - 1 - begin);
+			round.SetAction(action);
+			return;
+		}
+	}
+	throw std::string("Config Format Error, ACTION!");
 }
 std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;

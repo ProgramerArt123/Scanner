@@ -46,6 +46,7 @@ public:
 	virtual const char *GetTypeName() const;
 	bool ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
+	void SetAction(const std::string action);
 	virtual const std::string ToString() const;
 	const std::string TimesToString() const;	
 	void ForeachCheckDuplicate(const Pattern &other) const;
@@ -67,6 +68,7 @@ protected:
 	uint64_t m_max_times = 1;
 	bool m_is_shortest = false;
 	std::string m_content;
+	std::string m_action;
 	Rule &m_rule;
 	const Pattern *m_parent = NULL;
 	std::shared_ptr<Pattern> m_next;

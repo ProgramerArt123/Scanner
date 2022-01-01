@@ -133,6 +133,9 @@ Lexical &Content::GetLexicalRoot() {
 	return *m_lexical;
 }
 const std::string Content::GetContent(size_t from, size_t to) const {
+	if (from >= m_content.size() || to >= m_content.size()) {
+		throw std::string("cursor overflow!");
+	}
 	const std::string content(m_content.begin() + from, 
 		m_content.begin() + to);
 	return content;

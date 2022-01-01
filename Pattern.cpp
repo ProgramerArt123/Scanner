@@ -203,7 +203,9 @@ bool Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
 void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 	m_content.assign(literal.begin() + m_col_NO, literal.begin() + end);
 }
-
+void Pattern::SetAction(const std::string action) {
+	m_action = action;
+}
 const std::string Pattern::ToString() const {
 	return '(' + m_content + ')' + TimesToString();
 }
