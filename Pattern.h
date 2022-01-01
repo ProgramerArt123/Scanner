@@ -63,6 +63,9 @@ public:
 	void TryCommandActionExit(const Lexical &lexical, Content &content)const;
 	uint64_t GetFlag() const;
 	static const std::string  EscapeLiteral(const std::string &src);
+	bool IsIgnore() const;
+	bool IsSegmentation() const;
+	bool IsTerminate() const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	

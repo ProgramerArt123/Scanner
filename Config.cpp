@@ -33,13 +33,16 @@ void Config::Parse() {
 			if (std::string::npos == pos) {
 				throw "[" + line + "] is illegal rule!";
 			}
-			const std::string &label = line.substr(0, pos);
+			std::string label = line.substr(0, pos);
+			bool isSegmentation = CheckSegmentation(label);
+			bool isTerminate = CheckTerminate(label);
+						
 			if (m_rules.end() != m_rules.find(label)) {
 				std::cout << label << " override!";
 			}
 			const std::string &pattern = line.substr(pos + 1);
 			//std::cout << "label:" << label << ",pattern:" << pattern << std::endl;
-			SetRule(label, new Rule(*this, label, pattern, lineNO));
+			SetRule(label, new Rule(*this, label, pattern, lineNO, isSegmentation, isTerminate));
 		}
 		lineNO++;
 	}
@@ -83,7 +86,7 @@ Rule &Config::GetRule(const std::string name) {
 	if (m_rules.end() == m_rules.find(name)) {
 		throw name + " undefined!";
 	}
-	return *m_rules[name];
+	return *m_rules.at(name);
 }
 
 void Config::BindActionFunction(const std::string name, action enter, action exit) {
@@ -126,4 +129,32 @@ void Config::SetRule(const std::string name, Rule *rule) {
 	CodeGenerate::GetInstance().GetSourceStream() <<
 	"\tconfig" << m_flag << "->SetRule(\"" << name << "\",rule" << rule->GetFlag() << ");"
 	<< std::endl;
+}
+
+bool Config::IsHaveIgnore() const {
+	return m_rules.find(IGNORE) != m_rules.end();
+}
+Pattern &Config::GetIgnore() {
+	return *GetRule(IGNORE).GetPattern();
+}
+bool Config::CheckSegmentation(std::string &name) {
+	const std::string head = IGNORE;
+	bool isSegmentation = name != IGNORE && 
+		 name.length() > head.size() &&
+		0 == name.compare(0, head.length(), head);
+	if (isSegmentation) {
+		name = name.substr(head.length());
+	}
+	return isSegmentation;
+}
+
+bool Config::CheckTerminate(std::string &name) {
+	const std::string tail = TERMINATE;
+	bool isTerminate = name.length() > tail.length() &&
+		0 == name.compare(name.length() - tail.length(),
+		tail.length(), tail);
+	if (isTerminate) {
+		name = name.substr(0, name.length() - tail.length());
+	}
+	return isTerminate;
 }

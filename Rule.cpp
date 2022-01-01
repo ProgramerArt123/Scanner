@@ -22,15 +22,16 @@
 #define RANGE '-'
 #define ACTION '#'
 
-Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
-	m_config(config),m_name(name),
-	m_literal(literal.begin(), literal.end()),
-	m_line_NO(lineNO){
+Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO, bool isSegmentation, bool isTerminate):
+	m_config(config),m_name(name), m_literal(literal.begin(), literal.end()),
+	m_line_NO(lineNO), m_is_segmentation(isSegmentation), m_is_terminate(isTerminate){
+		
 		static uint64_t flag = 0;
 		m_flag = flag++;
 		std::shared_ptr<Pattern> pattern(new Pattern(*this, lineNO, 0));
 		CodeGenerate::GetInstance().GetSourceStream() <<
-		"\tRule *rule" << m_flag << " = new Rule(*config" << config.GetFlag() << ", \"" << name << "\", \"" << Pattern::EscapeLiteral(literal) << "\", " << lineNO << ");" << std::endl <<
+		"\tRule *rule" << m_flag << " = new Rule(*config" << config.GetFlag() << ", \"" << name << "\", \"" << Pattern::EscapeLiteral(literal) <<
+			"\", " << lineNO << ", " << isSegmentation << ", " << isTerminate << ");" << std::endl <<
 		"\tstd::shared_ptr<Pattern> pattern" << pattern->GetFlag() << "(new Pattern(*rule" << m_flag << ", " << lineNO << ", " << 0 << "));" << std::endl;
 		SetPattern(pattern);
 }
@@ -243,4 +244,14 @@ void Rule::SetPattern(const std::shared_ptr<Pattern> &pattern) {
 	m_pattern = pattern;
 	CodeGenerate::GetInstance().GetSourceStream() <<
 		"\trule" << m_flag << "->SetPattern(pattern"<< pattern->GetFlag() <<");" << std::endl;
+}
+
+bool Rule::IsIgnore() const {
+	return IGNORE == m_name;
+}
+bool Rule::IsSegmentation() const {
+	return m_is_segmentation;
+}
+bool Rule::IsTerminate() const {
+	return m_is_terminate;
 }

@@ -27,6 +27,9 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	while (times++ < m_max_times) {
 		if (!IsMatchOnce(content, *lexical)) {
 			break;
+		}		
+		if (!IsTerminate() && !IsIgnore() && GetRule().GetConfig().IsHaveIgnore()) {
+			GetRule().GetConfig().GetIgnore().IsMatch(content, parent);
 		}
 		if (IsShortest() && m_next && times > m_min_times) {
 			if (m_next->IsMatch(content, parent)) {
@@ -36,7 +39,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 		}
 	}
 #ifdef DEBUG
-	if (m_rule.GetName() != "ignore") {
+	if (!IsIgnore()) {
 		std::stringstream trace;
 		GetTraceInfo(trace);
 		if (times > m_min_times) {
@@ -50,8 +53,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	memento.IsMatch(UINT64_MAX != thisPos || times > m_min_times);
 	if (UINT64_MAX == thisPos) {
 		if (times > m_min_times) {
-			if (m_rule.GetName() != "ignore" && 
-				m_rule.GetName() != "segmentation") {
+			if (!IsIgnore() && !IsSegmentation()) {
 					lexical->SetContent(content.GetContent(
 					memento.GetCursor(),content.GetCursor()));
 				parent.InsertChild(lexical, thisPos);
@@ -63,8 +65,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 		}
 	}
 	else {
-		if (m_rule.GetName() != "ignore" && 
-			m_rule.GetName() != "segmentation") {
+		if (!IsIgnore() && !IsSegmentation()) {
 				lexical->SetContent(content.GetContent(
 				memento.GetCursor(),
 				content.GetCursor()));
@@ -336,4 +337,14 @@ const std::string Pattern::EscapeLiteral(const std::string &src) {
 		}
 	}
 	return escapeLiteral.get();
+}
+
+bool Pattern::IsIgnore() const {
+	return GetRule().IsIgnore();
+}
+bool Pattern::IsSegmentation() const {
+	return GetRule().IsSegmentation();
+}
+bool Pattern::IsTerminate() const {
+	return GetRule().IsTerminate();
 }

@@ -8,6 +8,9 @@
 
 #include "Rule.h"
 
+#define IGNORE "?"
+#define TERMINATE "<"
+
 class Content;
 class Lexical;
 typedef void(*action)(const Lexical &lexical,  Content &content);
@@ -24,15 +27,16 @@ public:
 	bool TryExecuteActionEnter(const std::string name, const Lexical &lexical,  Content &content) const;
 	bool TryExecuteActionExit(const std::string name, const Lexical &lexical, Content &content) const;
 	uint64_t GetFlag() const;
-	
 	void SetRule(const std::string name, Rule *rule);
-	
+	bool IsHaveIgnore() const;
+	Pattern &GetIgnore();
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		begin() {return m_rules.begin();}
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		end() {return m_rules.end();}
 private:
-	
+	static bool CheckSegmentation(std::string &name);
+	static bool CheckTerminate(std::string &name);
 	bool IsActionBind(const std::string name) const;
 	void ExecuteActionEnter(const std::string name, const Lexical &lexical, Content &content) const;
 	void ExecuteActionExit(const std::string name, const Lexical &lexical, Content &content) const;
