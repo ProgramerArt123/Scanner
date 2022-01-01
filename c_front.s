@@ -254,8 +254,8 @@ do_while_s:@do@@once@@while@@round@
 
 while_s:@while@@round@@once@
 
-for_s:@for@@round_left@@element2@(@comma@@element2@)*
-	@semicolon@@comma_expression@@semicolon@@comma_expression@@round_right@@once@
+for_s:(@for@@round_left@@element2@(@comma@@element2@)*
+	@semicolon@@comma_expression@@semicolon@@comma_expression@@round_right@@once@)#ForState#
 
 
 
