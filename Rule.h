@@ -28,6 +28,7 @@ private:
 	void Parse(Pattern &parent);
 	void TryRangeParse(CharPattern &character);
 	void TryActionParse(Pattern &round);
+	uint64_t GetFlag() const;
 private:
 	const std::vector<char> m_literal;
 	std::shared_ptr<Pattern> m_pattern;
@@ -35,6 +36,7 @@ private:
 	size_t m_index = 0;
 	const uint64_t m_line_NO = 0;
 	const std::string m_name;
+	uint64_t m_flag = 0;
 };
 
 #endif

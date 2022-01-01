@@ -307,6 +307,6 @@ void Pattern::TryCommandAction(const Lexical &lexical)const {
 	}
 }
 
-uint64_t Pattern::GetFlag() {
+uint64_t Pattern::GetFlag() const {
 	return m_flag;
 }

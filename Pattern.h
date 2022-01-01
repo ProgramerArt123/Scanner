@@ -60,7 +60,7 @@ public:
 	size_t GetMementoCursor()const;
 	const std::string &GetActionName()const;
 	void TryCommandAction(const Lexical &lexical)const;
-	uint64_t GetFlag();
+	uint64_t GetFlag() const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	

@@ -5,6 +5,7 @@
 #include "AndPattern.h"
 #include "Config.h"
 #include "Content.h"
+#include "CodeGenerate.h"
 #include "Rule.h"
 
 #define ESCAPE '\\'
@@ -24,8 +25,14 @@
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_config(config),m_name(name),
 	m_literal(literal.begin(), literal.end()),
-	m_pattern(new AndPattern(*this, lineNO, 0)),
+	m_pattern(new Pattern(*this, lineNO, 0)),
 	m_line_NO(lineNO){
+		static uint64_t flag = 0;
+		m_flag = flag++;
+		std::cout << "Rule *rule" << m_flag << " = new Rule(config, " << name << ", " << literal << ", " << lineNO << ");" << std::endl;
+		CodeGenerate::GetInstance().GetStream() <<
+		"Rule *rule" << m_flag << " = new Rule(config, " << name << ", " << literal << ", " << lineNO << ");"
+		<< std::endl;
 }
 
 void Rule::Parse() {
@@ -226,4 +233,8 @@ bool Rule::IsMatch(Content &content)const {
 }
 const std::string &Rule::GetName() {
 	return m_name;
+}
+
+uint64_t Rule::GetFlag() const {
+	return m_flag;
 }
