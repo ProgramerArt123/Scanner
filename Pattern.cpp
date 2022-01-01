@@ -26,10 +26,9 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 	uint64_t times = 0;
 	while (times < maxTimes) {
 		Content::CursorsMemento onece(content, *this);
-		if (!IsMatchOnce(content, *lexical)) {
+		if (!onece.IsMatch(IsMatchOnce(content, *lexical))) {
 			break;
 		}
-		onece.IsMatch(true);
 		times++;
 		if (!IsTerminate() && !IsIgnore() && GetRule().GetConfig().IsHaveIgnore()) {
 			GetRule().GetConfig().GetIgnore().IsMatch(0, UINT64_MAX, content, parent);

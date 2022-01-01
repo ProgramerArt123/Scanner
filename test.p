@@ -75,6 +75,16 @@ int main(){
 			printf("while\n");
 		}
 		int y = 1 % 2 + 5 * (6 + 9) / 3;
+		
+		switch(y){
+			case 0:
+				printf("0\n");
+				break;
+			default:
+				printf("1\n");
+				break;
+		}
+		
 		int z = x + y;
         printf("x=%d, y=%d\\\", z=%d\n", x, y, z);
 		z = 999;

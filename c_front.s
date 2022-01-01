@@ -150,6 +150,8 @@ else:"else"
 
 break:"break"
 
+switch:"switch"
+
 case:"case"
 
 default:"default"
@@ -193,7 +195,7 @@ proc_call:@variable@@round_left@@arguments@?@round_right@
 
 round:@round_left@@expression@@round_right@
 
-statement:[@if_else_s@@while_s@
+statement:[@if_else_s@@while_s@@switch_case_s@
 	([@do_while_s@@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
 
 block:@block_left@@statement@*@block_right@
@@ -216,15 +218,19 @@ body:@label@@block_left@([(@variable_def@@semicolon@)
 
 
 
-break_process:[@break@@return_s@@goto@@proc_call@@expression@]
+break_process:[@break@@return_s@@goto@@proc_call@@expression@]@semicolon@
 
-branch:@integer@@colon@[@block@(@break_process@+)]?
+branch:@colon@[@block@(@break_process@+)]?
 
-case_s:@case@@branch@
+case_s:@case@@integer@@branch@
 
 default_s:@default@@branch@
 
-switch_case:@round@@block_left@@case_s@*@default_s@?@block_right@
+switch_case_s:@switch@@round@@block_left@@case_s@*@default_s@?@block_right@
+
+
+
+
 
 break_continue_statement:[((@break@@continue@)@semicolon@)@statement@]
 
