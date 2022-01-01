@@ -75,3 +75,7 @@ uint64_t Lexical::GetLineNO() const {
 uint64_t Lexical::GetColNO() const {
 	return m_col_NO;
 }
+void Lexical::Error(const std::string &info) const throw (std::string) {
+	throw "Lexical_Error=>line:【"  + std::to_string(m_line_NO) + 
+		"】, content 【" + GetContent() + "】 " + info;
+}

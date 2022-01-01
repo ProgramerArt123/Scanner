@@ -21,6 +21,7 @@ public:
 	size_t GetBrotherCount() const;
 	const std::shared_ptr<Lexical> &GetChild(size_t index) const;
 	const std::shared_ptr<Lexical> &GetBrother(size_t index) const;
+	void Error(const std::string &info)const throw (std::string);
 private:
 	std::string m_content;
 	
