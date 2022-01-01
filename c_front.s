@@ -224,11 +224,11 @@ break_process:[@break@@return_s@@goto@@proc_call@@expression@]@semicolon@
 
 branch:@colon@[@block@(@break_process@+)]?
 
-case_s:@case@@integer@@branch@
+case_s:(@case@@integer@@branch@)#Case#
 
 default_s:@default@@branch@
 
-switch_case_s:@switch@@round@@block_left@@case_s@*@default_s@?@block_right@
+switch_case_s:(@switch@@round@@block_left@@case_s@*@default_s@?@block_right@)#Switch#
 
 
 
