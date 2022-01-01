@@ -140,3 +140,6 @@ const std::string Content::GetContent(size_t from, size_t to) const {
 		m_content.begin() + to);
 	return content;
 }
+void Content::ForeachLexical() {
+	m_lexical->ForeachTopLeftRigth();
+}

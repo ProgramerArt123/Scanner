@@ -58,6 +58,8 @@ public:
 	void GetTraceInfo(std::stringstream &trace)const;
 	void SetMementoCursor(size_t memento);
 	size_t GetMementoCursor()const;
+	const std::string &GetActionName()const;
+	void TryCommandAction(const Lexical &lexical)const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	

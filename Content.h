@@ -38,6 +38,7 @@ public:
 	size_t GetCursor()const;
 	Lexical &GetLexicalRoot();
 	const std::string GetContent(size_t from, size_t to) const;
+	void ForeachLexical();
 private:
 	friend class CursorsMemento;
 	const Config &m_config;

@@ -19,7 +19,7 @@ sizeof:[(sizeof@ignore@"("@ignore@@expression@@ignore@")")(sizeof@ignore@@elemen
 
 oper_two:[","@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
 
-oper_comma:(",")#SetComma#
+oper_comma:","
 oper_assgin:["=""+=""-=""*=""/=""%=""&=""^=""|=""<<="">>="]
 oper_logic_or:"||"
 oper_logic_and:"&&"
@@ -124,7 +124,7 @@ proc_call:@variable@@ignore@"("@ignore@@arguments@?@ignore@")"
 
 parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)*
 
-proc_def:@arbitrarily_type@@segmentation@@label@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@
+proc_def:(@arbitrarily_type@@segmentation@@label@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@)#ProcDef#
 
 return:"return"(@segmentation@@expression@)?
 

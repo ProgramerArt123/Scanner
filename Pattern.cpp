@@ -16,7 +16,7 @@ Pattern::~Pattern() {
 }
 MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	CheckClosedLoop(content);
-	std::shared_ptr<Lexical> lexical(new Lexical);
+	std::shared_ptr<Lexical> lexical(new Lexical(this));
 	Content::CursorsMemento memento(content, *this);
 	uint64_t thisPos = UINT64_MAX;
 	uint64_t times = 0;
@@ -46,7 +46,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 		if (times > m_min_times) {
 			if (m_rule.GetName() != "ignore" && 
 				m_rule.GetName() != "segmentation") {
-				lexical->SetContent(content.GetContent(
+					lexical->SetContent(content.GetContent(
 					memento.GetCursor(),content.GetCursor()));
 				parent.InsertChild(lexical, thisPos);
 			}
@@ -59,7 +59,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	else {
 		if (m_rule.GetName() != "ignore" && 
 			m_rule.GetName() != "segmentation") {
-			lexical->SetContent(content.GetContent(
+				lexical->SetContent(content.GetContent(
 				memento.GetCursor(),
 				content.GetCursor()));
 			parent.InsertChild(lexical, thisPos);
@@ -289,4 +289,14 @@ void Pattern::SetMementoCursor(size_t memento) {
 }
 size_t Pattern::GetMementoCursor()const {
 	return m_memento_cursor;
+}
+const std::string &Pattern::GetActionName()const {
+	return m_action;
+}
+void Pattern::TryCommandAction(const Lexical &lexical)const {
+	if (!m_action.empty()) {
+		if (!GetRule().GetConfig().TryExecuteAction(m_action, lexical)) {
+			std::cout << "Warn:" << m_action << " un bind!" << std::endl;
+		}
+	}
 }

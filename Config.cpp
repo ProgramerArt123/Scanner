@@ -72,3 +72,22 @@ Rule &Config::GetRule(const std::string name) {
 	}
 	return *m_rules[name];
 }
+
+void Config::BindActionFunction(const std::string name, action func) {
+	m_actions[name] = func;
+}
+
+bool Config::TryExecuteAction(const std::string name, const Lexical &lexical) const {
+	bool isActionBind = IsActionBind(name);
+	if (isActionBind) {
+		ExecuteAction(name, lexical);
+	}
+	return isActionBind;
+}
+
+bool Config::IsActionBind(const std::string name) const {
+	return m_actions.find(name) != m_actions.end();
+}
+void Config::ExecuteAction(const std::string name, const Lexical &lexical) const {
+	m_actions.at(name)(lexical);
+}
