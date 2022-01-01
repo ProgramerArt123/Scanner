@@ -195,7 +195,7 @@ proc_call:@variable@@round_left@@arguments@?@round_right@
 
 round:@round_left@@expression@@round_right@
 
-statement:[@if_else_s@@while_s@@switch_case_s@
+statement:[@if_else_s@@while_s@@switch_case_s@@for_s@
 	([@do_while_s@@return_s@@goto@@proc_call@@variable_def@@expression@]@semicolon@)]
 
 block:@block_left@@statement@*@block_right@
@@ -238,7 +238,7 @@ break_continue_block:@block_left@@break_continue_statement@*@block_right@
 
 once:[@break_continue_block@@break_continue_statement@]
 
-
+element2:[@variable_def@@expression@]
 
 
 
@@ -254,8 +254,8 @@ do_while_s:@do@@once@@while@@round@
 
 while_s:@while@@round@@once@
 
-for_s:@for@@round_left@(@statement@(@comma@@statement@)*)|
-	@semicolon@@comma_expression@|@semicolon@@comma_expression@|@round_right@@once@
+for_s:@for@@round_left@@element2@(@comma@@element2@)*
+	@semicolon@@comma_expression@@semicolon@@comma_expression@@round_right@@once@
 
 
 

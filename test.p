@@ -85,6 +85,9 @@ int main(){
 				break;
 		}
 		
+		for(int a = 0; a < 100; a ++){
+			printf("a=%d\n",a);
+		}
 		int z = x + y;
         printf("x=%d, y=%d\\\", z=%d\n", x, y, z);
 		z = 999;
