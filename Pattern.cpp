@@ -18,21 +18,22 @@ Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type)
 Pattern::~Pattern() {
 	
 }
-MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
+MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &content, Lexical &parent) {
 	CheckClosedLoop(content);
 	std::shared_ptr<Lexical> lexical(new Lexical(content.GetLineNO(), 0, this));
 	Content::CursorsMemento memento(content, *this);
 	uint64_t thisPos = UINT64_MAX;
 	uint64_t times = 0;
-	while (times++ < m_max_times) {
+	while (times++ < maxTimes) {
 		if (!IsMatchOnce(content, *lexical)) {
 			break;
 		}		
 		if (!IsTerminate() && !IsIgnore() && GetRule().GetConfig().IsHaveIgnore()) {
-			GetRule().GetConfig().GetIgnore().IsMatch(content, parent);
+			GetRule().GetConfig().GetIgnore().IsMatch(0, UINT64_MAX, content, parent);
 		}
-		if (IsShortest() && m_next && times > m_min_times) {
-			if (m_next->IsMatch(content, parent)) {
+		if (IsShortest() && m_next.m_pattern && times > minTimes) {
+			if (m_next.m_pattern->IsMatch(m_next.m_min_times, 
+					m_next.m_max_times, content, parent)) {
 				thisPos = parent.GetChildrenCount();
 				break;
 			}
@@ -42,17 +43,17 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	if (!IsIgnore()) {
 		std::stringstream trace;
 		GetTraceInfo(trace);
-		if (times > m_min_times) {
-			std::cout << "Match:" << *this << "===" << content.GetMemInfo(memento) << trace.str() << std::endl;
+		if (times > minTimes) {
+			std::cout << "Match "  << "times:" << times - 1 << "," << *this << "===" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 		else {
-			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
+			std::cout << "UnMatch " << "times:" << times - 1 <<  "," << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
 #endif
-	memento.IsMatch(UINT64_MAX != thisPos || times > m_min_times);
+	memento.IsMatch(UINT64_MAX != thisPos || times > minTimes);
 	if (UINT64_MAX == thisPos) {
-		if (times > m_min_times) {
+		if (times > minTimes) {
 			if (!IsIgnore() && !IsSegmentation()) {
 					lexical->SetContent(content.GetContent(
 					memento.GetCursor(),content.GetCursor()));
@@ -77,8 +78,9 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 bool Pattern::IsMatchOnce(Content &content, Lexical &parent) const {
 	size_t count = m_children.size();
 	for (size_t index = 0; index < count; index ++) {
-		m_children[index]->SetParent(this);
-		MATCH_RESULT match = m_children[index]->IsMatch(content, parent);
+		m_children[index].m_pattern->SetParent(this);
+		MATCH_RESULT match = m_children[index].m_pattern->IsMatch(
+			m_children[index].m_min_times, m_children[index].m_max_times, content, parent);
 		if (MATCH_RESULT_FAILED == match) {
 			return false;
 		}
@@ -92,26 +94,28 @@ bool Pattern::IsMatchOnce(Content &content, Lexical &parent) const {
 void Pattern::AddChild(std::shared_ptr<Pattern> child) {
 	std::shared_ptr<Pattern> last;
 	if (!m_children.empty()) {
-		last = m_children.back();
+		last = m_children.back().m_pattern;
 	}
-	m_children.push_back(child);
+	TimesPattern timesChild;
+	timesChild.m_pattern = child;
+	m_children.push_back(timesChild);
 	child->SetParent(this);
 	if (last && last->IsShortest()) {
-		last->m_next = child;
+		last->m_next.m_pattern = child;
 	}
 	CodeGenerate::GetInstance().GetSourceStream() <<
 	"\tpattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");" << std::endl;
 }
 
 void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
-	m_children.back()->m_min_times = minTimes;
-	m_children.back()->m_max_times = maxTimes;
+	m_children.back().m_min_times = minTimes;
+	m_children.back().m_max_times = maxTimes;
 	CodeGenerate::GetInstance().GetSourceStream() <<
 	"\tpattern" << m_flag << "->SetLastChildTimes(" << minTimes << ", " << maxTimes << ");" << std::endl;
 }
 
 void Pattern::SetLastChildShortest() {
-	m_children.back()->m_is_shortest = true;
+	m_children.back().m_pattern->m_is_shortest = true;
 	CodeGenerate::GetInstance().GetSourceStream() <<
 	"\tpattern" << m_flag << "->SetLastChildShortest();" << std::endl;
 }
@@ -137,9 +141,9 @@ bool Pattern::Compare(const Pattern &other) const {
 	}
 	for (size_t index = 0; index < m_children.size(); index++) {
 		size_t j = 0;
-		if (m_children[index]->SearchEqual(other, j)) {
+		if (m_children[index].m_pattern->SearchEqual(other, j)) {
 			if (index + 1 < m_children.size() &&
-				m_children[index + 1]->Equal(other, j + 1)) {
+				m_children[index + 1].m_pattern->Equal(other, j + 1)) {
 				return true;
 			}
 		}
@@ -155,7 +159,7 @@ bool Pattern::operator==(const Pattern &other) const {
 		return false;
 	}
 	for (size_t index = 0; index < m_children.size(); index++) {
-		if (m_children[index] != other.m_children[index]) {
+		if (m_children[index].m_pattern != other.m_children[index].m_pattern) {
 			return false;
 		}
 	}
@@ -169,7 +173,7 @@ bool Pattern::Equal(const Pattern &other, size_t otherIndex) const {
 	if (otherIndex >= other.m_children.size()) {
 		return false;
 	}
-	return Equal(*other.m_children[otherIndex]);
+	return Equal(*other.m_children[otherIndex].m_pattern);
 }
 
 bool Pattern::SearchEqual(const Pattern &other, size_t &otherIndex) const {
@@ -177,7 +181,7 @@ bool Pattern::SearchEqual(const Pattern &other, size_t &otherIndex) const {
 		return false;
 	}
 	for (size_t index = 0; index < other.m_children.size(); index++) {
-		if (Equal(*other.m_children[index])) {
+		if (Equal(*other.m_children[index].m_pattern)) {
 			otherIndex = index;
 			return true;
 		}
@@ -193,12 +197,7 @@ uint64_t Pattern::GetLineNO() const {
 uint64_t Pattern::GetColNO() const {
 	return m_col_NO;
 }
-uint64_t Pattern::GetMinTimes() const {
-	return m_min_times;
-}
-uint64_t Pattern::GetMaxTimes() const {
-	return m_max_times;
-}
+
 const char *Pattern::GetTypeName() const {
 	return "Pattern";
 }
@@ -207,7 +206,7 @@ bool Pattern::IsSameType(const Pattern &other)const {
 }
 bool Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
 	for (auto child : m_children) {
-		if (child->CheckDuplicate(other)) {
+		if (child.m_pattern->CheckDuplicate(other)) {
 			return true;
 		}
 	}
@@ -226,15 +225,15 @@ const std::string Pattern::ToString() const {
 }
 
 const std::string Pattern::TimesToString() const {
-	return "{" + std::to_string(m_min_times) + 
-		"," + std::to_string(m_max_times) + "}";
+	return "{" + std::to_string(0) + 
+		"," + std::to_string(0) + "}";
 }
 
 void Pattern::ForeachCheckDuplicate(const Pattern &other) const {
 	other.CheckDuplicate(*this);
 	if (IsNotSelf(other)) {
 		for (auto child : m_children) {
-			child->ForeachCheckDuplicate(other);
+			child.m_pattern->ForeachCheckDuplicate(other);
 		}
 	}
 }

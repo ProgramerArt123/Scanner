@@ -35,7 +35,7 @@ private:
 	void TryActionParse(Pattern &round);
 private:
 	const std::vector<char> m_literal;
-	std::shared_ptr<Pattern> m_pattern;
+	TimesPattern m_pattern;
 	Config &m_config;
 	size_t m_index = 0;
 	const uint64_t m_line_NO = 0;

@@ -22,11 +22,19 @@ enum PATTERN_TYPE {
 	PATTERN_TYPE_STRING,
 	PATTERN_TYPE_CHAR
 };
+
+class Pattern;
+class TimesPattern {
+public:
+	std::shared_ptr<Pattern> m_pattern;
+	uint64_t m_min_times = 1;
+	uint64_t m_max_times = 1;
+};
 class Pattern {
 public:
 	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_NONE);
 	virtual ~Pattern();
-	MATCH_RESULT IsMatch(Content &content, Lexical &parent);
+	MATCH_RESULT IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &content, Lexical &parent);
 	virtual bool IsMatchOnce(Content &content, Lexical &parent)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
@@ -41,8 +49,6 @@ public:
 	bool IsSameType(const Pattern &other)const;
 	uint64_t GetLineNO () const;
 	uint64_t GetColNO () const;
-	uint64_t GetMinTimes() const;
-	uint64_t GetMaxTimes() const;
 	virtual const char *GetTypeName() const;
 	bool ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
@@ -69,22 +75,21 @@ public:
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
-	std::vector<std::shared_ptr<Pattern>> m_children;
+	std::vector<TimesPattern> m_children;
 	const uint64_t m_line_NO = 0;
 	const uint64_t m_col_NO = 0;
-	uint64_t m_min_times = 1;
-	uint64_t m_max_times = 1;
 	bool m_is_shortest = false;
 	std::string m_content;
 	std::string m_action;
 	Rule &m_rule;
 	const Pattern *m_parent = NULL;
-	std::shared_ptr<Pattern> m_next;
+	TimesPattern m_next;
 	PATTERN_TYPE m_type = PATTERN_TYPE_AND;
 	size_t m_memento_cursor = UINT64_MAX;
 	uint64_t m_flag = 0;
 private:
 	bool m_is_closed_loop = false;
 };
+
 
 #endif

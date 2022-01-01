@@ -90,9 +90,10 @@ bool CharPattern::operator==(const Pattern &other)const {
 	return ((m_from_pattern == otherChar.m_from_pattern &&
 		m_to_pattern == otherChar.m_to_pattern) ||
 		(m_from_pattern == otherChar.m_to_pattern &&
-		m_to_pattern == otherChar.m_from_pattern)) &&
-		m_min_times == other.GetMinTimes() &&
-		m_max_times == other.GetMaxTimes();
+		m_to_pattern == otherChar.m_from_pattern));
+//		&&
+//		m_min_times == other.GetMinTimes() &&
+//		m_max_times == other.GetMaxTimes();
 }
 const char *CharPattern::GetTypeName() const {
 	return "CharPattern";

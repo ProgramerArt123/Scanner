@@ -3,9 +3,11 @@ annotation:"//".*$
 
 string:\"[("\".)^\"]*\"
 
-?:[@annotation@\s*]
+?:[@annotation@\s+]
 
 ?segmentation<:\s+
+
+oper_comma:","
 
 variable_def:(@arbitrarily_type@@segmentation@@variable@("="@expression@)?)#VariableDef#
 
@@ -17,12 +19,9 @@ element:[("("@expression@")")@proc_call@@string@@variable@@numeric@@integer@@add
 
 sizeof:[(sizeof"("@expression@")")(sizeof@element@)]
 
-oper_two:[","
-@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@
-@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@
-@oper_add_sub@@oper_mul_div@]
-
-oper_comma:","
+oper_two:[@oper_comma@@oper_assgin@@oper_logic_or@
+@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@
+@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
 
 oper_assgin:["=""+=""-=""*=""/=""%=""&=""^=""|=""<<="">>="]
 
@@ -143,7 +142,7 @@ comma_expression:@expression@(@oper_comma@@expression@)*
 
 for:"for""("(@statement@(@oper_comma@@statement@)*)|";"@comma_expression@|";"@comma_expression@|")"@once@
 
-arguments:@expression@(","@expression@)*
+arguments:@expression@(@oper_comma@@expression@)*
 
 proc_call:@variable@"("@arguments@?")"
 
@@ -161,7 +160,7 @@ labels:@label@(@oper_comma@@label@)+)|@label@
 
 assgin_label:@label@("="@integer@)?
 
-enum_def:("enum"@label@"{"(@assgin_label@","?)*"}"";")#EnumDef#
+enum_def:("enum"@label@"{"(@assgin_label@@oper_comma@?)*"}"";")#EnumDef#
 
 body:@label@"{"([(@variable_def@";")@enum_def@@struct_def@@union_def@])*"}"";"
 

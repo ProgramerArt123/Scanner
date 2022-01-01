@@ -12,9 +12,10 @@ OrPattern::OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
 OrPattern::~OrPattern() {}
 	
 bool OrPattern::IsMatchOnce(Content &content, Lexical &parent)const {
-	for (const std::shared_ptr<Pattern> &child : m_children) {
-		child->SetParent(this);
-		if (child->IsMatch(content, parent)) {
+	for (const TimesPattern &child : m_children) {
+		child.m_pattern->SetParent(this);
+		if (child.m_pattern->IsMatch(child.m_min_times, 
+				child.m_max_times, content, parent)) {
 			return true;
 		}
 	}
@@ -41,7 +42,7 @@ const char *OrPattern::GetTypeName() const {
 bool OrPattern::CompareSelf() const {
 	for (size_t i = 0; i < m_children.size(); i++) {
 		for (size_t j = 0; i < m_children.size(); j++) {
-			if (i != j && m_children[i] == m_children[j]) {
+			if (i != j && m_children[i].m_pattern == m_children[j].m_pattern) {
 				return true;
 			}
 		}
@@ -53,7 +54,7 @@ bool OrPattern::CompareOther(const Pattern &other) const {
 	bool hasDup = false;
 	for (size_t i = 0; i < m_children.size(); i++) {
 		size_t j = 0;
-		if (m_children[i]->SearchEqual(other, j)) {
+		if (m_children[i].m_pattern->SearchEqual(other, j)) {
 			if (hasDup) {
 				return true;
 			}

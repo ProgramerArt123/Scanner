@@ -36,9 +36,10 @@ bool StringPattern::operator==(const Pattern &other)const {
 		return false;
 	}
 	const StringPattern &otherChar = static_cast<const StringPattern &>(other);
-	return m_pattern == otherChar.m_pattern &&
-		m_min_times == other.GetMinTimes() &&
-		m_max_times == other.GetMaxTimes();
+	return m_pattern == otherChar.m_pattern ;
+//		&&
+//		m_min_times == other.GetMinTimes() &&
+//		m_max_times == other.GetMaxTimes();
 }
 const char *StringPattern::GetTypeName() const {
 	return "StringPattern";

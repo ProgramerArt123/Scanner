@@ -38,9 +38,9 @@ Rule::Rule(Config &config, const std::string name, const std::string literal, ui
 
 void Rule::Parse() {
 	while (m_index < m_literal.size()) {
-		Parse(*m_pattern);
+		Parse(*m_pattern.m_pattern);
 	}
-	m_pattern->MarkContent(m_literal, m_index);
+	m_pattern.m_pattern->MarkContent(m_literal, m_index);
 }
 
 void Rule::Parse(Pattern &parent) {
@@ -87,7 +87,6 @@ void Rule::Parse(Pattern &parent) {
 		CharParse(parent, false, isExclude);
 		break;
 	}
-	
 	if (m_index < m_literal.size()) {
 		uint64_t minTimes = 1;
 		uint64_t maxTimes = 1;
@@ -217,11 +216,11 @@ void Rule::TryActionParse(Pattern &round) {
 	throw std::string("Config Format Error, ACTION!");
 }
 std::shared_ptr<Pattern> &Rule::GetPattern() {
-	return m_pattern;
+	return m_pattern.m_pattern;
 }
 
 void Rule::CheckDuplicate(const Rule &other) {
-	m_pattern->ForeachCheckDuplicate(*other.m_pattern);
+	m_pattern.m_pattern->ForeachCheckDuplicate(*other.m_pattern.m_pattern);
 }
 
 Config &Rule::GetConfig() {
@@ -229,8 +228,8 @@ Config &Rule::GetConfig() {
 }
 
 bool Rule::IsMatch(Content &content)const {
-	return m_pattern->IsMatch(content, 
-		content.GetLexicalRoot());
+	return m_pattern.m_pattern->IsMatch(m_pattern.m_min_times, 
+		m_pattern.m_max_times, content, content.GetLexicalRoot());
 }
 const std::string &Rule::GetName() {
 	return m_name;
@@ -241,7 +240,7 @@ uint64_t Rule::GetFlag() const {
 }
 
 void Rule::SetPattern(const std::shared_ptr<Pattern> &pattern) {
-	m_pattern = pattern;
+	m_pattern.m_pattern = pattern;
 	CodeGenerate::GetInstance().GetSourceStream() <<
 		"\trule" << m_flag << "->SetPattern(pattern"<< pattern->GetFlag() <<");" << std::endl;
 }
