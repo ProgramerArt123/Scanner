@@ -24,6 +24,8 @@ public:
 	
 	uint64_t GetFlag() const;
 	
+	void SetRule(const std::string name, Rule *rule);
+	
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		begin() {return m_rules.begin();}
 	std::map<std::string, std::unique_ptr<Rule>>::iterator

@@ -34,7 +34,7 @@ void Config::Parse() {
 			}
 			const std::string &pattern = line.substr(pos + 1);
 			//std::cout << "label:" << label << ",pattern:" << pattern << std::endl;
-			m_rules[label].reset(new Rule(*this, label, pattern, lineNO));
+			SetRule(label, new Rule(*this, label, pattern, lineNO));
 		}
 		lineNO++;
 	}
@@ -102,4 +102,12 @@ void Config::ExecuteAction(const std::string name, const Lexical &lexical) const
 
 uint64_t Config::GetFlag() const {
 	return m_flag;
+}
+
+void Config::SetRule(const std::string name, Rule *rule) {
+	m_rules[name].reset(rule);
+	std::cout << "config" << m_flag << "->SetRule(name, rule" <<rule->GetFlag()<<");" << std::endl;
+	CodeGenerate::GetInstance().GetStream() <<
+	"config" << m_flag << "->SetRule(rule" << rule->GetFlag() << ");"
+	<< std::endl;
 }

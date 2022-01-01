@@ -30,8 +30,10 @@ Rule::Rule(Config &config, const std::string name, const std::string literal, ui
 		static uint64_t flag = 0;
 		m_flag = flag++;
 		std::cout << "Rule *rule" << m_flag << " = new Rule(config, " << name << ", " << literal << ", " << lineNO << ");" << std::endl;
+		std::cout << "std::shared_ptr<Pattern> &pattern" << m_pattern->GetFlag() << " = rule" << m_flag << "->GetPattern();" << std::endl;
 		CodeGenerate::GetInstance().GetStream() <<
-		"Rule *rule" << m_flag << " = new Rule(config, " << name << ", " << literal << ", " << lineNO << ");"
+		"Rule *rule" << m_flag << " = new Rule(config, " << name << ", " << literal << ", " << lineNO << ");" << std::endl <<
+		"std::shared_ptr<Pattern> &pattern" << m_pattern->GetFlag() << " = rule" << m_flag << "->GetPattern();"
 		<< std::endl;
 }
 
