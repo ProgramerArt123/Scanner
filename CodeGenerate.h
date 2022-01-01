@@ -8,12 +8,15 @@ class CodeGenerate {
 public:
 	static CodeGenerate &GetInstance();
 	~CodeGenerate();
-	std::stringstream &GetStream();
+	std::stringstream &GetHeaderStream();
+	std::stringstream &GetSourceStream();
 	void MarkGenerate();
 private:
 	explicit CodeGenerate(const std::string fileName);
+	void OutPutFile(const std::string &fileName, const std::stringstream &stream);
 	std::string m_file_name;
-	std::stringstream m_stream;
+	std::stringstream m_header_stream;
+	std::stringstream m_source_stream;
 	bool m_generate = false;
 };
 

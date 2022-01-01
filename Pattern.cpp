@@ -95,7 +95,7 @@ void Pattern::AddChild(std::shared_ptr<Pattern> child) {
 	if (last && last->IsShortest()) {
 		last->m_next = child;
 	}
-	CodeGenerate::GetInstance().GetStream() <<
+	CodeGenerate::GetInstance().GetSourceStream() <<
 	"\tpattern" << m_flag << "->AddChild(pattern" << child->m_flag << ");" << std::endl;
 }
 

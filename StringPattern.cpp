@@ -6,7 +6,7 @@
 
 StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern): 
 	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {
-		CodeGenerate::GetInstance().GetStream() <<
+		CodeGenerate::GetInstance().GetSourceStream() <<
 		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new StringPattern(rule, " << lineNO << ", " << colNO << ", " << pattern << "));" << std::endl;
 	}
 StringPattern::~StringPattern() {}

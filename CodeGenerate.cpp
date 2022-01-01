@@ -2,36 +2,46 @@
 #include <iostream>
 #include "CodeGenerate.h"
 CodeGenerate &CodeGenerate::GetInstance() {
-	static CodeGenerate instance("Generate.h");
+	static CodeGenerate instance("Generate");
 	return instance;
 }
 CodeGenerate::~CodeGenerate() {
+	const std::string &headerFileName = m_file_name + ".h";
+	OutPutFile(headerFileName, GetHeaderStream());
+	const std::string &sourceFileName = m_file_name + ".cpp";
+	OutPutFile(sourceFileName, GetSourceStream());
+}
+std::stringstream &CodeGenerate::GetHeaderStream() {
+	return m_header_stream;
+}
+std::stringstream &CodeGenerate::GetSourceStream() {
+	return m_source_stream;
+}
+CodeGenerate::CodeGenerate(const std::string fileName):
+	m_file_name(fileName) {
+}
+
+void CodeGenerate::OutPutFile(const std::string &fileName, const std::stringstream &stream) {
 	{
-		std::ofstream out(m_file_name);
+		std::ofstream out(fileName);
 		if (!out.is_open()) {
-			std::cerr << "Clear " << m_file_name << " Failed!" << std::endl;
+			std::cerr << "Clear " << fileName << " Failed!" << std::endl;
 		}
 	}
 	if (m_generate) {
-		std::ofstream out(m_file_name);
+		std::ofstream out(fileName);
 		if (out.is_open()) {
-			const std::string &content = m_stream.str();
+			const std::string &content = stream.str();
 #ifdef DEBUG
 			std::cout << content;
 #endif
 			out << content;
-			std::cout << "Output " << m_file_name << " success!" << std::endl;
+			std::cout << "Output " << fileName << " success!" << std::endl;
 		}
 		else {
-			std::cerr << "Output " << m_file_name << " Failed!" << std::endl;
+			std::cerr << "Output " << fileName << " Failed!" << std::endl;
 		}
 	}
-}
-std::stringstream &CodeGenerate::GetStream() {
-	return m_stream;
-}
-CodeGenerate::CodeGenerate(const std::string fileName):
-	m_file_name(fileName) {
 }
 void CodeGenerate::MarkGenerate() {
 	m_generate = true;
