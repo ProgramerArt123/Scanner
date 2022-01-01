@@ -23,7 +23,7 @@ enum PATTERN_TYPE {
 };
 
 struct RECTANGLE{
-	double length;
+	double * * * *length;
 	double width; 
 	union TIME{
 		int play;

@@ -13,14 +13,17 @@ public:
 	public:
 		explicit CursorsMemento(Content &content, Pattern &pattern);
 		~CursorsMemento();
-		size_t GetCursor();
+		size_t GetBeginCursor();
+		void MemRealEndCursor();
+		size_t GetRealEndCursor();
 		bool IsMatch(bool isMatch);
 	private:
 		friend class Content;
 		Content &m_content;
 		Pattern &m_pattern;
 		bool m_is_match = false;
-		size_t m_cursor = 0;
+		size_t m_begin_cursor = 0;
+		size_t m_real_end_cursor = 0;
 		size_t m_line_NO = 1;
 	};
 	explicit Content(const std::string fileName, const Config &config);

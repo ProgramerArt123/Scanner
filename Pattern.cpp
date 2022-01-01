@@ -29,6 +29,7 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 		if (!onece.IsMatch(IsMatchOnce(content, *lexical))) {
 			break;
 		}
+		memento.MemRealEndCursor();
 		times++;
 		if (!IsTerminate() && !IsIgnore() && GetRule().GetConfig().IsHaveIgnore()) {
 			GetRule().GetConfig().GetIgnore().IsMatch(0, UINT64_MAX, content, parent);
@@ -60,7 +61,8 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 		if (times >= minTimes) {
 			if (!IsIgnore() && !IsSegmentation()) {
 					lexical->SetContent(content.GetContent(
-					memento.GetCursor(),content.GetCursor()));
+					memento.GetBeginCursor(),
+					memento.GetRealEndCursor()));
 				parent.InsertChild(lexical, thisPos);
 			}
 			return MATCH_RESULT_SUCCESS;
@@ -72,8 +74,8 @@ MATCH_RESULT Pattern::IsMatch(uint64_t minTimes, uint64_t maxTimes, Content &con
 	else {
 		if (!IsIgnore() && !IsSegmentation()) {
 				lexical->SetContent(content.GetContent(
-				memento.GetCursor(),
-				content.GetCursor()));
+				memento.GetBeginCursor(),
+				memento.GetRealEndCursor()));
 			parent.InsertChild(lexical, thisPos);
 		}
 		return MATCH_RESULT_SUCCESS_JUMP;
