@@ -20,7 +20,7 @@ Pattern::~Pattern() {
 }
 MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	CheckClosedLoop(content);
-	std::shared_ptr<Lexical> lexical(new Lexical(this));
+	std::shared_ptr<Lexical> lexical(new Lexical(content.GetLineNO(), 0, this));
 	Content::CursorsMemento memento(content, *this);
 	uint64_t thisPos = UINT64_MAX;
 	uint64_t times = 0;

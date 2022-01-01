@@ -28,7 +28,7 @@ size_t Content::CursorsMemento::GetCursor() {
 }
 
 Content::Content(const std::string fileName, const Config &config):
-	m_file_name(fileName), m_config(config),m_lexical(new Lexical){
+	m_file_name(fileName), m_config(config),m_lexical(new Lexical(0,0)){
 }
 void Content::Load() {
 	std::ifstream file(m_file_name);
