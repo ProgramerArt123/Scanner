@@ -15,9 +15,9 @@ label:@label_head@[_a-zA-Z0-9]*
 
 
 
-semicolon:";"
+?semicolon:";"
 
-comma:","
+?comma:","
 
 colon:":"
 
@@ -170,7 +170,9 @@ for:"for"
 
 numeric:@integer@(@oper_dot@@integer@)?
 
-variable:@pointer@*@label@(@square_left@@expression@@square_right@)*(@oper_suffix@@variable@)*
+variable_label:@pointer@*@label@
+
+variable:@variable_label@(@square_left@@expression@@square_right@)*(@oper_suffix@@variable@)*
 
 sizeof_s:@sizeof@[(@segmentation@?@round@)(@segmentation@@element@)]
 
@@ -265,7 +267,7 @@ for_s:(@for@@round_left@@element2@(@comma@@element2@)*
 
 
 
-variable_def:(@arbitrarily_type@@segmentation@@variable@
+variable_def:(@arbitrarily_type@@segmentation@@variable_label@
 	(@oper_eq@@expression@)?)#VariableDef#
 
 proc_def:(@arbitrarily_type@@segmentation@@label@

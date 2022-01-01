@@ -26,9 +26,13 @@ void Config::Parse() {
 	}
 	
 	uint64_t lineNO = 1;
+	uint64_t beginLineNO = 0;
 	std::stringstream ruleStream;
 	std::string line;
 	while (std::getline(config, line)) {
+		if (0 == beginLineNO && !line.empty()) {
+			beginLineNO = lineNO;
+		}
 		ruleStream << line;
 		if (line.empty() || config.eof()) {
 			const std::string &cleanString = CleanRule(ruleStream.str());
@@ -45,7 +49,8 @@ void Config::Parse() {
 				}
 				const std::string &pattern = cleanString.substr(pos + 1);
 				//std::cout << "label:" << label << ",pattern:" << pattern << std::endl;
-				SetRule(label, new Rule(*this, label, pattern, lineNO, isSegmentation, isTerminate));
+				SetRule(label, new Rule(*this, label, pattern, beginLineNO, isSegmentation, isTerminate));
+				beginLineNO = 0;
 				ruleStream.str("");
 			}
 		}
