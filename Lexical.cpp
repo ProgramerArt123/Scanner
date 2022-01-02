@@ -19,18 +19,28 @@ void Lexical::SetContent(const std::string content) {
 const std::string &Lexical::GetContent() const {
 	return m_content;
 }
-void Lexical::ForeachTopLeftRigth( Content &content) {
+void Lexical::ForeachTryCommandAction(Content &content) {
 	if (m_pattern) {
 		m_pattern->TryCommandActionEnter(*this, content);
 	}
 	for (auto child : m_children) {
-		child->ForeachTopLeftRigth(content);
+		child->ForeachTryCommandAction(content);
 	}
 	if (m_pattern) {
 		m_pattern->TryCommandActionExit(*this, content);
 	}
 }
-
+bool Lexical::ForeachTopLeftRigthInterrupt(std::function<bool(const Lexical &)> factor) {
+	if (factor(*this)) {
+		return true;
+	}
+	for (auto child : m_children) {
+		if (child->ForeachTopLeftRigthInterrupt(factor)) {
+			return true;
+		}
+	}
+	return false;
+}
 void Lexical::SetParent(const Lexical *parent) {
 	m_parent = parent;
 }

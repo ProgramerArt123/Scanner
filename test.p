@@ -1,4 +1,4 @@
-int func1(){
+const int func1(){
 	return 99;
 }
 

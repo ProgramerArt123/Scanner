@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
 		content.Load();
 		content.Parse();
 		config.BindActionFunction("ProcDef", &ProcDefEnter, &ProcDefExit);
-		content.ForeachLexical();
+		content.ForeachTryCommandAction();
 #endif
 	}
 	catch (const std::string &e){

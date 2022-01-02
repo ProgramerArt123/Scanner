@@ -12,7 +12,8 @@ public:
 	void SetContent(const std::string content);
 	const std::string &GetContent() const;
 	void SetParent(const Lexical *parent);
-	void ForeachTopLeftRigth( Content &content);
+	void ForeachTryCommandAction(Content &content);
+	bool ForeachTopLeftRigthInterrupt(std::function<bool(const Lexical &)> factor);
 	uint64_t GetLineNO() const;
 	uint64_t GetColNO() const;
 	bool IsRoot() const;
