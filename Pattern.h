@@ -61,6 +61,7 @@ public:
 	const std::string &GetActionName()const;
 	void TryCommandAction(const Lexical &lexical)const;
 	uint64_t GetFlag() const;
+	static const std::string  EscapeLiteral(const std::string &src);
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	

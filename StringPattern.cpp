@@ -2,12 +2,13 @@
 #include <iostream>
 #include "Content.h"
 #include "CodeGenerate.h"
+#include "Rule.h"
 #include "StringPattern.h"
 
 StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern): 
 	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {
 		CodeGenerate::GetInstance().GetSourceStream() <<
-		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new StringPattern(rule, " << lineNO << ", " << colNO << ", " << pattern << "));" << std::endl;
+		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new StringPattern(*rule" << rule.GetFlag() << ", " << lineNO << ", " << colNO << ", \"" << Pattern::EscapeLiteral(pattern) << "\"));" << std::endl;
 	}
 StringPattern::~StringPattern() {}
 

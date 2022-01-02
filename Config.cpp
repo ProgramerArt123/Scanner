@@ -13,7 +13,7 @@ Config::Config(const std::string fileName):
 		"std::shared_ptr<Config> GetConfig" << m_flag << "();" << std::endl;
 		CodeGenerate::GetInstance().GetSourceStream() <<
 		"std::shared_ptr<Config> GetConfig" << m_flag << "(){" << std::endl <<
-		"\tstd::shared_ptr<Config> config" << m_flag << "(new Config(" << fileName << "));"
+		"\tstd::shared_ptr<Config> config" << m_flag << "(new Config(\"" << fileName << "\"));"
 		<< std::endl;
 }
 Config::~Config() {
@@ -112,6 +112,6 @@ uint64_t Config::GetFlag() const {
 void Config::SetRule(const std::string name, Rule *rule) {
 	m_rules[name].reset(rule);
 	CodeGenerate::GetInstance().GetSourceStream() <<
-	"\tconfig" << m_flag << "->SetRule(rule" << rule->GetFlag() << ");"
+	"\tconfig" << m_flag << "->SetRule(\"" << name << "\",rule" << rule->GetFlag() << ");"
 	<< std::endl;
 }

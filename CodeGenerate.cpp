@@ -19,6 +19,15 @@ std::stringstream &CodeGenerate::GetSourceStream() {
 }
 CodeGenerate::CodeGenerate(const std::string fileName):
 	m_file_name(fileName) {
+		GetHeaderStream() << "#include <memory>" << std::endl ;
+		GetHeaderStream() << "#include \"Config.h\"" << std::endl << std::endl;
+		
+		GetSourceStream() << "#include \"Pattern.h\"" << std::endl;
+		GetSourceStream() << "#include \"AndPattern.h\"" << std::endl;
+		GetSourceStream() << "#include \"OrPattern.h\"" << std::endl;
+		GetSourceStream() << "#include \"CharPattern.h\"" << std::endl;
+		GetSourceStream() << "#include \"StringPattern.h\"" << std::endl;
+		GetSourceStream() << "#include \"" << m_file_name << ".h\"" << std::endl << std::endl;
 }
 
 void CodeGenerate::OutPutFile(const std::string &fileName, const std::stringstream &stream) {

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Content.h"
 #include "CodeGenerate.h"
+#include "Rule.h"
 #include "CharPattern.h"
 
 #define NUMBER 'd'
@@ -41,7 +42,7 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 			m_to_pattern = m_from_pattern;
 		}
 		CodeGenerate::GetInstance().GetSourceStream() <<
-		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(rule, " << lineNO << ", " << colNO << ", " << fromPattern << ", " << isEscape << ", " << isExclude << "));"
+		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(*rule" << rule.GetFlag() << ", " << lineNO << ", " << colNO << ", '" << fromPattern << "', " << isEscape << ", " << isExclude << "));"
 		<< std::endl;
 }
 CharPattern::~CharPattern() {}

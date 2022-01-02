@@ -7,6 +7,7 @@
 #include "Rule.h"
 #include "Lexical.h"
 #include "CodeGenerate.h"
+#include "Rule.h"
 #include "Pattern.h"
 
 Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type):
@@ -308,4 +309,19 @@ void Pattern::TryCommandAction(const Lexical &lexical)const {
 
 uint64_t Pattern::GetFlag() const {
 	return m_flag;
+}
+
+const std::string Pattern::EscapeLiteral(const std::string &src) {
+	std::unique_ptr<char[]> escapeLiteral(new char[src.length() * 2 + 1]);
+	size_t index = 0, escapeIndex = 0;
+	while (index++ < src.length()) {
+		if (src[index] == '\\' || src[index] == '"') {
+			escapeLiteral[escapeIndex++] = '\\';
+			escapeLiteral[escapeIndex++] = src[index];
+		}
+		else {
+			escapeLiteral[escapeIndex++] = src[index];
+		}
+	}
+	return escapeLiteral.get();
 }
