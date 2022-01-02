@@ -30,7 +30,7 @@ void Lexical::ForeachTryCommandAction(Content &content) {
 		m_pattern->TryCommandActionExit(*this, content);
 	}
 }
-bool Lexical::ForeachTopLeftRigthInterrupt(std::function<bool(const Lexical &)> factor) {
+bool Lexical::ForeachTopLeftRigthInterrupt(std::function<bool(const Lexical &)> factor) const{
 	if (factor(*this)) {
 		return true;
 	}
