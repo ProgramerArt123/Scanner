@@ -10,6 +10,7 @@ public:
 	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape, bool isExclude);
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content, Lexical &parent) const override;
+	void SetFromPattern(char fromPattern, bool isEscape);
 	void SetToPattern(char toPattern, bool isEscape);
 	bool Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;
@@ -25,7 +26,7 @@ private:
 	char PatternMapping(char src);
 	char m_from_pattern;
 	char m_to_pattern;
-	const bool m_is_from_escape = false;
+	 bool m_is_from_escape = false;
 	const bool m_is_yes = true;
 	bool m_is_to_escape = false;
 	std::vector<char> m_from_escape_patterns;

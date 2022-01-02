@@ -103,10 +103,14 @@ void Pattern::AddChild(std::shared_ptr<Pattern> child) {
 void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 	m_children.back()->m_min_times = minTimes;
 	m_children.back()->m_max_times = maxTimes;
+	CodeGenerate::GetInstance().GetSourceStream() <<
+	"\tpattern" << m_flag << "->SetLastChildTimes(" << minTimes << ", " << maxTimes << ");" << std::endl;
 }
 
 void Pattern::SetLastChildShortest() {
 	m_children.back()->m_is_shortest = true;
+	CodeGenerate::GetInstance().GetSourceStream() <<
+	"\tpattern" << m_flag << "->SetLastChildShortest();" << std::endl;
 }
 
 bool Pattern::CheckDuplicate(const Pattern &other) const {
@@ -211,6 +215,8 @@ void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 }
 void Pattern::SetAction(const std::string action) {
 	m_action = action;
+	CodeGenerate::GetInstance().GetSourceStream() <<
+	"\tpattern" << m_flag << "->SetAction(\"" << action << "\");" << std::endl;
 }
 const std::string Pattern::ToString() const {
 	return '(' + m_content + ')' + TimesToString();
@@ -312,15 +318,15 @@ uint64_t Pattern::GetFlag() const {
 }
 
 const std::string Pattern::EscapeLiteral(const std::string &src) {
-	std::unique_ptr<char[]> escapeLiteral(new char[src.length() * 2 + 1]);
+	std::unique_ptr<char[]> escapeLiteral(new char[src.length() * 2 + 1]());
 	size_t index = 0, escapeIndex = 0;
-	while (index++ < src.length()) {
+	while (index < src.length()) {
 		if (src[index] == '\\' || src[index] == '"') {
 			escapeLiteral[escapeIndex++] = '\\';
-			escapeLiteral[escapeIndex++] = src[index];
+			escapeLiteral[escapeIndex++] = src[index++];
 		}
 		else {
-			escapeLiteral[escapeIndex++] = src[index];
+			escapeLiteral[escapeIndex++] = src[index++];
 		}
 	}
 	return escapeLiteral.get();

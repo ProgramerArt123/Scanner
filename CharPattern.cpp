@@ -11,39 +11,10 @@
 #define ANY '.'
 CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape, bool isExclude): 
 	Pattern(rule, lineNO, colNO, PATTERN_TYPE_CHAR), m_from_pattern(fromPattern), m_is_from_escape(isEscape),m_is_yes(!isExclude) {
-		if (!m_is_from_escape) {
-			switch (m_from_pattern)
-			{
-			case ANY:
-				m_from_pattern = -128;
-				m_to_pattern = 127;
-				break;
-			default:
-				m_from_pattern = PatternMapping(m_from_pattern);
-				m_to_pattern = m_from_pattern;
-				break;
-			}
-		}
-		else {
-			switch (m_from_pattern)
-			{
-			case NUMBER:
-				m_from_pattern = '0';
-				m_to_pattern = '9';
-				break;
-			case SPACE:
-				m_from_escape_patterns.push_back(' ');
-				m_from_escape_patterns.push_back('\t');
-				m_from_escape_patterns.push_back('\n');
-				break;
-			default:
-				break;
-			}
-			m_to_pattern = m_from_pattern;
-		}
 		CodeGenerate::GetInstance().GetSourceStream() <<
 		"\tstd::shared_ptr<Pattern> pattern" << m_flag << "(new CharPattern(*rule" << rule.GetFlag() << ", " << lineNO << ", " << colNO << ", '" << fromPattern << "', " << isEscape << ", " << isExclude << "));"
 		<< std::endl;
+		SetFromPattern(fromPattern, isEscape);
 }
 CharPattern::~CharPattern() {}
 
@@ -57,10 +28,49 @@ bool CharPattern::IsMatchOnce(Content &content, Lexical &parent) const {
 	}
 	return isMatch;
 }
+void CharPattern::SetFromPattern(char fromPattern, bool isEscape) {
+	m_is_from_escape = isEscape;
+	m_from_pattern = fromPattern;
+	if (!m_is_from_escape) {
+		switch (m_from_pattern)
+		{
+		case ANY:
+			m_from_pattern = -128;
+			m_to_pattern = 127;
+			break;
+		default:
+			m_from_pattern = PatternMapping(m_from_pattern);
+			m_to_pattern = m_from_pattern;
+			break;
+		}
+	}
+	else {
+		switch (m_from_pattern)
+		{
+		case NUMBER:
+			m_from_pattern = '0';
+			m_to_pattern = '9';
+			break;
+		case SPACE:
+			m_from_escape_patterns.push_back(' ');
+			m_from_escape_patterns.push_back('\t');
+			m_from_escape_patterns.push_back('\n');
+			break;
+		default:
+			break;
+		}
+		m_to_pattern = m_from_pattern;
+	}
+	CodeGenerate::GetInstance().GetSourceStream() <<
+	"\t((CharPattern *)pattern" << m_flag << ".get())->SetFromPattern('" << fromPattern << "', " << isEscape << ");"
+	<< std::endl;
+}
 void CharPattern::SetToPattern(char toPattern, bool isEscape){
 	m_is_to_escape = isEscape;
 	m_to_pattern = toPattern;
 	m_to_pattern = PatternMapping(m_to_pattern);
+	CodeGenerate::GetInstance().GetSourceStream() <<
+		"\t((CharPattern *)pattern" << m_flag << ".get())->SetToPattern('" << toPattern << "', " << isEscape << ");" << std::endl;
 }
 
 bool CharPattern::Compare(const Pattern &other) const {
@@ -104,7 +114,6 @@ bool CharPattern::IsInRange(char from, char to, char c) const {
 }
 const std::string CharPattern::ToString() const {
 	return '\'' + m_content + '\'' + TimesToString();
-	;
 }
 
 void CharPattern::CheckMultiValueRange(char pattern, bool isEscape) const {

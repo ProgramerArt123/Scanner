@@ -67,5 +67,4 @@ bool OrPattern::CompareOther(const Pattern &other) const {
 
 const std::string OrPattern::ToString() const {
 	return '[' + m_content + ']' + TimesToString();
-	;
 }

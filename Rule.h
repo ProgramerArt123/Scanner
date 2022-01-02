@@ -20,6 +20,8 @@ public:
 	bool IsMatch(Content &content) const;
 	const std::string &GetName();
 	uint64_t GetFlag() const;
+	
+	void SetPattern(const std::shared_ptr<Pattern> &pattern);
 private:
 	void StringParse(Pattern &parent);
 	void LabelParse(Pattern &parent);

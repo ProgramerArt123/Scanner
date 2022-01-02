@@ -45,5 +45,4 @@ const char *StringPattern::GetTypeName() const {
 }
 const std::string StringPattern::ToString() const {
 	return '"' + m_content + '"' + TimesToString();
-	;
 }
