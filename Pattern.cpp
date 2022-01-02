@@ -35,6 +35,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 			}
 		}
 	}
+#ifdef DEBUG
 	if (m_rule.GetName() != "ignore") {
 		std::stringstream trace;
 		GetTraceInfo(trace);
@@ -45,6 +46,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
+#endif
 	memento.IsMatch(UINT64_MAX != thisPos || times > m_min_times);
 	if (UINT64_MAX == thisPos) {
 		if (times > m_min_times) {
