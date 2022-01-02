@@ -6,7 +6,8 @@ g++ -std=c++11 -fPIC -shared AndPattern.cpp CharPattern.cpp CodeGenerate.cpp Con
 rm -f Scanner
 g++ -std=c++11 Scanner.cpp -L. -lScanner -o Scanner -Wl,-rpath .
 
+rm -f Generate.h Generate.cpp
 ./Scanner c_front.s
 
 rm -f libc_front.so
-g++ -std=c++11 -fPIC -shared CodeGenerate.cpp -L. -lScanner -o libc_front.so -Wl,-rpath .
+g++ -std=c++11 -fPIC -shared Generate.cpp -L. -lScanner -o libc_front.so -Wl,-rpath .

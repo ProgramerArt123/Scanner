@@ -6,6 +6,7 @@ CodeGenerate &CodeGenerate::GetInstance() {
 	return instance;
 }
 CodeGenerate::~CodeGenerate() {
+	GetHeaderStream() << "#endif" << std::endl;
 	const std::string &headerFileName = m_file_name + ".h";
 	OutPutFile(headerFileName, GetHeaderStream());
 	const std::string &sourceFileName = m_file_name + ".cpp";
@@ -19,6 +20,8 @@ std::stringstream &CodeGenerate::GetSourceStream() {
 }
 CodeGenerate::CodeGenerate(const std::string fileName):
 	m_file_name(fileName) {
+		GetHeaderStream() << "#ifndef __GENERATE_H__" << std::endl;
+		GetHeaderStream() << "#define __GENERATE_H__" << std::endl;
 		GetHeaderStream() << "#include <memory>" << std::endl ;
 		GetHeaderStream() << "#include \"Config.h\"" << std::endl << std::endl;
 		
