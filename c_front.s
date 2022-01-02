@@ -7,7 +7,7 @@ ignore:[@annotation@\s*]
 
 segmentation:\s+
 
-variable_def:@arbitrarily_type@@ignore@@variable@(@ignore@"="@ignore@@expression@)?
+variable_def:(@arbitrarily_type@@ignore@@variable@(@ignore@"="@ignore@@expression@)?)#VariableDef#
 
 statement:[@return@@goto@@proc_call@@variable_def@@expression@]
 
