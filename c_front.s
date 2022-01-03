@@ -47,5 +47,13 @@ numeric:@integer@\.@integer@
 
 integer:[0-9]+
 
-variable:@label@|@label@"["@expression@"]"
+variable:@pointer_type@?@label@|@pointer_type@?@label@"["@expression@"]"
+
+base_type:double|int|long|char|float
+
+pointer:"*"@ignore@*
+
+pointer_type:@pointer@
+
+
 
