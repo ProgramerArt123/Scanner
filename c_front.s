@@ -47,13 +47,11 @@ numeric:@integer@\.@integer@
 
 integer:[0-9]+
 
-variable:@pointer_type@?@label@|@pointer_type@?@label@"["@expression@"]"
+variable:@pointer@*@label@|@pointer@*@label@"["@expression@"]"
 
 base_type:double|int|long|char|float
 
 pointer:"*"@ignore@*
 
-pointer_type:@pointer@
-
-
+address:"&"@ignore@@label@|"&"@ignore@@label@"["@expression@"]"
 
