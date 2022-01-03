@@ -9,6 +9,8 @@ line:\n
 
 ignore:(space|line)*
 
+
+
 expression:@ignore@@oper_one@@ignore@@expression@@ignore@
 expression:@ignore@@expression@@ignore@"++"
 expression:@ignore@@expression@@ignore@"--"
@@ -64,3 +66,5 @@ else:else@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statement
 while:while@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"
 
 do_while:do@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@while
+
+for:for@ignore@"("@ignore@@expression@@ignore@";"@ignore@@expression@@ignore@";"@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
