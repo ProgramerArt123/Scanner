@@ -7,7 +7,7 @@ space:[ \t\r]
 
 line:\n
 
-ignore:(space|line)+
+ignore:(space|line)*
 
 expression:@ignore@@oper_one@@ignore@@expression@@ignore@
 expression:@ignore@@expression@@ignore@"++"
@@ -41,17 +41,20 @@ round:"("@expression@")"
 
 label:[_a-zA-Z][a-zA-Z0-9]*
 
-keywords:auto|double|int|struct|break|else|long|switch|case|enum|register|typedef|char|extern|return|union|const|float|short|unsigned|continue|for|signed|void|default|goto|sizeof|volatile|do|if|while|static
+keywords:struct|break|else|switch|case|enum|register|typedef|extern|return|union|const|unsigned|continue|for|signed|void|default|goto|sizeof|volatile|do|if|while|static
 
 numeric:@integer@\.@integer@
 
 integer:[0-9]+
 
+
+
 variable:@pointer@*@label@|@pointer@*@label@"["@expression@"]"
 
-base_type:double|int|long|char|float
+base_type:auto|double|int|long|char|float
 
-pointer:"*"@ignore@*
+pointer:"*"@ignore@
 
 address:"&"@ignore@@label@|"&"@ignore@@label@"["@expression@"]"
 
+if:if@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
