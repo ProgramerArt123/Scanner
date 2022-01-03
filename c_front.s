@@ -51,6 +51,7 @@ integer:[0-9]+
 
 variable:@pointer@*@label@|@pointer@*@label@"["@expression@"]"
 
+
 base_type:auto|double|int|long|char|float
 
 pointer:"*"@ignore@
@@ -68,3 +69,7 @@ while:while@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@stateme
 do_while:do@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@while
 
 for:for@ignore@"("@ignore@@expression@@ignore@";"@ignore@@expression@@ignore@";"@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
+
+arguments:@expression@(@oper_comma@@expression@)*
+
+proc_call:@variable@"("arguments?")"
