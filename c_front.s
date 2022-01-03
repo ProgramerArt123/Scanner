@@ -62,3 +62,5 @@ else_if:else@ignore@if@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@igno
 else:else@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
 
 while:while@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"
+
+do_while:do@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@while
