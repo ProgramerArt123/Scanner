@@ -58,3 +58,5 @@ pointer:"*"@ignore@
 address:"&"@ignore@@label@|"&"@ignore@@label@"["@expression@"]"
 
 if:if@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
+
+else_if:else@ignore@if@ignore@"("@ignore@@expression@@ignore@")"@ignore@"{"@ignore@@statements@@ignore@"}"@ignore@
