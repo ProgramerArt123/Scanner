@@ -9,7 +9,7 @@ space:[ \t\r]
 
 line:\n
 
-ignore:(space|line)*
+ignore:(space|line)+
 
 expression:@ignore@@oper_one@@expression@@ignore@
 expression:@ignore@@expression@"++"@ignore@
@@ -47,7 +47,7 @@ round:"("@expression@")"
 
 label:[_a-zA-Z][a-zA-Z0-9]*
 
-keywords:struct|break|enum|register|typedef|extern|return|union|unsigned|continue|signed|void|goto|volatile
+keywords:struct|break|enum|register|typedef|extern|return|union|continue|goto|volatile
 
 numeric:@integer@\.@integer@
 
@@ -55,7 +55,7 @@ integer:[0-9]+
 
 variable:@pointer@*@label@("["@expression@"]")*
 
-base_type:auto|double|int|long|char|float|void
+base_type:auto|double|int|((unsigned|signed)(@ignore@int|long|char)?)|long|char|float|void
 
 type:@base_type@|@label@
 
