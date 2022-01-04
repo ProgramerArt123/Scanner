@@ -63,11 +63,21 @@ const_type:(const@ignore@@type@)|(@type@@ignore@const)
 
 static_type:(static@ignore@@type@)|(@type@@ignore@static)
 
+volatile_type:(volatile@ignore@@type@)|(@type@@ignore@volatile)
+
 static_const:(static@ignore@const)|(const@ignore@static)
 
 static_const_type:(@static_const@@ignore@@type@)|(@type@@ignore@@static_const@)
 
-arbitrarily_type:@static_const_type@|@static_type@|@const_type@
+static_volatile:(static@ignore@volatile)|(volatile@ignore@static)
+
+static_volatile_type:(@static_volatile@@ignore@@type@)|(@type@@ignore@@static_volatile@)
+
+const_volatile:(const@ignore@volatile)|(volatile@ignore@const)
+
+const_volatile_type:(@const_volatile@@ignore@@type@)|(@type@@ignore@@const_volatile@)
+
+arbitrarily_type:@const_volatile_type@|@static_volatile_type@|@static_const_type@|@volatile_type@|@static_type@|@const_type@
 
 pointer:"*"@ignore@
 
