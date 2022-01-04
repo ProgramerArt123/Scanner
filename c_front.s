@@ -1,4 +1,6 @@
 
+//TODO signed unsigned
+
 annotation:"//".*$
 
 string:\"[^\"]*\"
@@ -14,9 +16,13 @@ expression:@ignore@@expression@"++"@ignore@
 expression:@ignore@@expression@"--"@ignore@
 expression:@ignore@@expression@@oper_two@@expression@@ignore@
 expression:@ignore@@expression@"?"@expression@":"@expression@@ignore@
-expression:(@ignore@sizeof@ignore@@round@@ignore@)|(@ignore@sizeof(space|line)+@string@|@label@|@numeric@|@integer@@ignore@)
+expression:@ignore@@element@@ignore@
 expression:@ignore@@variable@|@numeric@|@integer@@ignore@
 expression:@ignore@@round@@ignore@
+
+element:@string@|@variable@|@numeric@|@integer@|@address@|@sizeof@
+
+sizeof:(sizeof@ignore@"("@ignore@@expression@@ignore@")")|(sizeof@ignore@@element@)
 
 oper_two:@oper_comma@|@oper_assgin@|@oper_logic_or@|@oper_logic_and@|@oper_bit_or@|@oper_bit_xor@|@oper_bit_and@|@oper_equal@|@oper_rela@|@oper_mov@|@oper_add_sub@|@oper_mul_div@
 
@@ -65,7 +71,7 @@ arbitrarily_type:@static_const_type@|@static_type@|@const_type@
 
 pointer:"*"@ignore@
 
-address:"&"@ignore@@label@|"&"@ignore@@label@"["@expression@"]"
+address:"&"@ignore@@variable@
 
 block:"{"@ignore@@statements@@ignore@"}"
 
