@@ -1,5 +1,5 @@
 
-//TODO signed unsigned
+//TODO register
 
 annotation:"//".*$
 
@@ -10,6 +10,12 @@ space:[ \t\r]
 line:\n
 
 ignore:(space|line)+
+
+process:@expression@|@return@|@goto@|@proc_call@
+
+variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
+
+statement:@process@|@variable_def@
 
 expression:@ignore@@oper_one@@expression@@ignore@
 expression:@ignore@@expression@"++"@ignore@
@@ -47,7 +53,7 @@ round:"("@expression@")"
 
 label:[_a-zA-Z][a-zA-Z0-9]*
 
-keywords:struct|break|enum|register|typedef|extern|return|union|continue|goto|volatile
+keywords:struct|enum|register|typedef|extern|union|
 
 numeric:@integer@\.@integer@
 
@@ -83,7 +89,7 @@ pointer:"*"@ignore@
 
 address:"&"@ignore@@variable@
 
-block:"{"@ignore@@statements@@ignore@"}"
+block:"{"@ignore@@statement@*@ignore@"}"
 
 scope:@block@|(@ignore@@statement@@ignore@)
 
@@ -95,7 +101,9 @@ else:else@ignore@@round@@ignore@@scope@
 
 if_else:@if@(@ignore@@else_if@@ignore@)*(@ignore@@else@)?
 
-branch:@variable@|@integer@@ignore@@block@|(@ignore@@processes@@ignore@)
+break_process:break|@process@
+
+branch:@variable@|@integer@@ignore@":"@ignore@@block@|(@ignore@@break_process@+@ignore@)|
 
 case:case@ignore@@branch@
 
@@ -103,13 +111,19 @@ default:default@ignore@@branch@
 
 switch_case:@ignore@@round@@ignore@"{"@ignore@@case@*@default@?@ignore@"}"
 
-while:while@ignore@@round@@ignore@@scope@
+break_continue_statement:break|continue|@statement@
 
-do_while:do@ignore@@scope@@ignore@while@ignore@@round@
+break_continue_block:"{"@ignore@@break_continue_statement@*@ignore@"}"
 
-comma_process:@processes@(@oper_comma@@processes@)*"
+once:@break_continue_block@|(@ignore@@break_continue_statement@@ignore@)
 
-for:for@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_process@@ignore@|";"@ignore@@comma_process@@ignore@|")"@ignore@@scope@
+while:while@ignore@@round@@ignore@@once@
+
+do_while:do@ignore@@once@@ignore@while@ignore@@round@
+
+comma_expression:@expression@(@oper_comma@@expression@)*"
+
+for:for@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
 
 arguments:@expression@(@ignore@@oper_comma@@expression@)*
 
@@ -118,3 +132,7 @@ proc_call:@variable@"("arguments?")"
 parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)*
 
 proc_def:@arbitrarily_type@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@
+
+return:return@expression@?
+
+goto:goto@ignore@@label@
