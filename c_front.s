@@ -1,5 +1,5 @@
 
-//TODO register
+//TODO
 
 annotation:"//".*$
 
@@ -53,7 +53,7 @@ round:"("@expression@")"
 
 label:[_a-zA-Z][a-zA-Z0-9]*
 
-keywords:struct|enum|register|typedef|extern|union|
+keywords:struct|enum||typedef|extern|union|
 
 numeric:@integer@\.@integer@
 
@@ -69,21 +69,23 @@ const_type:(const@ignore@@type@)|(@type@@ignore@const)
 
 static_type:(static@ignore@@type@)|(@type@@ignore@static)
 
-volatile_type:(volatile@ignore@@type@)|(@type@@ignore@volatile)
+register_volatile:register|volatile
+
+register_volatile_type:(@register_volatile@@ignore@@type@)|(@type@@ignore@@register_volatile@)
 
 static_const:(static@ignore@const)|(const@ignore@static)
 
 static_const_type:(@static_const@@ignore@@type@)|(@type@@ignore@@static_const@)
 
-static_volatile:(static@ignore@volatile)|(volatile@ignore@static)
+static_register_volatile:(static@ignore@@register_volatile@)|(@register_volatile@@ignore@static)
 
-static_volatile_type:(@static_volatile@@ignore@@type@)|(@type@@ignore@@static_volatile@)
+static_register_volatile_type:(@static_register_volatile@@ignore@@type@)|(@type@@ignore@@static_register_volatile@)
 
-const_volatile:(const@ignore@volatile)|(volatile@ignore@const)
+const_register_volatile:(const@ignore@@register_volatile@)|(@register_volatile@@ignore@const)
 
-const_volatile_type:(@const_volatile@@ignore@@type@)|(@type@@ignore@@const_volatile@)
+const_register_volatile_type:(@const_register_volatile@@ignore@@type@)|(@type@@ignore@@const_register_volatile@)
 
-arbitrarily_type:@const_volatile_type@|@static_volatile_type@|@static_const_type@|@volatile_type@|@static_type@|@const_type@
+arbitrarily_type:@const_register_volatile_type@|@static_register_volatile_type@|@static_const_type@|@register_volatile_type@|@static_type@|@const_type@
 
 pointer:"*"@ignore@
 
