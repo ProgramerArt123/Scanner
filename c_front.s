@@ -1,6 +1,4 @@
 
-//TODO  check reduce
-
 annotation:"//".*$
 
 string:\"[^\"]*\"
