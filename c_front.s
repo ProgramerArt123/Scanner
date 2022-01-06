@@ -19,14 +19,8 @@ variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
 
 statement:@process@|@variable_def@
 
-expression:@ignore@@oper_one@@expression@@ignore@
-expression:@ignore@@expression@"++"@ignore@
-expression:@ignore@@expression@"--"@ignore@
-expression:@ignore@@expression@@oper_two@@expression@@ignore@
-expression:@ignore@@expression@"?"@expression@":"@expression@@ignore@
-expression:@ignore@@element@@ignore@
-expression:@ignore@@variable@|@numeric@|@integer@@ignore@
-expression:@ignore@@round@@ignore@
+expression:@ignore@@oper_one@@expression@@ignore@|@ignore@@expression@"++"@ignore@|@ignore@@expression@"--"@ignore@|@ignore@@expression@@oper_two@@expression@@ignore@|@ignore@@expression@"?"@expression@":"@expression@@ignore@|@ignore@@element@@ignore@|@ignore@@variable@|@numeric@|@integer@@ignore@|@ignore@@round@@ignore@
+
 
 element:@string@|@variable@|@numeric@|@integer@|@address@|@sizeof@
 
