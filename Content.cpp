@@ -1,6 +1,20 @@
 #include "Config.h"
 #include "Content.h"
 
+Content::CursorsMemento::CursorsMemento(Content &content) :
+	m_content(content){
+		m_content.PushCursor();
+}
+Content::CursorsMemento::~CursorsMemento() {
+	if (!m_is_mask) {
+		m_content.PopCursor();
+	}
+}
+
+bool Content::CursorsMemento::IsMask(bool isMask) {
+	return m_is_mask = isMask;
+}
+
 Content::Content(const std::string fileName, const Config &config):
 	m_file_name(fileName), m_config(config){
 	
@@ -35,4 +49,15 @@ bool Content::Next() {
 	else {
 		return false;
 	}
+}
+
+void Content::PushCursor() {
+	m_cursors_memento.push(m_cursor);
+}
+void Content::PopCursor() {
+	if (m_cursors_memento.empty()) {
+		throw std::string("cursor stack unbalance!");
+	}
+	m_cursor = m_cursors_memento.top();
+	m_cursors_memento.pop();
 }
