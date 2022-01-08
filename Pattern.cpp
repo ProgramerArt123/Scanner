@@ -12,3 +12,13 @@ bool Pattern::IsMask(Content &content) {
 	}
 	return memento.IsMask(true) ;
 }
+
+void Pattern::AddChild(std::shared_ptr<Pattern> child) {
+	m_children.push_back(child);
+}
+
+void Pattern::ReplaceLastChild(std::shared_ptr<Pattern> newChild) {
+	newChild->m_children.push_back(m_children.back());
+	m_children.pop_back();
+	m_children.push_back(newChild);
+}
