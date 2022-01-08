@@ -5,16 +5,15 @@ StringPattern::StringPattern(uint64_t lineNO, uint64_t colNO, const std::string 
 	Pattern(lineNO, colNO), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
-bool StringPattern::IsMask(Content &content)  {
-	Content::CursorsMemento memento(content);
+bool StringPattern::IsMaskOnce(Content &content) {
 	for (const char c : m_pattern) {
 		if (content.IsEnd()) {
-			return memento.IsMask(false);
+			return false;
 		}
 		if (c != content.GetChar()) {
-			return memento.IsMask(false);
+			return false;
 		}
 		content.Next();
 	}
-	return memento.IsMask(true);
+	return true;
 }

@@ -6,7 +6,7 @@ class OrPattern : public Pattern {
 public:
 	explicit OrPattern(uint64_t lineNO, uint64_t colNO);
 	virtual ~OrPattern();
-	bool IsMask(Content &content) override;
+	bool IsMaskOnce(Content &content) override;
 };
 
 #endif

@@ -9,7 +9,7 @@ class CharPattern : public Pattern {
 public:
 	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char pattern);
 	virtual ~CharPattern();
-	bool IsMask(Content &content) override;
+	bool IsMaskOnce(Content &content) override;
 private:
 	const char m_pattern;
 };

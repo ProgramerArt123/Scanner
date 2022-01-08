@@ -6,12 +6,11 @@ OrPattern::OrPattern(uint64_t lineNO, uint64_t colNO):
 }
 OrPattern::~OrPattern() {}
 	
-bool OrPattern::IsMask(Content &content) {
-	Content::CursorsMemento memento(content);
+bool OrPattern::IsMaskOnce(Content &content) {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
 		if (child->IsMask(content)) {
-			return memento.IsMask(true);
+			return true;
 		}
 	}
-	return memento.IsMask(false);
+	return false;
 }

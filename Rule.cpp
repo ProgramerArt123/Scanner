@@ -1,7 +1,6 @@
 #include "CharPattern.h"
 #include "StringPattern.h"
 #include "OrPattern.h"
-#include "RepeatPattern.h"
 #include "Config.h"
 #include "Rule.h"
 
@@ -53,23 +52,19 @@ void Rule::Parse(Pattern &parent) {
 	}
 	
 	if (m_index + 1 < m_literal.size()) {
-		std::shared_ptr<Pattern> pattern;
 		switch (m_literal[m_index + 1])
 		{
 		case ASTERISK:
-			pattern.reset(new RepeatPattern(m_line_NO, m_index, 0, __UINT64_MAX__));
+			parent.SetLastChildTimes(0, __UINT64_MAX__);
 			break;
 		case PLUS:
-			pattern.reset(new RepeatPattern(m_line_NO, m_index, 1, __UINT64_MAX__));
+			parent.SetLastChildTimes(1, __UINT64_MAX__);
 			break;
 		case QUESTION:
-			pattern.reset(new RepeatPattern(m_line_NO, m_index, 0, 1));
+			parent.SetLastChildTimes(0, 1);
 			break;
 		default :
 			break;
-		}
-		if (pattern) {
-			parent.ReplaceLastChild(pattern);
 		}
 	}
 }
