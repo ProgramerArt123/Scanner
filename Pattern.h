@@ -13,6 +13,7 @@ public:
 	virtual bool IsMaskOnce(Content &content);
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
+
 protected:
 	std::list<std::shared_ptr<Pattern>> m_children;
 	const uint64_t m_line_NO = 0;

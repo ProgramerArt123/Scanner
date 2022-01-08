@@ -7,11 +7,13 @@
 #include "Pattern.h"
 class CharPattern : public Pattern {
 public:
-	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char pattern);
+	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char fromPattern);
 	virtual ~CharPattern();
 	bool IsMaskOnce(Content &content) override;
+	void SetToPattern(char toPattern);
 private:
-	const char m_pattern;
+	const char m_from_pattern;
+	char m_to_pattern;
 };
 
 #endif
