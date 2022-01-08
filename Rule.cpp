@@ -1,5 +1,5 @@
-#include "RegExpPattern.h"
-#include "AndPattern.h"
+#include "CharPattern.h"
+#include "StringPattern.h"
 #include "OrPattern.h"
 #include "RepeatPattern.h"
 #include "Config.h"
@@ -11,6 +11,7 @@
 #define SQUARE_L '['
 #define SQUARE_R ']'
 #define LABEL '@'
+#define STRING '"'
 #define ASTERISK '*'
 #define PLUS '+'
 #define QUESTION '?'
@@ -36,6 +37,9 @@ void Rule::Parse(Pattern &parent) {
 		break;
 	case LABEL:
 		LabelParse(parent);
+		break;
+	case STRING:
+		StringParse(parent);
 		break;
 	case ROUND_L:
 		RoundParse(parent);
@@ -69,6 +73,18 @@ void Rule::Parse(Pattern &parent) {
 		}
 	}
 }
+
+void Rule::StringParse(Pattern &parent) {
+	size_t begin = m_index;
+	while (m_index < m_literal.size()) {
+		if (STRING == m_literal[m_index++]) {
+			const std::string pattern(m_literal.data() + begin, m_index - begin);
+			parent.m_children.push_back(std::shared_ptr<Pattern>(new StringPattern(pattern)));
+			return;
+		}
+	}
+	throw std::string("RegExp Format Error, STRING!");
+}
 void Rule::LabelParse(Pattern &parent) {
 	size_t begin = m_index;
 	while (m_index < m_literal.size()) {
@@ -81,7 +97,7 @@ void Rule::LabelParse(Pattern &parent) {
 	throw std::string("RegExp Format Error, LABEL!");
 }
 void Rule::RoundParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new AndPattern);
+	std::shared_ptr<Pattern> pattern(new Pattern);
 	while (m_index < m_literal.size()) {
 		if (ROUND_R == m_literal[m_index]) {
 			parent.m_children.push_back(pattern);
@@ -107,7 +123,7 @@ void Rule::CharParse(Pattern &parent) {
 		throw std::string("RegExp Format Error, ESCAPE!");
 	}
 	m_pattern->m_children.push_back(std::shared_ptr<Pattern>
-		(new RegExpPattern(m_literal[m_index])));
+		(new CharPattern(m_literal[m_index])));
 }
 
 std::shared_ptr<Pattern> &Rule::GetPattern() {

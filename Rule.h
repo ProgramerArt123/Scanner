@@ -15,6 +15,7 @@ public:
 	void Parse();
 	std::shared_ptr<Pattern> &GetPattern();
 private:
+	void StringParse(Pattern &parent);
 	void LabelParse(Pattern &parent);
 	void RoundParse(Pattern &parent);
 	void SquareParse(Pattern &parent);
