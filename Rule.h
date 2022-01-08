@@ -7,18 +7,24 @@
 #include <memory>
 
 #include "Pattern.h"
+
+class Config;
 class Rule {
 public:
-	explicit Rule(const std::string literal);
+	explicit Rule(Config &config, const std::string literal);
 	void Parse();
+	std::shared_ptr<Pattern> &GetPattern();
 private:
-	void RoundParse(Pattern &parent, size_t &index);
-	void SquareParse(Pattern &parent, size_t &index);
-	void CharParse(Pattern &parent, size_t &index);
-	void Parse(Pattern &parent, size_t &index);
+	void LabelParse(Pattern &parent);
+	void RoundParse(Pattern &parent);
+	void SquareParse(Pattern &parent);
+	void CharParse(Pattern &parent);
+	void Parse(Pattern &parent);
 private:
 	const std::vector<char> m_literal;
-	Pattern m_pattern;
+	std::shared_ptr<Pattern> m_pattern;
+	Config &m_config;
+	size_t m_index = 0;
 };
 
 #endif

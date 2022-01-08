@@ -23,7 +23,7 @@ void Config::Parse() {
 			if (m_rules.end() != m_rules.find(label)) {
 				std::cout << label << " override!";
 			}
-			m_rules[label].reset(new Rule(line.substr(pos + 1)));
+			m_rules[label].reset(new Rule(*this, line.substr(pos + 1)));
 		}
 	}
 	
@@ -43,4 +43,11 @@ void Config::CheckRepeat() {
 
 void Config::ParseContent(Content &content) const {
 	
+}
+
+Rule &Config::GetRule(const std::string name) {
+	if (m_rules.end() == m_rules.find(name)) {
+		throw name + " undefined!";
+	}
+	return *m_rules[name];
 }
