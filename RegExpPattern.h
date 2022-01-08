@@ -2,14 +2,15 @@
 #define __REG_EXP_PATTERN_H__
 
 #include <string>
+#include <vector>
 #include "Pattern.h"
 class RegExpPattern : public Pattern {
 public:
-	explicit RegExpPattern(const std::string pattern);
+	explicit RegExpPattern(char pattern);
 	virtual ~RegExpPattern();
 	bool IsMask(Content &content) override;
 private:
-	const std::string m_pattern;
+	const char m_pattern;
 };
 
 #endif

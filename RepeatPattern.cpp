@@ -10,7 +10,7 @@ bool RepeatPattern::IsMask(Content &content) {
 	Content::CursorsMemento memento(content);
 	uint64_t times = 0;
 	while (times ++ < m_max_times){
-		if (!m_single->IsMask(content)) {
+		if (!m_children.front()->IsMask(content)) {
 			break;
 		}
 	}

@@ -24,13 +24,17 @@ void Config::Parse() {
 				std::cout << label << " override!";
 			}
 			m_rules[label].reset(new Rule(line.substr(pos + 1)));
-			m_rules[label]->Parse();
 		}
 	}
 	
 	if (m_rules.find("main") == m_rules.end()) {
 		throw std::string("main rule not defined!");
 	}
+	
+	for (auto &rule : m_rules) {
+		rule.second->Parse();
+	}
+	
 }
 
 void Config::CheckRepeat() {

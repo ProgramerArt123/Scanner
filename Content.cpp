@@ -50,6 +50,9 @@ bool Content::Next() {
 		return false;
 	}
 }
+bool Content::IsEnd() {
+	return m_cursor < m_content.size();
+}
 
 void Content::PushCursor() {
 	m_cursors_memento.push(m_cursor);

@@ -10,9 +10,8 @@ public:
 	virtual ~RepeatPattern();
 	bool IsMask(Content &content) override;
 private:
-	uint64_t m_min_times = 0;
-	uint64_t m_max_times = UINT64_MAX;
-	std::unique_ptr<Pattern> m_single;
+	uint64_t m_min_times = 1;
+	uint64_t m_max_times = 1;
 };
 
 #endif

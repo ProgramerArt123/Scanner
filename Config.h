@@ -16,7 +16,7 @@ public:
 	void ParseContent(Content &content) const;
 private:
 	const std::string m_file_name;
-	std::map<std::string, std::unique_ptr<Rule>> m_rules;
+	std::map<std::string, std::shared_ptr<Rule>> m_rules;
 };
 
 #endif

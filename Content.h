@@ -12,6 +12,7 @@ public:
 	char GetChar();
 	bool Previous();
 	bool Next();
+	bool IsEnd();
 	void PushCursor();
 	void PopCursor();
 	
