@@ -1,8 +1,8 @@
 #include "Content.h"
 #include "StringPattern.h"
 
-StringPattern::StringPattern(const std::string pattern): 
-	m_pattern(pattern) {}
+StringPattern::StringPattern(uint64_t lineNO, uint64_t colNO, const std::string pattern): 
+	Pattern(lineNO, colNO), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
 bool StringPattern::IsMask(Content &content)  {

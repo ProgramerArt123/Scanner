@@ -1,7 +1,7 @@
 #include "Content.h"
 #include "RepeatPattern.h"
-RepeatPattern::RepeatPattern(uint64_t minTimes, uint64_t maxTimes):
-	m_min_times(minTimes), m_max_times(maxTimes){
+RepeatPattern::RepeatPattern(uint64_t lineNO, uint64_t colNO, uint64_t minTimes, uint64_t maxTimes): 
+	Pattern(lineNO, colNO), m_min_times(minTimes), m_max_times(maxTimes){
 	
 }
 RepeatPattern::~RepeatPattern() {}

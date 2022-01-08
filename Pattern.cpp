@@ -1,5 +1,9 @@
 #include "Content.h"
 #include "Pattern.h"
+
+Pattern::Pattern(uint64_t lineNO, uint64_t colNO) :
+	m_line_NO(lineNO), m_col_NO(colNO){
+}
 Pattern::~Pattern() {
 	
 }

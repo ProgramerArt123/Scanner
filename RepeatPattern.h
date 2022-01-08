@@ -6,7 +6,7 @@
 #include "Pattern.h"
 class RepeatPattern : public Pattern {
 public:
-	explicit RepeatPattern(uint64_t minTimes, uint64_t maxTimes);
+	explicit RepeatPattern(uint64_t lineNO, uint64_t colNO, uint64_t minTimes, uint64_t maxTimes);
 	virtual ~RepeatPattern();
 	bool IsMask(Content &content) override;
 private:

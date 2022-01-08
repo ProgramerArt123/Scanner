@@ -13,6 +13,7 @@ void Config::Parse() {
 	
 	std::string line;
 	while (std::getline(config, line)) {
+		static uint64_t lineNO = 1;
 		if (!line.empty()) {
 			const std::size_t pos = line.find_first_of(":");
 			if (std::string::npos == pos) {
@@ -22,8 +23,9 @@ void Config::Parse() {
 			if (m_rules.end() != m_rules.find(label)) {
 				std::cout << label << " override!";
 			}
-			m_rules[label].reset(new Rule(*this, line.substr(pos + 1)));
+			m_rules[label].reset(new Rule(*this, line.substr(pos + 1), lineNO));
 		}
+		lineNO++;
 	}
 	
 	if (m_rules.find("main") == m_rules.end()) {

@@ -3,10 +3,11 @@
 
 #include <string>
 #include <vector>
+
 #include "Pattern.h"
 class CharPattern : public Pattern {
 public:
-	explicit CharPattern(char pattern);
+	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char pattern);
 	virtual ~CharPattern();
 	bool IsMask(Content &content) override;
 private:

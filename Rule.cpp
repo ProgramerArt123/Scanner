@@ -16,10 +16,10 @@
 #define PLUS '+'
 #define QUESTION '?'
 
-Rule::Rule(Config &config, const std::string literal):
+Rule::Rule(Config &config, const std::string literal, uint64_t lineNO):
 	m_literal(literal.begin(), literal.end()),
-	m_pattern(new Pattern),
-	m_config(config){
+	m_pattern(new Pattern(lineNO, m_index)),
+	m_config(config),m_line_NO(lineNO){
 }
 
 void Rule::Parse() {
@@ -52,19 +52,18 @@ void Rule::Parse(Pattern &parent) {
 		break;
 	}
 	
-	
 	if (m_index + 1 < m_literal.size()) {
 		std::shared_ptr<Pattern> pattern;
 		switch (m_literal[m_index + 1])
 		{
 		case ASTERISK:
-			pattern.reset(new RepeatPattern(0, __UINT64_MAX__));
+			pattern.reset(new RepeatPattern(m_line_NO, m_index, 0, __UINT64_MAX__));
 			break;
 		case PLUS:
-			pattern.reset(new RepeatPattern(1, __UINT64_MAX__));
+			pattern.reset(new RepeatPattern(m_line_NO, m_index, 1, __UINT64_MAX__));
 			break;
 		case QUESTION:
-			pattern.reset(new RepeatPattern(0, 1));
+			pattern.reset(new RepeatPattern(m_line_NO, m_index, 0, 1));
 			break;
 		default :
 			break;
@@ -83,7 +82,7 @@ void Rule::StringParse(Pattern &parent) {
 		}
 		else if (STRING == m_literal[m_index++]) {
 			const std::string pattern(m_literal.data() + begin, m_index - begin);
-			parent.AddChild(std::shared_ptr<Pattern>(new StringPattern(pattern)));
+			parent.AddChild(std::shared_ptr<Pattern>(new StringPattern(m_line_NO, m_index, pattern)));
 			return;
 		}
 	}
@@ -104,7 +103,7 @@ void Rule::LabelParse(Pattern &parent) {
 	throw std::string("RegExp Format Error, LABEL!");
 }
 void Rule::RoundParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new Pattern);
+	std::shared_ptr<Pattern> pattern(new Pattern(m_line_NO, m_index));
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
@@ -115,7 +114,7 @@ void Rule::RoundParse(Pattern &parent) {
 	throw std::string("RegExp Format Error, ROUND_L!");
 }
 void Rule::SquareParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new OrPattern);
+	std::shared_ptr<Pattern> pattern(new OrPattern(m_line_NO, m_index));
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
@@ -130,7 +129,7 @@ void Rule::CharParse(Pattern &parent) {
 		throw std::string("RegExp Format Error, ESCAPE!");
 	}
 	m_pattern->AddChild(std::shared_ptr<Pattern>
-		(new CharPattern(m_literal[m_index])));
+		(new CharPattern(m_line_NO, m_index, m_literal[m_index])));
 }
 
 std::shared_ptr<Pattern> &Rule::GetPattern() {
