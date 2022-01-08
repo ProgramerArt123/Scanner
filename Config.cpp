@@ -4,7 +4,6 @@
 
 Config::Config(const std::string fileName):
 	m_file_name(fileName) {
-	
 }
 void Config::Parse() {
 	std::ifstream config(m_file_name);

@@ -77,7 +77,10 @@ void Rule::Parse(Pattern &parent) {
 void Rule::StringParse(Pattern &parent) {
 	size_t begin = m_index;
 	while (m_index < m_literal.size()) {
-		if (STRING == m_literal[m_index++]) {
+		if (ESCAPE == m_literal[m_index++]) {
+			m_index++;
+		}
+		else if (STRING == m_literal[m_index++]) {
 			const std::string pattern(m_literal.data() + begin, m_index - begin);
 			parent.m_children.push_back(std::shared_ptr<Pattern>(new StringPattern(pattern)));
 			return;
@@ -88,7 +91,10 @@ void Rule::StringParse(Pattern &parent) {
 void Rule::LabelParse(Pattern &parent) {
 	size_t begin = m_index;
 	while (m_index < m_literal.size()) {
-		if (LABEL == m_literal[m_index++]) {
+		if (ESCAPE == m_literal[m_index++]) {
+			m_index++;
+		}
+		else if (LABEL == m_literal[m_index++]) {
 			const std::string labelName(m_literal.data() + begin, m_index - begin);
 			parent.m_children.push_back(m_config.GetRule(labelName).GetPattern());
 			return;
@@ -99,22 +105,22 @@ void Rule::LabelParse(Pattern &parent) {
 void Rule::RoundParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new Pattern);
 	while (m_index < m_literal.size()) {
+		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
 			parent.m_children.push_back(pattern);
 			return;
 		}
-		Parse(*pattern);
 	}
 	throw std::string("RegExp Format Error, ROUND_L!");
 }
 void Rule::SquareParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new OrPattern);
 	while (m_index < m_literal.size()) {
+		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
 			parent.m_children.push_back(pattern);
 			return;
 		}
-		Parse(*pattern);
 	}
 	throw std::string("RegExp Format Error, SQUARE_L!");
 }
