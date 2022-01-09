@@ -36,7 +36,7 @@ void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 	m_children.back()->m_max_times = maxTimes;
 }
 
-void Pattern::CheckDuplicate(const Pattern &other) const {
+bool Pattern::CheckDuplicate(const Pattern &other) const {
 	for (size_t index = 0; index < m_children.size(); index ++) {
 		size_t j = 0;
 		if (m_children[index]->SearchEqual(other, j)) {
@@ -44,11 +44,11 @@ void Pattern::CheckDuplicate(const Pattern &other) const {
 				m_children[index + 1]->Equal(other, j + 1)) {
 				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
 						"<=>line:" << other.m_line_NO << ", col:" << other.m_col_NO << std::endl;
-				return;
+				return true;
 			}
 		}
 	}
-
+	return false;
 }
 
 bool Pattern::operator==(const Pattern &other) const {
@@ -78,4 +78,11 @@ bool Pattern::SearchEqual(const Pattern &other, size_t &otherIndex) const {
 		}
 	}
 	return false;
+}
+
+uint64_t Pattern::GetLineNO() const {
+	return m_line_NO;
+}
+uint64_t Pattern::GetColNO() const {
+	return m_col_NO;
 }

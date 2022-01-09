@@ -1,3 +1,4 @@
+#include <iostream>
 #include "CharPattern.h"
 #include "StringPattern.h"
 #include "OrPattern.h"
@@ -144,7 +145,9 @@ std::shared_ptr<Pattern> &Rule::GetPattern() {
 void Rule::CheckDuplicate() {
 	for (const auto &rule : m_config) {
 		if (IsNotSelf(*rule.second)) {
-			m_pattern->CheckDuplicate(*rule.second->GetPattern());
+			if (m_pattern->CheckDuplicate(*rule.second->GetPattern())) {
+				std::cout << "content:" << std::string(m_literal.begin(), m_literal.end()) << std::endl;
+			}
 		}
 	}
 }
