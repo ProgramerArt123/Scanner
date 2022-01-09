@@ -6,13 +6,13 @@ Content::CursorsMemento::CursorsMemento(Content &content) :
 		m_content.PushCursor();
 }
 Content::CursorsMemento::~CursorsMemento() {
-	if (!m_is_mask) {
+	if (!m_is_match) {
 		m_content.PopCursor();
 	}
 }
 
-bool Content::CursorsMemento::IsMask(bool isMask) {
-	return m_is_mask = isMask;
+bool Content::CursorsMemento::IsMatch(bool isMatch) {
+	return m_is_match = isMatch;
 }
 
 Content::Content(const std::string fileName, const Config &config):

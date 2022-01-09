@@ -38,8 +38,12 @@ void Config::Parse() {
 	
 }
 
-void Config::CheckRepeat() {
-	
+void Config::CheckDuplicate() {
+	std::cout << "check pattern start......" << std::endl;
+	for (auto &rule : m_rules) {
+		rule.second->CheckDuplicate();
+	}
+	std::cout << "check pattern end" << std::endl;
 }
 
 void Config::ParseContent(Content &content) const {

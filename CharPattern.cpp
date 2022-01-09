@@ -7,14 +7,14 @@ CharPattern::CharPattern(uint64_t lineNO, uint64_t colNO, const char fromPattern
 }
 CharPattern::~CharPattern() {}
 
-bool CharPattern::IsMaskOnce(Content &content) {
+bool CharPattern::IsMatchOnce(Content &content) {
 	if (content.IsEnd()) {
 		return false;
 	}
-	bool isMask = m_from_pattern <= content.GetChar() &&
+	bool isMatch = m_from_pattern <= content.GetChar() &&
 			content.GetChar() <= m_to_pattern;
 	content.Next();
-	return isMask;
+	return isMatch;
 }
 void CharPattern::SetToPattern(char toPattern) {
 	m_to_pattern = toPattern;

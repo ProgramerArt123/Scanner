@@ -140,3 +140,15 @@ void Rule::CharParse(Pattern &parent) {
 std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;
 }
+
+void Rule::CheckDuplicate() {
+	for (const auto &rule : m_config) {
+		if (IsNotSelf(*rule.second)) {
+			m_pattern->CheckDuplicate(*rule.second->GetPattern());
+		}
+	}
+}
+
+bool Rule::IsNotSelf(const Rule &rule) const {
+	return m_line_NO != rule.m_line_NO;
+}

@@ -12,9 +12,14 @@ class Config {
 public:
 	explicit Config(const std::string fileName);
 	void Parse();
-	void CheckRepeat();	
+	void CheckDuplicate();	
 	void ParseContent(Content &content) const;
 	Rule &GetRule(const std::string name);
+	
+	std::map<std::string, std::unique_ptr<Rule>>::iterator
+		begin() {return m_rules.begin();}
+	std::map<std::string, std::unique_ptr<Rule>>::iterator
+		end() {return m_rules.end();}
 private:
 	const std::string m_file_name;
 	std::map<std::string, std::unique_ptr<Rule>> m_rules;

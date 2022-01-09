@@ -13,7 +13,9 @@ class Rule {
 public:
 	explicit Rule(Config &config, const std::string literal, uint64_t lineNO);
 	void Parse();
+	void CheckDuplicate();
 	std::shared_ptr<Pattern> &GetPattern();
+	bool IsNotSelf(const Rule &rule) const;
 private:
 	void StringParse(Pattern &parent);
 	void LabelParse(Pattern &parent);

@@ -5,7 +5,7 @@ StringPattern::StringPattern(uint64_t lineNO, uint64_t colNO, const std::string 
 	Pattern(lineNO, colNO), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
-bool StringPattern::IsMaskOnce(Content &content) {
+bool StringPattern::IsMatchOnce(Content &content) {
 	for (const char c : m_pattern) {
 		if (content.IsEnd()) {
 			return false;

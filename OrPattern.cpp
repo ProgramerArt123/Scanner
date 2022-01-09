@@ -6,9 +6,9 @@ OrPattern::OrPattern(uint64_t lineNO, uint64_t colNO):
 }
 OrPattern::~OrPattern() {}
 	
-bool OrPattern::IsMaskOnce(Content &content) {
+bool OrPattern::IsMatchOnce(Content &content) {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
-		if (child->IsMask(content)) {
+		if (child->IsMatch(content)) {
 			return true;
 		}
 	}

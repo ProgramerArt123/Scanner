@@ -20,10 +20,10 @@ public:
 	public:
 		explicit CursorsMemento(Content &content);
 		~CursorsMemento();
-		bool IsMask(bool isMask);
+		bool IsMatch(bool isMatch);
 	private:
 		Content &m_content;
-		bool m_is_mask = false;
+		bool m_is_match = false;
 	};
 private:
 	const Config &m_config;
