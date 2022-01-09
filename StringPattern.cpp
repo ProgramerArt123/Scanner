@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Content.h"
 #include "StringPattern.h"
 
@@ -16,4 +17,20 @@ bool StringPattern::IsMatchOnce(Content &content) {
 		content.Next();
 	}
 	return true;
+}
+
+void StringPattern::CheckDuplicate(const Pattern &other) const {
+	
+}
+bool StringPattern::operator==(const Pattern &other)const {
+	if (!IsSameType(other)) {
+		return false;
+	}
+	const StringPattern &otherChar = static_cast<const StringPattern &>(other);
+	return m_pattern == otherChar.m_pattern &&
+		m_min_times == other.GetMinTimes() &&
+		m_max_times == other.GetMaxTimes();
+}
+const char *StringPattern::GetTypeName() const {
+	return "StringPattern";
 }

@@ -9,6 +9,9 @@ public:
 	explicit StringPattern(uint64_t lineNO, uint64_t colNO, const std::string pattern);
 	virtual ~StringPattern();
 	bool IsMatchOnce(Content &content) override;
+	void CheckDuplicate(const Pattern &other) const override;
+	bool operator==(const Pattern &other)const override;
+	const char *GetTypeName() const override;
 private:
 	const std::string m_pattern;
 };

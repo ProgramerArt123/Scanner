@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string.h>
 #include "Config.h"
 #include "Content.h"
 

@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Content.h"
 #include "CharPattern.h"
 
@@ -18,4 +19,21 @@ bool CharPattern::IsMatchOnce(Content &content) {
 }
 void CharPattern::SetToPattern(char toPattern) {
 	m_to_pattern = toPattern;
+}
+
+void CharPattern::CheckDuplicate(const Pattern &other) const {
+}
+
+bool CharPattern::operator==(const Pattern &other)const {
+	if (!IsSameType(other)) {
+		return false;
+	}
+	const CharPattern &otherChar = static_cast<const CharPattern &>(other);
+	return m_from_pattern == otherChar.m_from_pattern &&
+		m_to_pattern == otherChar.m_to_pattern &&
+		m_min_times == other.GetMinTimes() &&
+		m_max_times == other.GetMaxTimes();
+}
+const char *CharPattern::GetTypeName() const {
+	return "CharPattern";
 }

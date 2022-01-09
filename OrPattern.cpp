@@ -16,13 +16,18 @@ bool OrPattern::IsMatchOnce(Content &content) {
 	return false;
 }
 
-bool OrPattern::CheckDuplicate(const Pattern &other) const {
+void OrPattern::CheckDuplicate(const Pattern &other) const {
+	ChildrenCheckDuplicate(other);
+	other.ChildrenCheckDuplicate(*this);
+	if (!IsSameType(other)) {
+		return;
+	}
 	for (size_t i = 0; i < m_children.size(); i++) {
 		for (size_t j = 0; i < m_children.size(); j++) {
 			if (i != j && m_children[i] == m_children[j]) {
 				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
 						"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
-				return true;
+				return ;
 			}
 		}
 	}
@@ -33,12 +38,15 @@ bool OrPattern::CheckDuplicate(const Pattern &other) const {
 			if (hasDup) {
 				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
 					"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
-				return true;
+				return ;
 			}
 			else {
 				hasDup = true;
 			}
 		}
 	}
-	return false;
+}
+
+const char *OrPattern::GetTypeName() const {
+	return "OrPattern";
 }
