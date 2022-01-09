@@ -1,4 +1,5 @@
 #include <string.h>
+#include <iostream>
 #include "Content.h"
 #include "StringPattern.h"
 
@@ -19,8 +20,14 @@ bool StringPattern::IsMatchOnce(Content &content) {
 	return true;
 }
 
-void StringPattern::CheckDuplicate(const Pattern &other) const {
-	
+void StringPattern::Compare(const Pattern &other) const {
+	if (!IsSameType(other)) {
+		return;
+	}
+	if (Equal(other)) {
+		std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
+					"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
+	}
 }
 bool StringPattern::operator==(const Pattern &other)const {
 	if (!IsSameType(other)) {

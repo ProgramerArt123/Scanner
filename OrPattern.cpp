@@ -16,9 +16,7 @@ bool OrPattern::IsMatchOnce(Content &content) {
 	return false;
 }
 
-void OrPattern::CheckDuplicate(const Pattern &other) const {
-	ChildrenCheckDuplicate(other);
-	other.ChildrenCheckDuplicate(*this);
+void OrPattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
 		return;
 	}

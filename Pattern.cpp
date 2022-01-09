@@ -40,10 +40,14 @@ void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 void Pattern::CheckDuplicate(const Pattern &other) const {
 	ChildrenCheckDuplicate(other);
 	other.ChildrenCheckDuplicate(*this);
+	Compare(other);
+}
+
+void Pattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
 		return;
 	}
-	for (size_t index = 0; index < m_children.size(); index ++) {
+	for (size_t index = 0; index < m_children.size(); index++) {
 		size_t j = 0;
 		if (m_children[index]->SearchEqual(other, j)) {
 			if (index + 1 < m_children.size() &&
@@ -78,7 +82,7 @@ bool Pattern::Equal(const Pattern &other, size_t otherIndex) const {
 	if (otherIndex >= other.m_children.size()) {
 		return false;
 	}
-	return this == &other || (*this) == other;
+	return Equal(*other.m_children[otherIndex]);
 }
 
 bool Pattern::SearchEqual(const Pattern &other, size_t &otherIndex) const {
@@ -86,14 +90,16 @@ bool Pattern::SearchEqual(const Pattern &other, size_t &otherIndex) const {
 		return false;
 	}
 	for (size_t index = 0; index < other.m_children.size(); index++) {
-		if (this == &other || (*this) == other) {
+		if (Equal(*other.m_children[index])) {
 			otherIndex = index;
 			return true;
 		}
 	}
 	return false;
 }
-
+bool Pattern::Equal(const Pattern &other) const {
+	return this == &other || (*this) == other;
+}
 uint64_t Pattern::GetLineNO() const {
 	return m_line_NO;
 }

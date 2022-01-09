@@ -7,7 +7,7 @@ public:
 	explicit OrPattern(uint64_t lineNO, uint64_t colNO);
 	virtual ~OrPattern();
 	bool IsMatchOnce(Content &content) override;
-	void CheckDuplicate(const Pattern &other) const override;
+	void Compare(const Pattern &other) const override;
 	const char *GetTypeName() const override;
 };
 

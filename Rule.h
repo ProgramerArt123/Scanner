@@ -11,7 +11,7 @@
 class Config;
 class Rule {
 public:
-	explicit Rule(Config &config, const std::string literal, uint64_t lineNO);
+	explicit Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO);
 	void Parse();
 	void CheckDuplicate();
 	std::shared_ptr<Pattern> &GetPattern();
@@ -29,6 +29,7 @@ private:
 	Config &m_config;
 	size_t m_index = 0;
 	const uint64_t m_line_NO = 0;
+	const std::string m_name;
 };
 
 #endif

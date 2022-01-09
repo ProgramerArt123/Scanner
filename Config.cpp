@@ -23,7 +23,7 @@ void Config::Parse() {
 			if (m_rules.end() != m_rules.find(label)) {
 				std::cout << label << " override!";
 			}
-			m_rules[label].reset(new Rule(*this, line.substr(pos + 1), lineNO));
+			m_rules[label].reset(new Rule(*this, label, line.substr(pos + 1), lineNO));
 		}
 		lineNO++;
 	}
@@ -43,7 +43,7 @@ void Config::CheckDuplicate() {
 	for (auto &rule : m_rules) {
 		rule.second->CheckDuplicate();
 	}
-	std::cout << "check pattern end" << std::endl;
+	std::cout << "check pattern finish" << std::endl;
 }
 
 void Config::ParseContent(Content &content) const {

@@ -21,7 +21,7 @@ void CharPattern::SetToPattern(char toPattern) {
 	m_to_pattern = toPattern;
 }
 
-void CharPattern::CheckDuplicate(const Pattern &other) const {
+void CharPattern::Compare(const Pattern &other) const {
 }
 
 bool CharPattern::operator==(const Pattern &other)const {

@@ -17,7 +17,8 @@
 #define QUESTION '?'
 #define RANGE '-'
 
-Rule::Rule(Config &config, const std::string literal, uint64_t lineNO):
+Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
+	m_name(name),
 	m_literal(literal.begin(), literal.end()),
 	m_pattern(new Pattern(lineNO, m_index)),
 	m_config(config),m_line_NO(lineNO){
@@ -143,11 +144,13 @@ std::shared_ptr<Pattern> &Rule::GetPattern() {
 }
 
 void Rule::CheckDuplicate() {
+	std::cout << "check " << m_name << " start......" << std::endl;
 	for (const auto &rule : m_config) {
 		if (IsNotSelf(*rule.second)) {
 			m_pattern->CheckDuplicate(*rule.second->GetPattern());
 		}
 	}
+	std::cout << "check " << m_name << " finish" << std::endl;
 }
 
 bool Rule::IsNotSelf(const Rule &rule) const {

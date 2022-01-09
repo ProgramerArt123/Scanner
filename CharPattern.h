@@ -11,7 +11,7 @@ public:
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) override;
 	void SetToPattern(char toPattern);
-	void CheckDuplicate(const Pattern &other) const override;
+	void Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;
 private:

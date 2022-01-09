@@ -13,10 +13,12 @@ public:
 	virtual bool IsMatchOnce(Content &content);
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
-	virtual void CheckDuplicate(const Pattern &other) const;
+	void CheckDuplicate(const Pattern &other) const;
+	virtual void Compare(const Pattern &other) const; 
 	virtual bool operator==(const Pattern &other)const;
 	bool Equal(const Pattern &other, size_t otherIndex) const;
 	bool SearchEqual(const Pattern &other, size_t &otherIndex) const;
+	bool Equal(const Pattern &other) const;
 	bool IsSameType(const Pattern &other)const;
 	uint64_t GetLineNO () const;
 	uint64_t GetColNO () const;
