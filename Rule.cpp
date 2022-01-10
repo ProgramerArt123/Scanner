@@ -31,22 +31,26 @@ void Rule::Parse() {
 }
 
 void Rule::Parse(Pattern &parent) {
-	switch (m_literal[m_index++])
+	switch (m_literal[m_index])
 	{
 	case ESCAPE:
 		m_index++;
 		CharParse(parent);
 		break;
 	case LABEL:
+		m_index++;
 		LabelParse(parent);
 		break;
 	case STRING:
+		m_index++;
 		StringParse(parent);
 		break;
 	case ROUND_L:
+		m_index++;
 		RoundParse(parent);
 		break;
 	case SQUARE_L:
+		m_index++;
 		SquareParse(parent);
 		break;
 	default:
@@ -54,16 +58,19 @@ void Rule::Parse(Pattern &parent) {
 		break;
 	}
 	
-	if (m_index + 1 < m_literal.size()) {
-		switch (m_literal[m_index + 1])
+	if (m_index < m_literal.size()) {
+		switch (m_literal[m_index])
 		{
 		case ASTERISK:
+			m_index++;
 			parent.SetLastChildTimes(0, __UINT64_MAX__);
 			break;
 		case PLUS:
+			m_index++;
 			parent.SetLastChildTimes(1, __UINT64_MAX__);
 			break;
 		case QUESTION:
+			m_index++;
 			parent.SetLastChildTimes(0, 1);
 			break;
 		default :
@@ -76,23 +83,23 @@ void Rule::StringParse(Pattern &parent) {
 	size_t begin = m_index;
 	while (m_index < m_literal.size()) {
 		if (STRING == m_literal[m_index++]) {
-			const std::string pattern(m_literal.data() + begin, m_index - begin);
+			const std::string pattern(m_literal.data() + begin, m_index - 1 - begin);
 			parent.AddChild(std::shared_ptr<Pattern>(new StringPattern(m_line_NO, m_index, pattern)));
 			return;
 		}
 	}
-	throw std::string("RegExp Format Error, STRING!");
+	throw std::string("Config Format Error, STRING!");
 }
 void Rule::LabelParse(Pattern &parent) {
 	size_t begin = m_index;
 	while (m_index < m_literal.size()) {
 		if (LABEL == m_literal[m_index++]) {
-			const std::string labelName(m_literal.data() + begin, m_index - begin);
+			const std::string labelName(m_literal.data() + begin, m_index - 1 - begin);
 			parent.AddChild(m_config.GetRule(labelName).GetPattern());
 			return;
 		}
 	}
-	throw std::string("RegExp Format Error, LABEL!");
+	throw std::string("Config Format Error, LABEL!");
 }
 void Rule::RoundParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new Pattern(m_line_NO, m_index));
@@ -100,10 +107,11 @@ void Rule::RoundParse(Pattern &parent) {
 		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
 			parent.AddChild(pattern);
+			m_index++;
 			return;
 		}
 	}
-	throw std::string("RegExp Format Error, ROUND_L!");
+	throw std::string("Config Format Error, ROUND_L!");
 }
 void Rule::SquareParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new OrPattern(m_line_NO, m_index));
@@ -111,14 +119,15 @@ void Rule::SquareParse(Pattern &parent) {
 		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
 			parent.AddChild(pattern) ;
+			m_index++;
 			return;
 		}
 	}
-	throw std::string("RegExp Format Error, SQUARE_L!");
+	throw std::string("Config Format Error, SQUARE_L!");
 }
 void Rule::CharParse(Pattern &parent) {
 	if (m_index >= m_literal.size()) {
-		throw std::string("RegExp Format Error, ESCAPE!");
+		throw std::string("Config Format Error, ESCAPE!");
 	}
 	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, m_literal[m_index]);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
@@ -126,16 +135,20 @@ void Rule::CharParse(Pattern &parent) {
 		if (RANGE == m_literal[m_index + 1]) {
 			if (ESCAPE != m_literal[m_index + 2]) {
 				charPattern->SetToPattern(m_literal[m_index + 2]);
-				m_index += 2;
+				m_index += 3;
 			}
 			else {
-				if (m_index + 3 < m_literal.size()) {
+				if (m_index + 3 >= m_literal.size()) {
 					throw std::string("RegExp Format Error, RANGE!");
 				}
 				charPattern->SetToPattern(m_literal[m_index + 3]);
-				m_index += 3;
+				m_index += 4;
 			}
+		} else {
+			m_index++;
 		}
+	} else {
+		m_index++;
 	}
 }
 

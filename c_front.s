@@ -55,7 +55,7 @@ integer:[0-9]+
 
 variable:@pointer@*@label@("["@expression@"]")*(@oper_suffix@@variable@)*
 
-base_type:["auto""double""int"["unsigned""signed"](@ignore["int""long""char"])?"long""char""float""void"]
+base_type:["auto""double""int"["unsigned""signed"](@ignore@["int""long""char"])?"long""char""float""void"]
 
 type:[@base_type@@label@]
 
@@ -119,7 +119,7 @@ while:while@ignore@@round@@ignore@@once@
 
 do_while:do@ignore@@once@@ignore@while@ignore@@round@
 
-comma_expression:@expression@(@oper_comma@@expression@)*"
+comma_expression:@expression@(@oper_comma@@expression@)*
 
 for:for@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
 
@@ -135,14 +135,16 @@ return:return@expression@?
 
 goto:goto@ignore@@label@
 
-lables:@lable@(@ignore@@oper_comma@@ignore@@lable@)+)|@lable@
+labels:@label@(@ignore@@oper_comma@@ignore@@label@)+)|@label@
 
 assgin_label:@label@@ignore@(@ignore@"="@ignore@@integer@)?
 
-enum_def:(typedef)?@ignore@enum@ignore@@label@@ignore@"{"@ignore@(@assgin_label@(@ignore@@oper_comma@@ignore@@assgin_label@)+)|@assgin_label@|)@ignore@"}"@ignore@@lables@|
+enum_def:(typedef)?@ignore@enum@ignore@@label@@ignore@"{"@ignore@(@assgin_label@(@ignore@@oper_comma@@ignore@@assgin_label@)+)|@assgin_label@|)@ignore@"}"@ignore@@labels@|
 
-body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*@ignore@"}"@ignore@@lables@|
+body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*@ignore@"}"@ignore@@labels@|
 
 struct_def:(typedef)?@ignore@struct@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
+
+main:[@enum_def@@struct_def@@union_def@@variable_def@@proc_def@]

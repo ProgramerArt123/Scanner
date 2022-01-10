@@ -11,9 +11,9 @@ void Config::Parse() {
 		throw m_file_name + " open failed!";
 	}
 	
+	uint64_t lineNO = 1;
 	std::string line;
 	while (std::getline(config, line)) {
-		static uint64_t lineNO = 1;
 		if (!line.empty()) {
 			const std::size_t pos = line.find_first_of(":");
 			if (std::string::npos == pos) {
@@ -41,7 +41,7 @@ void Config::Parse() {
 void Config::CheckDuplicate() {
 	std::cout << "check pattern start......" << std::endl;
 	for (auto &rule : m_rules) {
-		rule.second->CheckDuplicate();
+	//	rule.second->CheckDuplicate();
 	}
 	std::cout << "check pattern finish" << std::endl;
 }
