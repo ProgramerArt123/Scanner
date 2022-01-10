@@ -15,6 +15,7 @@ public:
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;
 private:
+	bool IsInRange(char c) const;
 	const char m_from_pattern;
 	char m_to_pattern;
 };

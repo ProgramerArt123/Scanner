@@ -9,6 +9,10 @@ public:
 	bool IsMatchOnce(Content &content) override;
 	void Compare(const Pattern &other) const override;
 	const char *GetTypeName() const override;
+private:
+	mutable bool m_is_self_compared = false;
+	void CompareSelf() const;
+	void CompareOther(const Pattern &other) const;
 };
 
 #endif
