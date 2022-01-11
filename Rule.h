@@ -9,6 +9,7 @@
 #include "Pattern.h"
 
 class Config;
+class CharPattern;
 class Rule {
 public:
 	explicit Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO);
@@ -23,6 +24,7 @@ private:
 	void SquareParse(Pattern &parent);
 	void CharParse(Pattern &parent);
 	void Parse(Pattern &parent);
+	void TryRangeParse(CharPattern &character);
 private:
 	const std::vector<char> m_literal;
 	std::shared_ptr<Pattern> m_pattern;

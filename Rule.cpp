@@ -133,27 +133,26 @@ void Rule::CharParse(Pattern &parent) {
 	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, 
 		LINEEND != m_literal[m_index] ? m_literal[m_index] : '\n');
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
-	if (m_index + 2 < m_literal.size()) {
-		if (RANGE == m_literal[m_index + 1]) {
-			if (ESCAPE != m_literal[m_index + 2]) {
-				charPattern->SetToPattern(m_literal[m_index + 2]);
-				m_index += 3;
+	m_index++;
+	TryRangeParse(*charPattern);
+}
+void Rule::TryRangeParse(CharPattern &character) {
+	if (m_index + 1 < m_literal.size()) {
+		if (RANGE == m_literal[m_index ]) {
+			if (ESCAPE != m_literal[m_index + 1]) {
+				character.SetToPattern(m_literal[m_index + 1]);
+				m_index += 2;
 			}
 			else {
-				if (m_index + 3 >= m_literal.size()) {
+				if (m_index + 2 >= m_literal.size()) {
 					throw std::string("RegExp Format Error, RANGE!");
 				}
-				charPattern->SetToPattern(m_literal[m_index + 3]);
-				m_index += 4;
+				character.SetToPattern(m_literal[m_index + 2]);
+				m_index += 3;
 			}
-		} else {
-			m_index++;
 		}
-	} else {
-		m_index++;
 	}
 }
-
 std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;
 }
