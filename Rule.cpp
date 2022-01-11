@@ -16,6 +16,7 @@
 #define PLUS '+'
 #define QUESTION '?'
 #define RANGE '-'
+#define LINEEND '$'
 
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_name(name),
@@ -129,7 +130,8 @@ void Rule::CharParse(Pattern &parent) {
 	if (m_index >= m_literal.size()) {
 		throw std::string("Config Format Error, ESCAPE!");
 	}
-	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, m_literal[m_index]);
+	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, 
+		LINEEND != m_literal[m_index] ? m_literal[m_index] : '\n');
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	if (m_index + 2 < m_literal.size()) {
 		if (RANGE == m_literal[m_index + 1]) {
