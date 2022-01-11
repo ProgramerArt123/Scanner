@@ -25,6 +25,7 @@ private:
 	void CharParse(Pattern &parent);
 	void Parse(Pattern &parent);
 	void TryRangeParse(CharPattern &character);
+	void TryActionParse(Pattern &round);
 private:
 	const std::vector<char> m_literal;
 	std::shared_ptr<Pattern> m_pattern;

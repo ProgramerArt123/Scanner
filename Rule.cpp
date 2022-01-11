@@ -109,6 +109,7 @@ void Rule::RoundParse(Pattern &parent) {
 		if (ROUND_R == m_literal[m_index]) {
 			parent.AddChild(pattern);
 			m_index++;
+			TryActionParse(*pattern);
 			return;
 		}
 	}
@@ -152,6 +153,9 @@ void Rule::TryRangeParse(CharPattern &character) {
 			}
 		}
 	}
+}
+void Rule::TryActionParse(Pattern &round) {
+	
 }
 std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;
