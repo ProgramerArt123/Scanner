@@ -27,6 +27,7 @@ public:
 	virtual const char *GetTypeName() const;
 	void ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
+	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
 	std::vector<std::shared_ptr<Pattern>> m_children;

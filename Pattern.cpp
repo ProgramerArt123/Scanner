@@ -126,3 +126,9 @@ void Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
 void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 	m_content.assign(literal.begin() + m_col_NO, literal.begin() + end);
 }
+
+std::ostream &operator<<(std::ostream &os, const Pattern &pattern) {
+	os << "{line:" << pattern.m_line_NO << ",col:" << 
+		pattern.m_col_NO << ",content:" << pattern.m_content << "}";
+	return os;
+}

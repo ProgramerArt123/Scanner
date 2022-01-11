@@ -85,7 +85,9 @@ void Rule::StringParse(Pattern &parent) {
 	while (m_index < m_literal.size()) {
 		if (STRING == m_literal[m_index++]) {
 			const std::string pattern(m_literal.data() + begin, m_index - 1 - begin);
-			parent.AddChild(std::shared_ptr<Pattern>(new StringPattern(m_line_NO, m_index, pattern)));
+			StringPattern *string = new StringPattern(m_line_NO, begin, pattern);
+			string->MarkContent(m_literal, m_index - 1);
+			parent.AddChild(std::shared_ptr<Pattern>(string));
 			return;
 		}
 	}
@@ -121,6 +123,7 @@ void Rule::SquareParse(Pattern &parent) {
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
+			pattern->MarkContent(m_literal, m_index);
 			parent.AddChild(pattern) ;
 			m_index++;
 			return;
@@ -134,6 +137,7 @@ void Rule::CharParse(Pattern &parent) {
 	}
 	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, 
 		LINEEND != m_literal[m_index] ? m_literal[m_index] : '\n');
+	charPattern->MarkContent(m_literal, m_index);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
