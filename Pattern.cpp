@@ -123,3 +123,6 @@ void Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
 		child->CheckDuplicate(other);
 	}
 }
+void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
+	m_content.assign(literal.begin() + m_col_NO, literal.begin() + end);
+}

@@ -28,7 +28,7 @@ sizeof:[(sizeof@ignore@"("@ignore@@expression@@ignore@")")(sizeof@ignore@@elemen
 
 oper_two:[@oper_comma@@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
 
-oper_comma:","	#printf(",\n")#
+oper_comma:(",")#SetComma#
 oper_assgin:["=""+=""-=""*=""/=""%=""&=""^=""|=""<<="">>="]
 oper_logic_or:"||"
 oper_logic_and:"&&"

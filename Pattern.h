@@ -25,8 +25,8 @@ public:
 	uint64_t GetMinTimes() const;
 	uint64_t GetMaxTimes() const;
 	virtual const char *GetTypeName() const;
-	
 	void ChildrenCheckDuplicate(const Pattern &other) const;
+	void MarkContent(const std::vector<char> &literal, size_t end);
 protected:
 	
 	std::vector<std::shared_ptr<Pattern>> m_children;
@@ -34,6 +34,7 @@ protected:
 	const uint64_t m_col_NO = 0;
 	uint64_t m_min_times = 1;
 	uint64_t m_max_times = 1;
+	std::string m_content;
 };
 
 #endif

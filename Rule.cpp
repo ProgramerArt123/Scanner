@@ -107,6 +107,7 @@ void Rule::RoundParse(Pattern &parent) {
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
+			pattern->MarkContent(m_literal, m_index);
 			parent.AddChild(pattern);
 			m_index++;
 			TryActionParse(*pattern);
