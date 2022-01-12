@@ -37,7 +37,7 @@ void Rule::Parse(Pattern &parent) {
 	{
 	case ESCAPE:
 		m_index++;
-		CharParse(parent);
+		CharParse(parent, true);
 		break;
 	case LABEL:
 		m_index++;
@@ -56,7 +56,7 @@ void Rule::Parse(Pattern &parent) {
 		SquareParse(parent);
 		break;
 	default:
-		CharParse(parent);
+		CharParse(parent, false);
 		break;
 	}
 	
@@ -132,12 +132,23 @@ void Rule::SquareParse(Pattern &parent) {
 	}
 	throw std::string("Config Format Error, SQUARE_L!");
 }
-void Rule::CharParse(Pattern &parent) {
+void Rule::CharParse(Pattern &parent, bool isEscape) {
 	if (m_index >= m_literal.size()) {
 		throw std::string("Config Format Error, ESCAPE!");
 	}
-	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, 
-		LINEEND != m_literal[m_index] ? m_literal[m_index] : '\n');
+	char c;
+	if (!isEscape) {
+		switch (m_literal[m_index])
+		{
+		case LINEEND:
+			c = '\n';
+			break;
+		default:
+			c = m_literal[m_index];
+			break;
+		}
+	}
+	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, c, isEscape);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);

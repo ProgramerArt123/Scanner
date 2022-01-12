@@ -3,11 +3,7 @@ annotation:"//".*$
 
 string:\"[^\"]*\"
 
-space:[ \t\r]
-
-line:\n
-
-partition:[@space@@line@]
+partition:[\s$]
 
 ignore:@partition@*
 

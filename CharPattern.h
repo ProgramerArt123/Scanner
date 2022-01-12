@@ -7,7 +7,7 @@
 #include "Pattern.h"
 class CharPattern : public Pattern {
 public:
-	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char fromPattern);
+	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) override;
 	void SetToPattern(char toPattern);
@@ -19,6 +19,7 @@ private:
 	bool IsInRange(char c) const;
 	const char m_from_pattern;
 	char m_to_pattern;
+	const bool m_is_escape = false;
 };
 
 #endif

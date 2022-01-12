@@ -3,8 +3,8 @@
 #include "Content.h"
 #include "CharPattern.h"
 
-CharPattern::CharPattern(uint64_t lineNO, uint64_t colNO, const char fromPattern): 
-	Pattern(lineNO, colNO), m_from_pattern(fromPattern) {
+CharPattern::CharPattern(uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
+	Pattern(lineNO, colNO), m_from_pattern(fromPattern), m_is_escape(isEscape) {
 	m_to_pattern = m_from_pattern;
 }
 CharPattern::~CharPattern() {}
@@ -57,5 +57,10 @@ bool CharPattern::IsInRange(char c) const {
 	}
 }
 const std::string CharPattern::ToString() const {
-	return '\'' + m_content + '\'';
+	if (!m_is_escape) {
+		return '\'' + m_content + '\'';
+	}
+	else {
+		return "'\\" + m_content + '\'';
+	}
 }
