@@ -14,7 +14,7 @@ public:
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
 	void CheckDuplicate(const Pattern &other) const;
-	virtual void Compare(const Pattern &other) const; 
+	virtual bool Compare(const Pattern &other) const; 
 	virtual bool operator==(const Pattern &other)const;
 	bool Equal(const Pattern &other, size_t otherIndex) const;
 	bool SearchEqual(const Pattern &other, size_t &otherIndex) const;
@@ -27,6 +27,7 @@ public:
 	virtual const char *GetTypeName() const;
 	void ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
+	virtual const std::string ToString() const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	

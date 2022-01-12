@@ -16,45 +16,50 @@ bool OrPattern::IsMatchOnce(Content &content) {
 	return false;
 }
 
-void OrPattern::Compare(const Pattern &other) const {
+bool OrPattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
-		return;
+		return false;
 	}
 	if (!m_is_self_compared) {
 		m_is_self_compared = true;
-		CompareSelf();
+		if (CompareSelf()) {
+			return true;
+		}
 	}
-	CompareOther(other);
+	return CompareOther(other);
 }
 
 const char *OrPattern::GetTypeName() const {
 	return "OrPattern";
 }
 
-void OrPattern::CompareSelf() const {
+bool OrPattern::CompareSelf() const {
 	for (size_t i = 0; i < m_children.size(); i++) {
 		for (size_t j = 0; i < m_children.size(); j++) {
 			if (i != j && m_children[i] == m_children[j]) {
-				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO << std::endl;
-				return ;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
-void OrPattern::CompareOther(const Pattern &other) const {
+bool OrPattern::CompareOther(const Pattern &other) const {
 	bool hasDup = false;
 	for (size_t i = 0; i < m_children.size(); i++) {
 		size_t j = 0;
 		if (m_children[i]->SearchEqual(other, j)) {
 			if (hasDup) {
-				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
-					"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
-				return ;
+				return true;
 			}
 			else {
 				hasDup = true;
 			}
 		}
 	}
+	return false;
+}
+
+const std::string OrPattern::ToString() const {
+	return '[' + m_content + ']';
 }

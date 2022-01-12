@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <unistd.h>
 #include "Content.h"
 #include "Pattern.h"
 
@@ -38,26 +39,34 @@ void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 }
 
 void Pattern::CheckDuplicate(const Pattern &other) const {
-	ChildrenCheckDuplicate(other);
-	other.ChildrenCheckDuplicate(*this);
-	Compare(other);
+	usleep(500000);
+	std::cout << *this << "<=>" << other << "......" << std::endl;
+	if (!Compare(other)) {
+		usleep(500000);
+		std::cout << *this << "****" << other << std::endl;
+		ChildrenCheckDuplicate(other);
+		other.ChildrenCheckDuplicate(*this);
+	}
+	else {
+		usleep(500000);
+		std::cout << *this << "====" << other << std::endl;
+	}
 }
 
-void Pattern::Compare(const Pattern &other) const {
+bool Pattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
-		return;
+		return false;
 	}
 	for (size_t index = 0; index < m_children.size(); index++) {
 		size_t j = 0;
 		if (m_children[index]->SearchEqual(other, j)) {
 			if (index + 1 < m_children.size() &&
 				m_children[index + 1]->Equal(other, j + 1)) {
-				std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
-						"<=>line:" << other.m_line_NO << ", col:" << other.m_col_NO << std::endl;
-				break;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 bool Pattern::operator==(const Pattern &other) const {
@@ -127,8 +136,12 @@ void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 	m_content.assign(literal.begin() + m_col_NO, literal.begin() + end);
 }
 
+const std::string Pattern::ToString() const {
+	return '(' + m_content + ')';
+}
+
 std::ostream &operator<<(std::ostream &os, const Pattern &pattern) {
-	os << "{line:" << pattern.m_line_NO << ",col:" << 
-		pattern.m_col_NO << ",content:" << pattern.m_content << "}";
+	os << "【line:" << pattern.m_line_NO << ",col:" << 
+		pattern.m_col_NO << ",content:" << pattern.ToString() << "】";
 	return os;
 }

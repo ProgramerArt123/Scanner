@@ -5,7 +5,7 @@
 
 CharPattern::CharPattern(uint64_t lineNO, uint64_t colNO, const char fromPattern): 
 	Pattern(lineNO, colNO), m_from_pattern(fromPattern) {
-		m_to_pattern = m_from_pattern;
+	m_to_pattern = m_from_pattern;
 }
 CharPattern::~CharPattern() {}
 
@@ -21,15 +21,12 @@ void CharPattern::SetToPattern(char toPattern) {
 	m_to_pattern = toPattern;
 }
 
-void CharPattern::Compare(const Pattern &other) const {
+bool CharPattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
-		return;
+		return false;
 	}
 	if (m_from_pattern != m_to_pattern) {
-		if (Equal(other)) {
-			std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
-						"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
-		}
+		return Equal(other);
 	}
 }
 
@@ -58,4 +55,7 @@ bool CharPattern::IsInRange(char c) const {
 		return m_to_pattern <= c &&
 			c <= m_from_pattern;
 	}
+}
+const std::string CharPattern::ToString() const {
+	return '\'' + m_content + '\'';
 }

@@ -7,12 +7,13 @@ public:
 	explicit OrPattern(uint64_t lineNO, uint64_t colNO);
 	virtual ~OrPattern();
 	bool IsMatchOnce(Content &content) override;
-	void Compare(const Pattern &other) const override;
+	bool Compare(const Pattern &other) const override;
 	const char *GetTypeName() const override;
+	const std::string ToString() const override;
 private:
 	mutable bool m_is_self_compared = false;
-	void CompareSelf() const;
-	void CompareOther(const Pattern &other) const;
+	bool CompareSelf() const;
+	bool CompareOther(const Pattern &other) const;
 };
 
 #endif

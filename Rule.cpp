@@ -19,16 +19,17 @@
 #define LINEEND '$'
 
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
-	m_name(name),
+	m_config(config),m_name(name),
 	m_literal(literal.begin(), literal.end()),
-	m_pattern(new Pattern(lineNO, m_index)),
-	m_config(config),m_line_NO(lineNO){
+	m_pattern(new Pattern(lineNO, 0)),
+	m_line_NO(lineNO){
 }
 
 void Rule::Parse() {
 	while (m_index < m_literal.size()) {
 		Parse(*m_pattern);
 	}
+	m_pattern->MarkContent(m_literal, m_index);
 }
 
 void Rule::Parse(Pattern &parent) {
@@ -137,10 +138,10 @@ void Rule::CharParse(Pattern &parent) {
 	}
 	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, 
 		LINEEND != m_literal[m_index] ? m_literal[m_index] : '\n');
-	charPattern->MarkContent(m_literal, m_index);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
+	charPattern->MarkContent(m_literal, m_index);
 }
 void Rule::TryRangeParse(CharPattern &character) {
 	if (m_index + 1 < m_literal.size()) {

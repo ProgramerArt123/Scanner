@@ -11,9 +11,10 @@ public:
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) override;
 	void SetToPattern(char toPattern);
-	void Compare(const Pattern &other) const override;
+	bool Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;
+	const std::string ToString() const override;
 private:
 	bool IsInRange(char c) const;
 	const char m_from_pattern;

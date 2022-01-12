@@ -101,7 +101,7 @@ if_else:@if@(@ignore@@else_if@@ignore@)*(@ignore@@else@)?
 
 break_process:["break"@process@]
 
-branch:@integer@@ignore@":"@ignore@[@block@(@ignore@@break_process@+@ignore@)""]
+branch:@integer@@ignore@":"@ignore@[@block@(@ignore@@break_process@+@ignore@)]?
 
 case:"case"@ignore@@branch@
 

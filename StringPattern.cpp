@@ -20,14 +20,11 @@ bool StringPattern::IsMatchOnce(Content &content) {
 	return true;
 }
 
-void StringPattern::Compare(const Pattern &other) const {
+bool StringPattern::Compare(const Pattern &other) const {
 	if (!IsSameType(other)) {
-		return;
+		return false;
 	}
-	if (Equal(other)) {
-		std::cout << "Warn: line:" << m_line_NO << ", col:" << m_col_NO <<
-					"<=>line:" << other.GetLineNO() << ", col:" << other.GetColNO() << std::endl;
-	}
+	return Equal(other);
 }
 bool StringPattern::operator==(const Pattern &other)const {
 	if (!IsSameType(other)) {
@@ -40,4 +37,7 @@ bool StringPattern::operator==(const Pattern &other)const {
 }
 const char *StringPattern::GetTypeName() const {
 	return "StringPattern";
+}
+const std::string StringPattern::ToString() const {
+	return '"' + m_content + '"';
 }
