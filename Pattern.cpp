@@ -40,18 +40,19 @@ void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 	m_children.back()->m_max_times = maxTimes;
 }
 
-void Pattern::CheckDuplicate(const Pattern &other) const {
+bool Pattern::CheckDuplicate(const Pattern &other) const {
 	if (!IsNotSelf(other)) {
-		return;
+		return false;
 	}
 	if (!Compare(other)) {
 		usleep(500000);
 		std::cout << *this << "****" << other << std::endl;
-		ChildrenCheckDuplicate(other);
+		return ChildrenCheckDuplicate(other);
 	}
 	else {
 		usleep(500000);
 		std::cout << *this << "====" << other << std::endl;
+		return true;
 	}
 }
 
@@ -129,10 +130,13 @@ const char *Pattern::GetTypeName() const {
 bool Pattern::IsSameType(const Pattern &other)const {
 	return 0 == strcmp(GetTypeName(), other.GetTypeName());
 }
-void Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
+bool Pattern::ChildrenCheckDuplicate(const Pattern &other) const {
 	for (auto child : m_children) {
-		child->CheckDuplicate(other);
+		if (child->CheckDuplicate(other)) {
+			return true;
+		}
 	}
+	return false;
 }
 void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 	m_content.assign(literal.begin() + m_col_NO, literal.begin() + end);

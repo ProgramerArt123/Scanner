@@ -15,7 +15,7 @@ public:
 	virtual bool IsMatchOnce(Content &content);
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
-	void CheckDuplicate(const Pattern &other) const;
+	bool CheckDuplicate(const Pattern &other) const;
 	bool IsNotSelf(const Pattern &other) const;
 	virtual bool Compare(const Pattern &other) const; 
 	virtual bool operator==(const Pattern &other)const;
@@ -28,7 +28,7 @@ public:
 	uint64_t GetMinTimes() const;
 	uint64_t GetMaxTimes() const;
 	virtual const char *GetTypeName() const;
-	void ChildrenCheckDuplicate(const Pattern &other) const;
+	bool ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
 	virtual const std::string ToString() const;
 	void Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const;
