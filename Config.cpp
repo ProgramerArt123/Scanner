@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include "Pattern.h"
 #include "Config.h"
 
 Config::Config(const std::string fileName):
@@ -31,7 +32,7 @@ void Config::Parse() {
 	}
 	
 	if (m_rules.find("main") == m_rules.end()) {
-		throw std::string("main rule not defined!");
+	//	throw std::string("main rule not defined!");
 	}
 	
 	for (auto &rule : m_rules) {
@@ -42,8 +43,9 @@ void Config::Parse() {
 
 void Config::CheckDuplicate() {
 	std::cout << "check pattern start......" << std::endl;
-	for (auto &rule : m_rules) {
-		rule.second->CheckDuplicate();
+	for (std::map<std::string, std::unique_ptr<Rule>>::iterator rule =
+		m_rules.begin(); rule != m_rules.end(); rule ++) {
+		rule->second->Foreach(rule);
 	}
 	std::cout << "check pattern finish" << std::endl;
 }
@@ -57,4 +59,11 @@ Rule &Config::GetRule(const std::string name) {
 		throw name + " undefined!";
 	}
 	return *m_rules[name];
+}
+void Config::CheckDuplicate(std::map<std::string, std::unique_ptr<Rule>>::iterator current,
+	const Pattern &other) const {
+		for (std::map<std::string, std::unique_ptr<Rule>>::iterator rule =
+			++current; rule != m_rules.end(); rule++) {
+		rule->second->CheckDuplicate(other);
+	}
 }

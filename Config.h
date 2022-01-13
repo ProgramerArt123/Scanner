@@ -15,6 +15,8 @@ public:
 	void CheckDuplicate();	
 	void ParseContent(Content &content) const;
 	Rule &GetRule(const std::string name);
+	void CheckDuplicate(std::map<std::string, std::unique_ptr<Rule>>::iterator current,
+		const Pattern &other) const;
 	
 	std::map<std::string, std::unique_ptr<Rule>>::iterator
 		begin() {return m_rules.begin();}

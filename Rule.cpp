@@ -21,7 +21,7 @@
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_config(config),m_name(name),
 	m_literal(literal.begin(), literal.end()),
-	m_pattern(new Pattern(lineNO, 0)),
+	m_pattern(new Pattern(*this, lineNO, 0)),
 	m_line_NO(lineNO){
 }
 
@@ -86,7 +86,7 @@ void Rule::StringParse(Pattern &parent) {
 	while (m_index < m_literal.size()) {
 		if (STRING == m_literal[m_index++]) {
 			const std::string pattern(m_literal.data() + begin, m_index - 1 - begin);
-			StringPattern *string = new StringPattern(m_line_NO, begin, pattern);
+			StringPattern *string = new StringPattern(*this, m_line_NO, begin, pattern);
 			string->MarkContent(m_literal, m_index - 1);
 			parent.AddChild(std::shared_ptr<Pattern>(string));
 			return;
@@ -106,7 +106,7 @@ void Rule::LabelParse(Pattern &parent) {
 	throw std::string("Config Format Error, LABEL!");
 }
 void Rule::RoundParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new Pattern(m_line_NO, m_index));
+	std::shared_ptr<Pattern> pattern(new Pattern(*this, m_line_NO, m_index));
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
@@ -120,7 +120,7 @@ void Rule::RoundParse(Pattern &parent) {
 	throw std::string("Config Format Error, ROUND_L!");
 }
 void Rule::SquareParse(Pattern &parent) {
-	std::shared_ptr<Pattern> pattern(new OrPattern(m_line_NO, m_index));
+	std::shared_ptr<Pattern> pattern(new OrPattern(*this, m_line_NO, m_index));
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
@@ -148,7 +148,7 @@ void Rule::CharParse(Pattern &parent, bool isEscape) {
 			break;
 		}
 	}
-	CharPattern *charPattern = new CharPattern(m_line_NO, m_index, c, isEscape);
+	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, c, isEscape);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
@@ -178,16 +178,13 @@ std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;
 }
 
-void Rule::CheckDuplicate() {
-	std::cout << "check " << m_name << " start......" << std::endl;
-	for (const auto &rule : m_config) {
-		if (IsNotSelf(*rule.second)) {
-			m_pattern->CheckDuplicate(*rule.second->GetPattern());
-		}
-	}
-	std::cout << "check " << m_name << " finish" << std::endl;
+void Rule::CheckDuplicate(const Pattern &other) {
+	m_pattern->CheckDuplicate(other);
 }
 
-bool Rule::IsNotSelf(const Rule &rule) const {
-	return m_line_NO != rule.m_line_NO;
+void Rule::Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const {
+	m_pattern->Foreach(current);
+}
+Config &Rule::GetConfig() {
+	return m_config;
 }

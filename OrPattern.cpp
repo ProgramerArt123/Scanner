@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Content.h"
 #include "OrPattern.h"
-OrPattern::OrPattern(uint64_t lineNO, uint64_t colNO):
-	Pattern(lineNO, colNO){
+OrPattern::OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
+	Pattern(rule, lineNO, colNO){
 	
 }
 OrPattern::~OrPattern() {}

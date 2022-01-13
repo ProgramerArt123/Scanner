@@ -6,7 +6,7 @@
 #include "Pattern.h"
 class StringPattern : public Pattern {
 public:
-	explicit StringPattern(uint64_t lineNO, uint64_t colNO, const std::string pattern);
+	explicit StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern);
 	virtual ~StringPattern();
 	bool IsMatchOnce(Content &content) override;
 	bool Compare(const Pattern &other) const override;

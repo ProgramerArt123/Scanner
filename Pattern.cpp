@@ -2,10 +2,12 @@
 #include <string.h>
 #include <unistd.h>
 #include "Content.h"
+#include "Config.h"
+#include "Rule.h"
 #include "Pattern.h"
 
-Pattern::Pattern(uint64_t lineNO, uint64_t colNO):
-	m_line_NO(lineNO), m_col_NO(colNO){
+Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
+	m_rule(rule),m_line_NO(lineNO), m_col_NO(colNO){
 }
 Pattern::~Pattern() {
 	
@@ -39,13 +41,13 @@ void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 }
 
 void Pattern::CheckDuplicate(const Pattern &other) const {
-	usleep(500000);
-	std::cout << *this << "<=>" << other << "......" << std::endl;
+	if (!IsNotSelf(other)) {
+		return;
+	}
 	if (!Compare(other)) {
 		usleep(500000);
 		std::cout << *this << "****" << other << std::endl;
 		ChildrenCheckDuplicate(other);
-		other.ChildrenCheckDuplicate(*this);
 	}
 	else {
 		usleep(500000);
@@ -139,9 +141,21 @@ void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 const std::string Pattern::ToString() const {
 	return '(' + m_content + ')';
 }
-
+void Pattern::Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const {
+	m_rule.GetConfig().CheckDuplicate(current, *this);
+	for (auto child : m_children) {
+		child->Foreach(current);
+	}
+}
+Rule &Pattern::GetRule() const {
+	return m_rule;
+}
+bool Pattern::IsNotSelf(const Pattern &other) const {
+	return m_line_NO != other.m_line_NO || m_col_NO != other.m_col_NO;
+}
 std::ostream &operator<<(std::ostream &os, const Pattern &pattern) {
 	os << "【line:" << pattern.m_line_NO << ",col:" << 
 		pattern.m_col_NO << ",content:" << pattern.ToString() << "】";
 	return os;
 }
+

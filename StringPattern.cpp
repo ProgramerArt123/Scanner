@@ -3,8 +3,8 @@
 #include "Content.h"
 #include "StringPattern.h"
 
-StringPattern::StringPattern(uint64_t lineNO, uint64_t colNO, const std::string pattern): 
-	Pattern(lineNO, colNO), m_pattern(pattern) {}
+StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern): 
+	Pattern(rule, lineNO, colNO), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
 bool StringPattern::IsMatchOnce(Content &content) {

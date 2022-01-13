@@ -3,8 +3,8 @@
 #include "Content.h"
 #include "CharPattern.h"
 
-CharPattern::CharPattern(uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
-	Pattern(lineNO, colNO), m_from_pattern(fromPattern), m_is_escape(isEscape) {
+CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
+	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_escape(isEscape) {
 	m_to_pattern = m_from_pattern;
 }
 CharPattern::~CharPattern() {}

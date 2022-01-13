@@ -7,7 +7,7 @@
 #include "Pattern.h"
 class CharPattern : public Pattern {
 public:
-	explicit CharPattern(uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
+	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) override;
 	void SetToPattern(char toPattern);

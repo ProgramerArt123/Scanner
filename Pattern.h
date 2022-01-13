@@ -2,18 +2,21 @@
 #define __PATTERN_H__
 
 #include <vector>
+#include <map>
 #include <memory>
 #include <stdint.h>
 class Content;
+class Rule;
 class Pattern {
 public:
-	explicit Pattern(uint64_t lineNO, uint64_t colNO);
+	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
 	virtual ~Pattern();
 	bool IsMatch(Content &content);
 	virtual bool IsMatchOnce(Content &content);
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
 	void CheckDuplicate(const Pattern &other) const;
+	bool IsNotSelf(const Pattern &other) const;
 	virtual bool Compare(const Pattern &other) const; 
 	virtual bool operator==(const Pattern &other)const;
 	bool Equal(const Pattern &other, size_t otherIndex) const;
@@ -28,6 +31,8 @@ public:
 	void ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
 	virtual const std::string ToString() const;
+	void Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const;
+	Rule &GetRule()const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
@@ -37,6 +42,7 @@ protected:
 	uint64_t m_min_times = 1;
 	uint64_t m_max_times = 1;
 	std::string m_content;
+	Rule &m_rule;
 };
 
 #endif

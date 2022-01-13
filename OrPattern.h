@@ -4,7 +4,7 @@
 #include "Pattern.h"
 class OrPattern : public Pattern {
 public:
-	explicit OrPattern(uint64_t lineNO, uint64_t colNO);
+	explicit OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
 	virtual ~OrPattern();
 	bool IsMatchOnce(Content &content) override;
 	bool Compare(const Pattern &other) const override;
