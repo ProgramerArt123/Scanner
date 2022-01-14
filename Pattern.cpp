@@ -44,14 +44,13 @@ bool Pattern::CheckDuplicate(const Pattern &other) const {
 	if (!IsNotSelf(other)) {
 		return false;
 	}
+	usleep(500000);
 	if (!Compare(other)) {
-		usleep(500000);
 		std::cout << *this << "****" << other << std::endl;
 		return ChildrenCheckDuplicate(other);
 	}
 	else {
-		usleep(500000);
-		std::cout << *this << "====" << other << std::endl;
+		std::cout << *this << "====" << other << std::endl ;
 		return true;
 	}
 }

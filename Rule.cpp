@@ -16,7 +16,6 @@
 #define PLUS '+'
 #define QUESTION '?'
 #define RANGE '-'
-#define LINEEND '$'
 
 Rule::Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO):
 	m_config(config),m_name(name),
@@ -136,19 +135,7 @@ void Rule::CharParse(Pattern &parent, bool isEscape) {
 	if (m_index >= m_literal.size()) {
 		throw std::string("Config Format Error, ESCAPE!");
 	}
-	char c;
-	if (!isEscape) {
-		switch (m_literal[m_index])
-		{
-		case LINEEND:
-			c = '\n';
-			break;
-		default:
-			c = m_literal[m_index];
-			break;
-		}
-	}
-	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, c, isEscape);
+	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, m_literal[m_index], isEscape);
 	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
@@ -158,14 +145,14 @@ void Rule::TryRangeParse(CharPattern &character) {
 	if (m_index + 1 < m_literal.size()) {
 		if (RANGE == m_literal[m_index ]) {
 			if (ESCAPE != m_literal[m_index + 1]) {
-				character.SetToPattern(m_literal[m_index + 1]);
+				character.SetToPattern(m_literal[m_index + 1], false);
 				m_index += 2;
 			}
 			else {
 				if (m_index + 2 >= m_literal.size()) {
 					throw std::string("RegExp Format Error, RANGE!");
 				}
-				character.SetToPattern(m_literal[m_index + 2]);
+				character.SetToPattern(m_literal[m_index + 2], true);
 				m_index += 3;
 			}
 		}

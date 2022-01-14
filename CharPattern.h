@@ -10,7 +10,7 @@ public:
 	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) override;
-	void SetToPattern(char toPattern);
+	void SetToPattern(char toPattern, bool isEscape);
 	bool Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;
@@ -19,7 +19,8 @@ private:
 	bool IsInRange(char c) const;
 	const char m_from_pattern;
 	char m_to_pattern;
-	const bool m_is_escape = false;
+	const bool m_is_from_escape = false;
+	bool m_is_to_escape = false;
 };
 
 #endif
