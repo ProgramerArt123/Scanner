@@ -31,7 +31,7 @@ public:
 	bool ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
 	virtual const std::string ToString() const;
-	void Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const;
+	void ForeachCheckDuplicate(const Pattern &other) const;
 	Rule &GetRule()const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:

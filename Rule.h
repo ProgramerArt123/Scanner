@@ -14,9 +14,8 @@ class Rule {
 public:
 	explicit Rule(Config &config, const std::string name, const std::string literal, uint64_t lineNO);
 	void Parse();
-	void CheckDuplicate(const Pattern &other);
+	void CheckDuplicate(const Rule &other);
 	std::shared_ptr<Pattern> &GetPattern();
-	void Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const;
 	Config &GetConfig();
 private:
 	void StringParse(Pattern &parent);

@@ -178,13 +178,10 @@ std::shared_ptr<Pattern> &Rule::GetPattern() {
 	return m_pattern;
 }
 
-void Rule::CheckDuplicate(const Pattern &other) {
-	m_pattern->CheckDuplicate(other);
+void Rule::CheckDuplicate(const Rule &other) {
+	m_pattern->ForeachCheckDuplicate(*other.m_pattern);
 }
 
-void Rule::Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const {
-	m_pattern->Foreach(current);
-}
 Config &Rule::GetConfig() {
 	return m_config;
 }

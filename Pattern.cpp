@@ -145,10 +145,12 @@ void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 const std::string Pattern::ToString() const {
 	return '(' + m_content + ')';
 }
-void Pattern::Foreach(std::map<std::string, std::unique_ptr<Rule>>::iterator current) const {
-	m_rule.GetConfig().CheckDuplicate(current, *this);
-	for (auto child : m_children) {
-		child->Foreach(current);
+void Pattern::ForeachCheckDuplicate(const Pattern &other) const {
+	other.CheckDuplicate(*this);
+	if (IsNotSelf(other)) {
+		for (auto child : m_children) {
+			child->ForeachCheckDuplicate(other);
+		}
 	}
 }
 Rule &Pattern::GetRule() const {

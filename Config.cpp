@@ -43,9 +43,12 @@ void Config::Parse() {
 
 void Config::CheckDuplicate() {
 	std::cout << "check pattern start......" << std::endl;
-	for (std::map<std::string, std::unique_ptr<Rule>>::iterator rule =
-		m_rules.begin(); rule != m_rules.end(); rule ++) {
-		rule->second->Foreach(rule);
+	for (std::map<std::string, std::unique_ptr<Rule>>::iterator i =
+		m_rules.begin(); i != m_rules.end(); i ++) {
+			for (std::map<std::string, std::unique_ptr<Rule>>::iterator j = 
+				i; j != m_rules.end(); j++) {
+				i->second->CheckDuplicate(*j->second);
+		}
 	}
 	std::cout << "check pattern finish" << std::endl;
 }
@@ -59,11 +62,4 @@ Rule &Config::GetRule(const std::string name) {
 		throw name + " undefined!";
 	}
 	return *m_rules[name];
-}
-void Config::CheckDuplicate(std::map<std::string, std::unique_ptr<Rule>>::iterator current,
-	const Pattern &other) const {
-		for (std::map<std::string, std::unique_ptr<Rule>>::iterator rule =
-			++current; rule != m_rules.end(); rule++) {
-		rule->second->CheckDuplicate(other);
-	}
 }
