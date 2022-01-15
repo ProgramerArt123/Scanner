@@ -33,8 +33,11 @@ public:
 	virtual const std::string ToString() const;
 	void ForeachCheckDuplicate(const Pattern &other) const;
 	Rule &GetRule()const;
+	void BestMatchTracePrint() const;
+	void SetParent(const Pattern *parent);
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
+	void CheckClosedLoop()const;
 	
 	std::vector<std::shared_ptr<Pattern>> m_children;
 	const uint64_t m_line_NO = 0;
@@ -43,6 +46,7 @@ protected:
 	uint64_t m_max_times = 1;
 	std::string m_content;
 	Rule &m_rule;
+	const Pattern *m_parent = NULL;
 };
 
 #endif

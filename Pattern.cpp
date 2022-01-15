@@ -13,6 +13,7 @@ Pattern::~Pattern() {
 	
 }
 bool Pattern::IsMatch(Content &content)const {
+	CheckClosedLoop();
 	Content::CursorsMemento memento(content);
 	uint64_t times = 0;
 	while (times++ < m_max_times) {
@@ -20,10 +21,17 @@ bool Pattern::IsMatch(Content &content)const {
 			break;
 		}
 	}
+	if (times > m_min_times) {
+		std::cout << "Match:" << *this << "==============================" << std::endl;
+	}
+	else {
+		std::cout << "UnMatch:" << *this << content.GetMemInfo() << std::endl;
+	}
 	return memento.IsMatch(times > m_min_times);
 }
 bool Pattern::IsMatchOnce(Content &content) const {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
+		child->SetParent(this);
 		if (!child->IsMatch(content)) {
 			return false;
 		}
@@ -164,3 +172,22 @@ std::ostream &operator<<(std::ostream &os, const Pattern &pattern) {
 	return os;
 }
 
+void Pattern::BestMatchTracePrint() const {
+	std::cout << *this << std::endl;
+	if (m_parent) {
+		m_parent->BestMatchTracePrint();
+	}
+}
+void Pattern::SetParent(const Pattern *parent) {
+	m_parent = parent;
+}
+
+void Pattern::CheckClosedLoop() const {
+	const Pattern *parent = m_parent;
+	while (parent) {
+		if (parent == this) {
+			throw m_content + "Closed Loop";
+		}
+		parent = parent->m_parent;
+	}
+}

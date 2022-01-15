@@ -136,7 +136,7 @@ void Rule::CharParse(Pattern &parent, bool isEscape) {
 		throw std::string("Config Format Error, ESCAPE!");
 	}
 	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, m_literal[m_index], isEscape);
-	m_pattern->AddChild(std::shared_ptr<Pattern>(charPattern));
+	parent.AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
 	charPattern->MarkContent(m_literal, m_index);

@@ -19,7 +19,7 @@ public:
 	char GetFromPattern();
 	bool IsFromEscape();
 private:
-	bool IsInRange(char c) const;
+	bool IsIn(char c) const;
 	bool IsInRange(char from, char to, char c) const;
 	bool IsInMultiValue(char c) const;
 	char PatternMapping(char src);

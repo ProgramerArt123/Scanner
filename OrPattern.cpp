@@ -9,6 +9,7 @@ OrPattern::~OrPattern() {}
 	
 bool OrPattern::IsMatchOnce(Content &content)const {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
+		child->SetParent(this);
 		if (child->IsMatch(content)) {
 			return true;
 		}

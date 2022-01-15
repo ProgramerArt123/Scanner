@@ -15,7 +15,7 @@ bool StringPattern::IsMatchOnce(Content &content) const {
 		if (c != content.GetChar()) {
 			return false;
 		}
-		content.Next();
+		content.Next(*this);
 	}
 	return true;
 }

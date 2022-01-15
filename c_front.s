@@ -3,17 +3,15 @@ annotation:"//".*$
 
 string:\"[^\"]*\"
 
-partition:[\s$]
+ignore:\s*
 
-ignore:@partition@*
-
-segmentation:@partition@+
+segmentation:\s+
 
 process:[@expression@@return@@goto@@proc_call@]
 
 variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
 
-statement:[@process@@variable_def@]
+statement:[@variable_def@]
 
 expression:[@ignore@@oper_one@@expression@@ignore@)(@ignore@@expression@"++"@ignore@)(@ignore@@expression@"--"@ignore@)(@ignore@@expression@@oper_two@@expression@@ignore@)(@ignore@@expression@"?"@expression@":"@expression@@ignore@)(@ignore@@element@@ignore@)(@ignore@@variable@)(@numeric@)(@integer@@ignore@)(@ignore@@round@@ignore@)]
 
@@ -51,33 +49,37 @@ integer:[0-9]+
 
 variable:@pointer@*@label@("["@expression@"]")*(@oper_suffix@@variable@)*
 
-base_type:["auto""double""int"["unsigned""signed"](@ignore@["int""long""char"])?"long""char""float""void"]
+int:["int""long""short""char"]
+
+base_type:[@int@"double""float""void"(["unsigned""signed"](@segmentation@@int@)?)]
 
 type:[@base_type@@label@]
 
-const_type:[("const"@ignore@@type@)(@type@@ignore@"const")]
+const:"const"
+
+const_type:[(@const@@segmentation@@type@)(@type@@segmentation@@const@)]
 
 extern_static:["extern""static"]
 
-extern_static_type:[(@extern_static@@ignore@@type@)|(@type@@ignore@@extern_static@)]
+extern_static_type:[(@extern_static@@segmentation@@type@)|(@type@@segmentation@@extern_static@)]
 
 register_volatile:["register""volatile"]
 
-register_volatile_type:[(@register_volatile@@ignore@@type@)(@type@@ignore@@register_volatile@)]
+register_volatile_type:[(@register_volatile@@segmentation@@type@)(@type@@segmentation@@register_volatile@)]
 
-extern_static_const:[(@extern_static@@ignore@const)(const@ignore@@extern_static@)]
+extern_static_const:[(@extern_static@@segmentation@@const@)(@const@@segmentation@@extern_static@)]
 
-extern_static_const_type:[(@extern_static_const@@ignore@@type@)(@type@@ignore@@extern_static_const@)]
+extern_static_const_type:[(@extern_static_const@@segmentation@@type@)(@type@@segmentation@@extern_static_const@)]
 
-extern_static_register_volatile:[(@extern_static@@ignore@@register_volatile@)(@register_volatile@@ignore@@extern_static@)]
+extern_static_register_volatile:[(@extern_static@@segmentation@@register_volatile@)(@register_volatile@@segmentation@@extern_static@)]
 
-extern_static_register_volatile_type:[(@extern_static_register_volatile@@ignore@@type@)(@type@@ignore@@extern_static_register_volatile@)]
+extern_static_register_volatile_type:[(@extern_static_register_volatile@@segmentation@@type@)(@type@@segmentation@@extern_static_register_volatile@)]
 
-const_register_volatile:[(const@ignore@@register_volatile@)(@register_volatile@@ignore@const)]
+const_register_volatile:[(@const@@segmentation@@register_volatile@)(@register_volatile@@segmentation@@const@)]
 
-const_register_volatile_type:[(@const_register_volatile@@ignore@@type@)(@type@@ignore@@const_register_volatile@)]
+const_register_volatile_type:[(@const_register_volatile@@segmentation@@type@)(@type@@segmentation@@const_register_volatile@)]
 
-arbitrarily_type:[@const_register_volatile_type@@extern_static_register_volatile_type@@extern_static_const_type@@register_volatile_type@@extern_static_type@@const_type@]
+arbitrarily_type:[@const_register_volatile_type@@extern_static_register_volatile_type@@extern_static_const_type@@register_volatile_type@@extern_static_type@@const_type@@type@]
 
 pointer:"*"@ignore@
 
@@ -101,7 +103,7 @@ branch:@integer@@ignore@":"@ignore@[@block@(@ignore@@break_process@+@ignore@)]?
 
 case:"case"@ignore@@branch@
 
-default:default@ignore@@branch@
+default:"default"@ignore@@branch@
 
 switch_case:@ignore@@round@@ignore@"{"@ignore@@case@*@default@?@ignore@"}"
 
@@ -111,13 +113,13 @@ break_continue_block:"{"@ignore@@break_continue_statement@*@ignore@"}"
 
 once:[@break_continue_block@(@ignore@@break_continue_statement@@ignore@)]
 
-while:while@ignore@@round@@ignore@@once@
+while:"while"@ignore@@round@@ignore@@once@
 
-do_while:do@ignore@@once@@ignore@while@ignore@@round@
+do_while:do@ignore@@once@@ignore@"while"@ignore@@round@
 
 comma_expression:@expression@(@oper_comma@@expression@)*
 
-for:for@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
+for:"for"@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
 
 arguments:@expression@(@ignore@@oper_comma@@expression@)*
 
@@ -125,7 +127,7 @@ proc_call:@variable@"("arguments?")"
 
 parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)*
 
-proc_def:@arbitrarily_type@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@
+proc_def:@arbitrarily_type@@segmentation@@label@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@
 
 return:return@expression@?
 
@@ -143,4 +145,4 @@ struct_def:(typedef)?@ignore@struct@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
 
-main:[@enum_def@@struct_def@@union_def@@variable_def@@proc_def@]
+main:[@proc_def@]

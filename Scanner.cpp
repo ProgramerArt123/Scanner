@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <memory>
 #include "Config.h"
 #include "Content.h"
 

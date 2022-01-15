@@ -31,8 +31,10 @@ bool CharPattern::IsMatchOnce(Content &content) const {
 	if (content.IsEnd()) {
 		return false;
 	}
-	bool isMatch = IsInRange(content.GetChar());
-	content.Next();
+	bool isMatch = IsIn(content.GetChar());
+	if (isMatch) {
+		content.Next(*this);
+	}
 	return isMatch;
 }
 void CharPattern::SetToPattern(char toPattern, bool isEscape){
@@ -66,7 +68,7 @@ const char *CharPattern::GetTypeName() const {
 	return "CharPattern";
 }
 
-bool CharPattern::IsInRange(char c) const {
+bool CharPattern::IsIn(char c) const {
 	if (!m_from_escape_patterns.empty()) {
 		return IsInMultiValue(c);
 	}
