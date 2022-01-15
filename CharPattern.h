@@ -15,9 +15,11 @@ public:
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;
 	const std::string ToString() const override;
+	void CheckMultiValueRange(char pattern, bool isEscape) const;
+	char GetFromPattern();
+	bool IsFromEscape();
 private:
 	bool IsInRange(char c) const;
-	void CheckMultiValueRange(char pattern, bool isEscape) const;
 	const char m_from_pattern;
 	char m_to_pattern;
 	const bool m_is_from_escape = false;

@@ -143,8 +143,11 @@ void Rule::CharParse(Pattern &parent, bool isEscape) {
 }
 void Rule::TryRangeParse(CharPattern &character) {
 	if (m_index + 1 < m_literal.size()) {
-		if (RANGE == m_literal[m_index ]) {
+		if (RANGE == m_literal[m_index]) {
+			character.CheckMultiValueRange(character.GetFromPattern(), 
+				character.IsFromEscape());
 			if (ESCAPE != m_literal[m_index + 1]) {
+				character.CheckMultiValueRange(m_literal[m_index + 1], false);
 				character.SetToPattern(m_literal[m_index + 1], false);
 				m_index += 2;
 			}
@@ -152,6 +155,7 @@ void Rule::TryRangeParse(CharPattern &character) {
 				if (m_index + 2 >= m_literal.size()) {
 					throw std::string("RegExp Format Error, RANGE!");
 				}
+				character.CheckMultiValueRange(m_literal[m_index + 2], true);
 				character.SetToPattern(m_literal[m_index + 2], true);
 				m_index += 3;
 			}

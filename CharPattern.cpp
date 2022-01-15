@@ -21,8 +21,6 @@ bool CharPattern::IsMatchOnce(Content &content) {
 	return isMatch;
 }
 void CharPattern::SetToPattern(char toPattern, bool isEscape){
-	CheckMultiValueRange(m_from_pattern, m_is_from_escape);
-	CheckMultiValueRange(toPattern, isEscape);
 	m_is_to_escape = isEscape;
 	m_to_pattern = toPattern;
 }
@@ -74,4 +72,10 @@ void CharPattern::CheckMultiValueRange(char pattern, bool isEscape) const {
 			break;
 		}
 	}
+}
+char CharPattern::GetFromPattern() {
+	return m_from_pattern;
+}
+bool CharPattern::IsFromEscape() {
+	return m_is_from_escape;
 }
