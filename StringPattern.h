@@ -8,7 +8,7 @@ class StringPattern : public Pattern {
 public:
 	explicit StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern);
 	virtual ~StringPattern();
-	bool IsMatchOnce(Content &content) override;
+	bool IsMatchOnce(Content &content) const override;
 	bool Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;
 	const char *GetTypeName() const override;

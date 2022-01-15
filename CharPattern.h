@@ -9,7 +9,7 @@ class CharPattern : public Pattern {
 public:
 	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
 	virtual ~CharPattern();
-	bool IsMatchOnce(Content &content) override;
+	bool IsMatchOnce(Content &content) const override;
 	void SetToPattern(char toPattern, bool isEscape);
 	bool Compare(const Pattern &other) const override;
 	bool operator==(const Pattern &other)const override;

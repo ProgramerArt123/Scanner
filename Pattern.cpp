@@ -12,7 +12,7 @@ Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
 Pattern::~Pattern() {
 	
 }
-bool Pattern::IsMatch(Content &content) {
+bool Pattern::IsMatch(Content &content)const {
 	Content::CursorsMemento memento(content);
 	uint64_t times = 0;
 	while (times++ < m_max_times) {
@@ -22,7 +22,7 @@ bool Pattern::IsMatch(Content &content) {
 	}
 	return memento.IsMatch(times > m_min_times);
 }
-bool Pattern::IsMatchOnce(Content &content) {
+bool Pattern::IsMatchOnce(Content &content) const {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
 		if (!child->IsMatch(content)) {
 			return false;

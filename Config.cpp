@@ -32,7 +32,7 @@ void Config::Parse() {
 	}
 	
 	if (m_rules.find("main") == m_rules.end()) {
-	//	throw std::string("main rule not defined!");
+		throw std::string("main rule not defined!");
 	}
 	
 	for (auto &rule : m_rules) {
@@ -53,8 +53,11 @@ void Config::CheckDuplicate() {
 	std::cout << "check pattern finish" << std::endl;
 }
 
-void Config::ParseContent(Content &content) const {
-	
+bool Config::ParseContent(Content &content) const {
+	if (m_rules.find("main") == m_rules.end()) {
+		throw std::string("main rule not defined!");
+	}
+	return m_rules.at("main")->IsMatch(content);
 }
 
 Rule &Config::GetRule(const std::string name) {

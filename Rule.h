@@ -17,6 +17,7 @@ public:
 	void CheckDuplicate(const Rule &other);
 	std::shared_ptr<Pattern> &GetPattern();
 	Config &GetConfig();
+	bool IsMatch(Content &content) const;
 private:
 	void StringParse(Pattern &parent);
 	void LabelParse(Pattern &parent);

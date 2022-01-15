@@ -176,3 +176,7 @@ void Rule::CheckDuplicate(const Rule &other) {
 Config &Rule::GetConfig() {
 	return m_config;
 }
+
+bool Rule::IsMatch(Content &content)const {
+	return m_pattern->IsMatch(content);
+}

@@ -1,3 +1,5 @@
+#include <fstream>
+#include <sstream>
 #include "Config.h"
 #include "Content.h"
 
@@ -17,11 +19,21 @@ bool Content::CursorsMemento::IsMatch(bool isMatch) {
 
 Content::Content(const std::string fileName, const Config &config):
 	m_file_name(fileName), m_config(config){
-	
 }
-void Content::Load() {}
+void Content::Load() {
+	std::ifstream file(m_file_name);
+	if (!file.is_open()) {
+		throw m_file_name + " open failed!";
+	}
+	std::stringstream buffer;  
+	buffer << file.rdbuf();
+	const std::string &content = buffer.str();
+	m_content.assign(content.begin(), content.end());
+}
 void Content::Parse() {
-	m_config.ParseContent(*this);
+	if (!m_config.ParseContent(*this)) {
+		throw m_file_name + " parse failed!";
+	}
 }
 char Content::GetChar() {
 	if (m_cursor >= m_content.size()) {

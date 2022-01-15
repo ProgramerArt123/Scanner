@@ -13,7 +13,7 @@ public:
 	explicit Config(const std::string fileName);
 	void Parse();
 	void CheckDuplicate();	
-	void ParseContent(Content &content) const;
+	bool ParseContent(Content &content) const;
 	Rule &GetRule(const std::string name);
 
 	

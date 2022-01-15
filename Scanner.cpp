@@ -7,7 +7,7 @@ int main(int argc, char *argv[]){
 	try{
 		Config config("c_front.s");
 		config.Parse();
-		config.CheckDuplicate();
+		//config.CheckDuplicate();
 		Content content("test.p", config);
 		content.Load();
 		content.Parse();

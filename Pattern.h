@@ -11,8 +11,8 @@ class Pattern {
 public:
 	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
 	virtual ~Pattern();
-	bool IsMatch(Content &content);
-	virtual bool IsMatchOnce(Content &content);
+	bool IsMatch(Content &content)const;
+	virtual bool IsMatchOnce(Content &content)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
 	bool CheckDuplicate(const Pattern &other) const;
