@@ -8,6 +8,21 @@
 
 CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
 	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_from_escape(isEscape) {
+		if (!m_is_from_escape) {
+			m_from_pattern = PatternMapping(m_from_pattern);
+		}
+		else {
+			switch (m_from_pattern)
+			{
+			case SPACE:
+				m_from_escape_patterns.push_back(' ');
+				m_from_escape_patterns.push_back('\t');
+				m_from_escape_patterns.push_back('\n');
+				break;
+			default:
+				break;
+			}
+		}
 	m_to_pattern = m_from_pattern;
 }
 CharPattern::~CharPattern() {}
@@ -23,6 +38,7 @@ bool CharPattern::IsMatchOnce(Content &content) {
 void CharPattern::SetToPattern(char toPattern, bool isEscape){
 	m_is_to_escape = isEscape;
 	m_to_pattern = toPattern;
+	m_to_pattern = PatternMapping(m_to_pattern);
 }
 
 bool CharPattern::Compare(const Pattern &other) const {
@@ -51,13 +67,17 @@ const char *CharPattern::GetTypeName() const {
 }
 
 bool CharPattern::IsInRange(char c) const {
-	if (m_from_pattern <= m_to_pattern) {
-		return m_from_pattern <= c &&
-			c <= m_to_pattern;
+	if (!m_from_escape_patterns.empty()) {
+		return IsInMultiValue(c);
+	}
+	return IsInRange(m_from_pattern, m_to_pattern, c);
+}
+bool CharPattern::IsInRange(char from, char to, char c) const {
+	if (from <= to) {
+		return from <= c && c <= to;
 	}
 	else {
-		return m_to_pattern <= c &&
-			c <= m_from_pattern;
+		return to <= c && c <= from;
 	}
 }
 const std::string CharPattern::ToString() const {
@@ -78,4 +98,24 @@ char CharPattern::GetFromPattern() {
 }
 bool CharPattern::IsFromEscape() {
 	return m_is_from_escape;
+}
+bool CharPattern::IsInMultiValue(char c) const {
+	for (char pattern : m_from_escape_patterns) {
+		if (c == pattern) {
+			return true;
+		}
+	}
+	return false;
+}
+char CharPattern::PatternMapping(char src) {
+	char dst = src;
+	switch (src)
+	{
+	case LINEEND:
+		dst = '\n';
+		break;
+	default:
+		break;
+	}
+	return dst;
 }

@@ -20,10 +20,14 @@ public:
 	bool IsFromEscape();
 private:
 	bool IsInRange(char c) const;
-	const char m_from_pattern;
+	bool IsInRange(char from, char to, char c) const;
+	bool IsInMultiValue(char c) const;
+	char PatternMapping(char src);
+	char m_from_pattern;
 	char m_to_pattern;
 	const bool m_is_from_escape = false;
 	bool m_is_to_escape = false;
+	std::vector<char> m_from_escape_patterns;
 };
 
 #endif
