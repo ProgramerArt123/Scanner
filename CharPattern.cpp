@@ -3,6 +3,7 @@
 #include "Content.h"
 #include "CharPattern.h"
 
+#define SPACE 's'
 #define LINEEND '$'
 
 CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
@@ -20,20 +21,8 @@ bool CharPattern::IsMatchOnce(Content &content) {
 	return isMatch;
 }
 void CharPattern::SetToPattern(char toPattern, bool isEscape){
-	if(!m_is_from_escape){
-		switch(m_from_pattern){
-			case LINEEND:
-				throw std::string("range can not be multi value!");
-				break;
-		}
-	}
-	if(isEscape){
-		switch(toPattern){
-			case LINEEND:
-				throw std::string("range can not be multi value!");
-				break;
-		}
-	}
+	CheckMultiValueRange(m_from_pattern, m_is_from_escape);
+	CheckMultiValueRange(toPattern, isEscape);
 	m_is_to_escape = isEscape;
 	m_to_pattern = toPattern;
 }
@@ -75,4 +64,14 @@ bool CharPattern::IsInRange(char c) const {
 }
 const std::string CharPattern::ToString() const {
 	return '\'' + m_content + '\'';
+}
+
+void CharPattern::CheckMultiValueRange(char pattern, bool isEscape) const {
+	if (isEscape) {
+		switch (pattern) {
+		case SPACE:
+			throw std::string("range can not be SPACE!");
+			break;
+		}
+	}
 }
