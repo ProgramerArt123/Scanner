@@ -22,10 +22,10 @@ bool Pattern::IsMatch(Content &content)const {
 		}
 	}
 	if (times > m_min_times) {
-		std::cout << "Match:" << *this << "==============================" << std::endl;
+		std::cout << "Match:" << *this << "==============================" << content.GetMemInfo() << std::endl;
 	}
 	else {
-		std::cout << "UnMatch:" << *this << content.GetMemInfo() << std::endl;
+		std::cout << "UnMatch:" << *this << "*" << content.GetMemInfo() << std::endl;
 	}
 	return memento.IsMatch(times > m_min_times);
 }

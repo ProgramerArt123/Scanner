@@ -7,13 +7,13 @@ ignore:\s*
 
 segmentation:\s+
 
-process:[@expression@@return@@goto@@proc_call@]
+process:[@return@@goto@@proc_call@@expression@]
 
 variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
 
 statement:[@process@@variable_def@]
 
-expression:[(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)(@ignore@@expression@@oper_two@@expression@@ignore@)(@ignore@@expression@"?"@expression@":"@expression@@ignore@)(@ignore@@element@@ignore@)(@ignore@@variable@)(@numeric@)(@integer@@ignore@)(@ignore@@round@@ignore@)]
+expression:[(@numeric@)(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)]
 
 
 element:[@string@@variable@@numeric@@integer@@address@@sizeof@]
@@ -43,7 +43,7 @@ round:"("@expression@")"
 
 label:[_a-zA-Z][a-zA-Z0-9]*
 
-numeric:@integer@\.@integer@
+numeric:@integer@("."@integer@)?
 
 integer:[0-9]+
 
@@ -85,7 +85,7 @@ pointer:"*"@ignore@
 
 address:"&"@ignore@@variable@
 
-block:"{"@ignore@@statement@*@ignore@"}"
+block:"{"(@ignore@@statement@@ignore@";")*@ignore@"}"
 
 scope:[@block@(@ignore@@statement@@ignore@)]
 
@@ -129,7 +129,7 @@ parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)
 
 proc_def:@arbitrarily_type@@segmentation@@label@@ignore@"("@ignore@@parameters@?@ignore@")"@ignore@@block@
 
-return:return@expression@?
+return:"return"(@segmentation@@expression@)?
 
 goto:goto@ignore@@label@
 
