@@ -11,9 +11,9 @@ process:[@expression@@return@@goto@@proc_call@]
 
 variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
 
-statement:[@variable_def@]
+statement:[@process@@variable_def@]
 
-expression:[@ignore@@oper_one@@expression@@ignore@)(@ignore@@expression@"++"@ignore@)(@ignore@@expression@"--"@ignore@)(@ignore@@expression@@oper_two@@expression@@ignore@)(@ignore@@expression@"?"@expression@":"@expression@@ignore@)(@ignore@@element@@ignore@)(@ignore@@variable@)(@numeric@)(@integer@@ignore@)(@ignore@@round@@ignore@)]
+expression:[(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)(@ignore@@expression@@oper_two@@expression@@ignore@)(@ignore@@expression@"?"@expression@":"@expression@@ignore@)(@ignore@@element@@ignore@)(@ignore@@variable@)(@numeric@)(@integer@@ignore@)(@ignore@@round@@ignore@)]
 
 
 element:[@string@@variable@@numeric@@integer@@address@@sizeof@]

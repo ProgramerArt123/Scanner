@@ -17,6 +17,7 @@ public:
 	void PushCursor();
 	void PopCursor();
 	std::string GetMemInfo();
+	bool NotForward() const;
 	class CursorsMemento {
 	public:
 		explicit CursorsMemento(Content &content);

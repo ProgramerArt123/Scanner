@@ -86,8 +86,8 @@ void Rule::StringParse(Pattern &parent) {
 		if (STRING == m_literal[m_index++]) {
 			const std::string pattern(m_literal.data() + begin, m_index - 1 - begin);
 			StringPattern *string = new StringPattern(*this, m_line_NO, begin, pattern);
-			string->MarkContent(m_literal, m_index - 1);
 			parent.AddChild(std::shared_ptr<Pattern>(string));
+			string->MarkContent(m_literal, m_index - 1);
 			return;
 		}
 	}
@@ -98,7 +98,8 @@ void Rule::LabelParse(Pattern &parent) {
 	while (m_index < m_literal.size()) {
 		if (LABEL == m_literal[m_index++]) {
 			const std::string labelName(m_literal.data() + begin, m_index - 1 - begin);
-			parent.AddChild(m_config.GetRule(labelName).GetPattern());
+			std::shared_ptr<Pattern> pattern(m_config.GetRule(labelName).GetPattern());
+			parent.AddChild(pattern);
 			return;
 		}
 	}
@@ -106,11 +107,11 @@ void Rule::LabelParse(Pattern &parent) {
 }
 void Rule::RoundParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new Pattern(*this, m_line_NO, m_index));
+	parent.AddChild(pattern);
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (ROUND_R == m_literal[m_index]) {
 			pattern->MarkContent(m_literal, m_index);
-			parent.AddChild(pattern);
 			m_index++;
 			TryActionParse(*pattern);
 			return;
@@ -120,11 +121,11 @@ void Rule::RoundParse(Pattern &parent) {
 }
 void Rule::SquareParse(Pattern &parent) {
 	std::shared_ptr<Pattern> pattern(new OrPattern(*this, m_line_NO, m_index));
+	parent.AddChild(pattern);
 	while (m_index < m_literal.size()) {
 		Parse(*pattern);
 		if (SQUARE_R == m_literal[m_index]) {
 			pattern->MarkContent(m_literal, m_index);
-			parent.AddChild(pattern) ;
 			m_index++;
 			return;
 		}
@@ -179,4 +180,7 @@ Config &Rule::GetConfig() {
 
 bool Rule::IsMatch(Content &content)const {
 	return m_pattern->IsMatch(content);
+}
+const std::string &Rule::GetName() {
+	return m_name;
 }

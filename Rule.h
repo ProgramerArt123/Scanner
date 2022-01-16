@@ -18,6 +18,7 @@ public:
 	std::shared_ptr<Pattern> &GetPattern();
 	Config &GetConfig();
 	bool IsMatch(Content &content) const;
+	const std::string &GetName();
 private:
 	void StringParse(Pattern &parent);
 	void LabelParse(Pattern &parent);

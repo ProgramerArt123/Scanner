@@ -35,9 +35,9 @@ public:
 	Rule &GetRule()const;
 	void BestMatchTracePrint() const;
 	void SetParent(const Pattern *parent);
+	void CheckClosedLoop(const Content &content)const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
-	void CheckClosedLoop()const;
 	
 	std::vector<std::shared_ptr<Pattern>> m_children;
 	const uint64_t m_line_NO = 0;

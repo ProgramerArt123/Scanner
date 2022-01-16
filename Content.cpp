@@ -127,3 +127,10 @@ std::string Content::GetMemInfo() {
 			",content:" + content;
 	}
 }
+bool Content::NotForward() const {
+	if (m_cursors_memento.empty()) {
+		return true;
+	}
+	return m_cursors_memento.top().first 
+		== m_cursor;
+}
