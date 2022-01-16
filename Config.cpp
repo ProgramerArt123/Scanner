@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "Pattern.h"
+#include "Content.h"
 #include "Config.h"
 
 Config::Config(const std::string fileName):
@@ -57,7 +58,12 @@ bool Config::ParseContent(Content &content) const {
 	if (m_rules.find("main") == m_rules.end()) {
 		throw std::string("main rule not defined!");
 	}
-	return m_rules.at("main")->IsMatch(content);
+	while (!content.IsEnd()) {
+		if (!m_rules.at("main")->IsMatch(content)) {
+			return false;
+		}
+	}
+	return true;
 }
 
 Rule &Config::GetRule(const std::string name) {

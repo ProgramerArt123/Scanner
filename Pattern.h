@@ -15,6 +15,7 @@ public:
 	virtual bool IsMatchOnce(Content &content)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
+	void SetLastChildShortest();
 	bool CheckDuplicate(const Pattern &other) const;
 	bool IsNotSelf(const Pattern &other) const;
 	virtual bool Compare(const Pattern &other) const; 
@@ -36,6 +37,8 @@ public:
 	void BestMatchTracePrint() const;
 	void SetParent(const Pattern *parent);
 	void CheckClosedLoop(const Content &content)const;
+	bool IsShortest()const;
+	
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
@@ -44,9 +47,12 @@ protected:
 	const uint64_t m_col_NO = 0;
 	uint64_t m_min_times = 1;
 	uint64_t m_max_times = 1;
+	bool m_is_shortest = false;
 	std::string m_content;
 	Rule &m_rule;
 	const Pattern *m_parent = NULL;
+	std::shared_ptr<Pattern> m_next;
+	
 };
 
 #endif

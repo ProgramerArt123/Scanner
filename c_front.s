@@ -1,9 +1,9 @@
 
 annotation:"//".*$
 
-string:\"[^\"]*\"
+string:\".*?\"
 
-ignore:\s*
+ignore:[@annotation@\s*]
 
 segmentation:\s+
 
@@ -13,7 +13,7 @@ variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
 
 statement:[@process@@variable_def@]
 
-expression:[(@numeric@)(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)]
+expression:[@numeric@@string@(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)]
 
 
 element:[@string@@variable@@numeric@@integer@@address@@sizeof@]
@@ -123,7 +123,7 @@ for:"for"@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@st
 
 arguments:@expression@(@ignore@@oper_comma@@expression@)*
 
-proc_call:@variable@"("arguments?")"
+proc_call:@variable@"("@arguments@?")"
 
 parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)*
 
@@ -145,4 +145,4 @@ struct_def:(typedef)?@ignore@struct@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
 
-main:[@proc_def@]
+main:@ignore@@proc_def@@ignore@

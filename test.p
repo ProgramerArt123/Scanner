@@ -10,6 +10,10 @@ void func3(){
 	printf("I am func3!\n");
 }
 
+void func4(){
+	return;
+}
+
 int main(){
 		int x = 1 % 2 + 5 * 6 + 9 / 3;
 		int y = 1 % 2 + 5 * (6 + 9) / 3;

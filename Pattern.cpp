@@ -20,12 +20,18 @@ bool Pattern::IsMatch(Content &content)const {
 		if (!IsMatchOnce(content)) {
 			break;
 		}
+		if (IsShortest() && m_next && times > m_min_times) {
+			Content::CursorsMemento memento(content);
+			if (memento.IsMatch(m_next->IsMatch(content))) {
+				break;
+			}
+		}
 	}
 	if (times > m_min_times) {
 		std::cout << "Match:" << *this << "==============================" << content.GetMemInfo() << std::endl;
 	}
 	else {
-		std::cout << "UnMatch:" << *this << "*" << content.GetMemInfo() << std::endl;
+		//std::cout << "UnMatch:" << *this << "*" << content.GetMemInfo() << std::endl;
 	}
 	return memento.IsMatch(times > m_min_times);
 }
@@ -40,13 +46,24 @@ bool Pattern::IsMatchOnce(Content &content) const {
 }
 
 void Pattern::AddChild(std::shared_ptr<Pattern> child) {
+	std::shared_ptr<Pattern> last;
+	if (!m_children.empty()) {
+		last = m_children.back();
+	}
 	m_children.push_back(child);
 	child->SetParent(this);
+	if (last && last->IsShortest()) {
+		last->m_next = child;
+	}
 }
 
 void Pattern::SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes) {
 	m_children.back()->m_min_times = minTimes;
 	m_children.back()->m_max_times = maxTimes;
+}
+
+void Pattern::SetLastChildShortest() {
+	m_children.back()->m_is_shortest = true;
 }
 
 bool Pattern::CheckDuplicate(const Pattern &other) const {
@@ -191,4 +208,8 @@ void Pattern::CheckClosedLoop(const Content &content) const {
 		}
 		parent = parent->m_parent;
 	}
+}
+
+bool Pattern::IsShortest()const {
+	return m_is_shortest;
 }

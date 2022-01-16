@@ -3,13 +3,24 @@
 #include "Content.h"
 #include "CharPattern.h"
 
+
 #define SPACE 's'
 #define LINEEND '$'
-
+#define ANY '.'
 CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
 	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_from_escape(isEscape) {
 		if (!m_is_from_escape) {
-			m_from_pattern = PatternMapping(m_from_pattern);
+			switch (m_from_pattern)
+			{
+			case ANY:
+				m_from_pattern = -128;
+				m_to_pattern = 127;
+				break;
+			default:
+				m_from_pattern = PatternMapping(m_from_pattern);
+				m_to_pattern = m_from_pattern;
+				break;
+			}
 		}
 		else {
 			switch (m_from_pattern)
@@ -22,8 +33,8 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 			default:
 				break;
 			}
+			m_to_pattern = m_from_pattern;
 		}
-	m_to_pattern = m_from_pattern;
 }
 CharPattern::~CharPattern() {}
 
