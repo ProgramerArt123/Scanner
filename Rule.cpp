@@ -66,19 +66,23 @@ void Rule::Parse(Pattern &parent) {
 		{
 		case ASTERISK:
 			minTimes = 0, maxTimes = __UINT64_MAX__;
+			break;
 		case PLUS:
 			minTimes = 1, maxTimes = __UINT64_MAX__;
+			break;
 		case QUESTION:
 			minTimes = 0, maxTimes = 1;
-			m_index++;
-			parent.SetLastChildTimes(minTimes, maxTimes);
-			if (m_index < m_literal.size() && m_literal[m_index] == QUESTION) {
-				m_index++;
-				parent.SetLastChildShortest();
-			}
 			break;
 		default :
+			return;
 			break;
+		}
+		
+		m_index++;
+		parent.SetLastChildTimes(minTimes, maxTimes);
+		if (m_index < m_literal.size() && m_literal[m_index] == QUESTION) {
+			m_index++;
+			parent.SetLastChildShortest();
 		}
 	}
 }

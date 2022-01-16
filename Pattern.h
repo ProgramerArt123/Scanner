@@ -7,11 +7,17 @@
 #include <stdint.h>
 class Content;
 class Rule;
+enum MATCH_RESULT { 
+	MATCH_RESULT_NONE = -1,
+	MATCH_RESULT_FAILED = 0,
+	MATCH_RESULT_SUCCESS = 1,
+	MATCH_RESULT_SUCCESS_JUMP = 2,
+};
 class Pattern {
 public:
 	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
 	virtual ~Pattern();
-	bool IsMatch(Content &content)const;
+	MATCH_RESULT IsMatch(Content &content)const;
 	virtual bool IsMatchOnce(Content &content)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);

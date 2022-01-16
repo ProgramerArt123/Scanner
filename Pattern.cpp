@@ -12,17 +12,18 @@ Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
 Pattern::~Pattern() {
 	
 }
-bool Pattern::IsMatch(Content &content)const {
+MATCH_RESULT Pattern::IsMatch(Content &content)const {
 	CheckClosedLoop(content);
 	Content::CursorsMemento memento(content);
+	bool isNextMatch = false;
 	uint64_t times = 0;
 	while (times++ < m_max_times) {
 		if (!IsMatchOnce(content)) {
 			break;
 		}
 		if (IsShortest() && m_next && times > m_min_times) {
-			Content::CursorsMemento memento(content);
-			if (memento.IsMatch(m_next->IsMatch(content))) {
+			if (m_next->IsMatch(content)) {
+				isNextMatch = true;
 				break;
 			}
 		}
@@ -33,13 +34,28 @@ bool Pattern::IsMatch(Content &content)const {
 	else {
 		//std::cout << "UnMatch:" << *this << "*" << content.GetMemInfo() << std::endl;
 	}
-	return memento.IsMatch(times > m_min_times);
+	if (!isNextMatch) {
+		if (memento.IsMatch(times > m_min_times)) {
+			return MATCH_RESULT_SUCCESS;
+		}
+		else {
+			return MATCH_RESULT_FAILED;
+		}
+	}
+	else {
+		return MATCH_RESULT_SUCCESS_JUMP;
+	}
 }
 bool Pattern::IsMatchOnce(Content &content) const {
-	for (const std::shared_ptr<Pattern> &child : m_children) {
-		child->SetParent(this);
-		if (!child->IsMatch(content)) {
+	size_t count = m_children.size();
+	for (size_t index = 0; index < count; index ++) {
+		m_children[index]->SetParent(this);
+		MATCH_RESULT match = m_children[index]->IsMatch(content);
+		if (MATCH_RESULT_FAILED == match) {
 			return false;
+		}
+		else if (MATCH_RESULT_SUCCESS_JUMP == match) {
+			index++;
 		}
 	}
 	return true ;
