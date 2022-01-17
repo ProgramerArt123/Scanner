@@ -24,7 +24,7 @@ private:
 	void LabelParse(Pattern &parent);
 	void RoundParse(Pattern &parent);
 	void SquareParse(Pattern &parent);
-	void CharParse(Pattern &parent, bool isEscape);
+	void CharParse(Pattern &parent, bool isEscape, bool isExclude);
 	void Parse(Pattern &parent);
 	void TryRangeParse(CharPattern &character);
 	void TryActionParse(Pattern &round);

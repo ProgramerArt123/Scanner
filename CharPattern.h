@@ -7,7 +7,7 @@
 #include "Pattern.h"
 class CharPattern : public Pattern {
 public:
-	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape);
+	explicit CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, char fromPattern, bool isEscape, bool isExclude);
 	virtual ~CharPattern();
 	bool IsMatchOnce(Content &content) const override;
 	void SetToPattern(char toPattern, bool isEscape);
@@ -26,6 +26,7 @@ private:
 	char m_from_pattern;
 	char m_to_pattern;
 	const bool m_is_from_escape = false;
+	const bool m_is_yes = true;
 	bool m_is_to_escape = false;
 	std::vector<char> m_from_escape_patterns;
 };

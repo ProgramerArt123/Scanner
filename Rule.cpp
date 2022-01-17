@@ -6,6 +6,7 @@
 #include "Rule.h"
 
 #define ESCAPE '\\'
+#define EXCLUDE '^'
 #define ROUND_L '('
 #define ROUND_R ')'
 #define SQUARE_L '['
@@ -32,13 +33,24 @@ void Rule::Parse() {
 }
 
 void Rule::Parse(Pattern &parent) {
+	bool isExclude = false;
+	if (EXCLUDE == m_literal[m_index]) {
+		isExclude = true;
+		m_index++;
+		if (m_index >= m_literal.size()) {
+			throw std::string("Config Format Error, EXCLUDE!");
+		}
+	}
 	switch (m_literal[m_index])
 	{
 	case ESCAPE:
 		m_index++;
-		CharParse(parent, true);
+		CharParse(parent, true, isExclude);
 		break;
 	case LABEL:
+		if (isExclude) {
+			throw std::string("EXCLUDE unsupport LABEL");
+		}
 		m_index++;
 		LabelParse(parent);
 		break;
@@ -47,15 +59,21 @@ void Rule::Parse(Pattern &parent) {
 		StringParse(parent);
 		break;
 	case ROUND_L:
+		if (isExclude) {
+			throw std::string("EXCLUDE unsupport ROUND");
+		}
 		m_index++;
 		RoundParse(parent);
 		break;
 	case SQUARE_L:
+		if (isExclude) {
+			throw std::string("EXCLUDE unsupport SQUARE");
+		}
 		m_index++;
 		SquareParse(parent);
 		break;
 	default:
-		CharParse(parent, false);
+		CharParse(parent, false, isExclude);
 		break;
 	}
 	
@@ -139,16 +157,18 @@ void Rule::SquareParse(Pattern &parent) {
 	}
 	throw std::string("Config Format Error, SQUARE_L!");
 }
-void Rule::CharParse(Pattern &parent, bool isEscape) {
+void Rule::CharParse(Pattern &parent, bool isEscape, bool isExclude) {
 	if (m_index >= m_literal.size()) {
 		throw std::string("Config Format Error, ESCAPE!");
 	}
-	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, m_literal[m_index], isEscape);
+	CharPattern *charPattern = new CharPattern(*this, m_line_NO, m_index, 
+		m_literal[m_index], isEscape, isExclude);
 	parent.AddChild(std::shared_ptr<Pattern>(charPattern));
 	m_index++;
 	TryRangeParse(*charPattern);
 	charPattern->MarkContent(m_literal, m_index);
 }
+
 void Rule::TryRangeParse(CharPattern &character) {
 	if (m_index + 1 < m_literal.size()) {
 		if (RANGE == m_literal[m_index]) {

@@ -3,12 +3,12 @@
 #include "Content.h"
 #include "CharPattern.h"
 
-
+#define NUMBER 'd'
 #define SPACE 's'
 #define LINEEND '$'
 #define ANY '.'
-CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape): 
-	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_from_escape(isEscape) {
+CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape, bool isExclude): 
+	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_from_escape(isEscape),m_is_yes(!isExclude) {
 		if (!m_is_from_escape) {
 			switch (m_from_pattern)
 			{
@@ -25,6 +25,10 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 		else {
 			switch (m_from_pattern)
 			{
+			case NUMBER:
+				m_from_pattern = '0';
+				m_to_pattern = '9';
+				break;
 			case SPACE:
 				m_from_escape_patterns.push_back(' ');
 				m_from_escape_patterns.push_back('\t');
@@ -42,7 +46,7 @@ bool CharPattern::IsMatchOnce(Content &content) const {
 	if (content.IsEnd()) {
 		return false;
 	}
-	bool isMatch = IsIn(content.GetChar());
+	bool isMatch = m_is_yes == IsIn(content.GetChar());
 	if (isMatch) {
 		content.Next(*this);
 	}

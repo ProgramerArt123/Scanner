@@ -1,7 +1,7 @@
 
 annotation:"//".*$
 
-string:\".*?\"
+string:\"^\"*\"
 
 ignore:[@annotation@\s*]
 
@@ -121,9 +121,9 @@ comma_expression:@expression@(@oper_comma@@expression@)*
 
 for:"for"@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
 
-arguments:@expression@(@ignore@@oper_comma@@expression@)*
+arguments:@expression@(@ignore@@oper_comma@@ignore@@expression@)*
 
-proc_call:@variable@"("@arguments@?")"
+proc_call:@variable@@ignore@"("@ignore@@arguments@?@ignore@")"
 
 parameters:	@arbitrarily_type@@label@(@ignore@@arbitrarily_type@@ignore@@label@)*
 

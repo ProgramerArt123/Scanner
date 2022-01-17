@@ -13,6 +13,7 @@ Pattern::~Pattern() {
 	
 }
 MATCH_RESULT Pattern::IsMatch(Content &content)const {
+
 	CheckClosedLoop(content);
 	Content::CursorsMemento memento(content);
 	bool isNextMatch = false;
