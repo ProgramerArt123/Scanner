@@ -8,7 +8,7 @@
 #define LINEEND '$'
 #define ANY '.'
 CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char fromPattern, bool isEscape, bool isExclude): 
-	Pattern(rule, lineNO, colNO), m_from_pattern(fromPattern), m_is_from_escape(isEscape),m_is_yes(!isExclude) {
+	Pattern(rule, lineNO, colNO, PATTERN_TYPE_CHAR), m_from_pattern(fromPattern), m_is_from_escape(isEscape),m_is_yes(!isExclude) {
 		if (!m_is_from_escape) {
 			switch (m_from_pattern)
 			{
@@ -98,7 +98,8 @@ bool CharPattern::IsInRange(char from, char to, char c) const {
 	}
 }
 const std::string CharPattern::ToString() const {
-	return '\'' + m_content + '\'';
+	return '\'' + m_content + '\'' + TimesToString();
+	;
 }
 
 void CharPattern::CheckMultiValueRange(char pattern, bool isEscape) const {

@@ -110,22 +110,16 @@ void Content::PopCursor() {
 	m_cursors_memento.pop();
 }
 std::string Content::GetMemInfo() {
-	if (!m_cursors_memento.empty()) {
-		size_t len = m_content.size() - m_cursors_memento.top().first < 10 ?
-			m_content.size() - m_cursors_memento.top().first : 10;
-		const std::string content(m_content.begin() + m_cursors_memento.top().first,
-			m_content.begin() + m_cursors_memento.top().first + len);
-		return "line:" + std::to_string(m_cursors_memento.top().second) + 
-			",cursor:" + std::to_string(m_cursors_memento.top().first) +
-			",content:" + content;
+	if (m_cursors_memento.empty()) {
+		throw std::string("Content::GetMemInfo No Mem!");
 	}
-	else {
-		size_t len = m_content.size() - m_cursor < 10 ? m_content.size() - m_cursor : 10;
-		const std::string content(m_content.begin() + m_cursor, m_content.begin() + m_cursor + len);
-		return "line:" + std::to_string(m_line_NO) +
-			",cursor:" + std::to_string(m_cursor) +
-			",content:" + content;
-	}
+	size_t len = m_content.size() - m_cursors_memento.top().first < 10 ?
+		m_content.size() - m_cursors_memento.top().first : 10;
+	const std::string content(m_content.begin() + m_cursors_memento.top().first,
+		m_content.begin() + m_cursors_memento.top().first + len);
+	return "line:" + std::to_string(m_cursors_memento.top().second) + 
+		",cursor:" + std::to_string(m_cursors_memento.top().first) +
+		",content:" + content + "...";
 }
 bool Content::NotForward() const {
 	if (m_cursors_memento.empty()) {
@@ -133,4 +127,10 @@ bool Content::NotForward() const {
 	}
 	return m_cursors_memento.top().first 
 		== m_cursor;
+}
+size_t Content::GetLineNO() {
+	return m_line_NO;
+}
+size_t Content::GetCursor() {
+	return m_cursor;
 }

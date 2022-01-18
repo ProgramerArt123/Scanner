@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string.h>
 #include <unistd.h>
 #include "Content.h"
@@ -6,14 +7,13 @@
 #include "Rule.h"
 #include "Pattern.h"
 
-Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
-	m_rule(rule),m_line_NO(lineNO), m_col_NO(colNO){
+Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type):
+	m_rule(rule),m_line_NO(lineNO), m_col_NO(colNO), m_type(type){
 }
 Pattern::~Pattern() {
 	
 }
 MATCH_RESULT Pattern::IsMatch(Content &content)const {
-
 	CheckClosedLoop(content);
 	Content::CursorsMemento memento(content);
 	bool isNextMatch = false;
@@ -29,14 +29,19 @@ MATCH_RESULT Pattern::IsMatch(Content &content)const {
 			}
 		}
 	}
-	if (times > m_min_times) {
-		std::cout << "Match:" << *this << "==============================" << content.GetMemInfo() << std::endl;
+	if (m_rule.GetName() != "ignore") {
+		std::stringstream trace;
+		GetTraceInfo(trace);
+		if (times > m_min_times) {
+			std::cout << "Match:" << *this << "===" << content.GetMemInfo() << trace.str() << std::endl;
+		}
+		else {
+			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo() << trace.str() << std::endl;
+		}
 	}
-	else {
-		//std::cout << "UnMatch:" << *this << "*" << content.GetMemInfo() << std::endl;
-	}
+	memento.IsMatch(isNextMatch || times > m_min_times);
 	if (!isNextMatch) {
-		if (memento.IsMatch(times > m_min_times)) {
+		if (times > m_min_times) {
 			return MATCH_RESULT_SUCCESS;
 		}
 		else {
@@ -185,8 +190,14 @@ void Pattern::MarkContent(const std::vector<char> &literal, size_t end) {
 }
 
 const std::string Pattern::ToString() const {
-	return '(' + m_content + ')';
+	return '(' + m_content + ')' + TimesToString();
 }
+
+const std::string Pattern::TimesToString() const {
+	return "{" + std::to_string(m_min_times) + 
+		"," + std::to_string(m_max_times) + "}";
+}
+
 void Pattern::ForeachCheckDuplicate(const Pattern &other) const {
 	other.CheckDuplicate(*this);
 	if (IsNotSelf(other)) {
@@ -229,4 +240,11 @@ void Pattern::CheckClosedLoop(const Content &content) const {
 
 bool Pattern::IsShortest()const {
 	return m_is_shortest;
+}
+
+void Pattern::GetTraceInfo(std::stringstream &trace) const {
+	trace << "<-" << GetRule().GetName();
+	if (m_parent) {
+		m_parent->GetTraceInfo(trace);
+	}
 }

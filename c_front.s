@@ -7,14 +7,11 @@ ignore:[@annotation@\s*]
 
 segmentation:\s+
 
-process:[@return@@goto@@proc_call@@expression@]
+variable_def:@arbitrarily_type@@ignore@@variable@(@ignore@"="@ignore@@expression@)?
 
-variable_def:@arbitrarily_type@@ignore@@variable@@expression@?
+statement:[@return@@goto@@proc_call@@variable_def@@expression@]
 
-statement:[@process@@variable_def@]
-
-expression:[@numeric@@string@(@ignore@@oper_one@@expression@@ignore@)(@ignore@@variable@"++"@ignore@)(@ignore@@variable@"--"@ignore@)]
-
+expression:@element@(@ignore@@oper_two@@ignore@@element@)*
 
 element:[@string@@variable@@numeric@@integer@@address@@sizeof@]
 
@@ -97,7 +94,7 @@ else:else@ignore@@round@@ignore@@scope@
 
 if_else:@if@(@ignore@@else_if@@ignore@)*(@ignore@@else@)?
 
-break_process:["break"@process@]
+break_process:["break"@return@@goto@@proc_call@@expression@]
 
 branch:@integer@@ignore@":"@ignore@[@block@(@ignore@@break_process@+@ignore@)]?
 

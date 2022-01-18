@@ -2,7 +2,7 @@
 #include "Content.h"
 #include "OrPattern.h"
 OrPattern::OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
-	Pattern(rule, lineNO, colNO){
+	Pattern(rule, lineNO, colNO, PATTERN_TYPE_OR){
 	
 }
 OrPattern::~OrPattern() {}
@@ -62,5 +62,6 @@ bool OrPattern::CompareOther(const Pattern &other) const {
 }
 
 const std::string OrPattern::ToString() const {
-	return '[' + m_content + ']';
+	return '[' + m_content + ']' + TimesToString();
+	;
 }

@@ -4,7 +4,7 @@
 #include "StringPattern.h"
 
 StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const std::string pattern): 
-	Pattern(rule, lineNO, colNO), m_pattern(pattern) {}
+	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
 bool StringPattern::IsMatchOnce(Content &content) const {
@@ -39,5 +39,6 @@ const char *StringPattern::GetTypeName() const {
 	return "StringPattern";
 }
 const std::string StringPattern::ToString() const {
-	return '"' + m_content + '"';
+	return '"' + m_content + '"' + TimesToString();
+	;
 }

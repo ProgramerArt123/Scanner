@@ -13,9 +13,17 @@ enum MATCH_RESULT {
 	MATCH_RESULT_SUCCESS = 1,
 	MATCH_RESULT_SUCCESS_JUMP = 2,
 };
+
+enum PATTERN_TYPE { 
+	PATTERN_TYPE_NONE,
+	PATTERN_TYPE_AND,
+	PATTERN_TYPE_OR,
+	PATTERN_TYPE_STRING,
+	PATTERN_TYPE_CHAR
+};
 class Pattern {
 public:
-	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
+	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_AND);
 	virtual ~Pattern();
 	MATCH_RESULT IsMatch(Content &content)const;
 	virtual bool IsMatchOnce(Content &content)const;
@@ -38,13 +46,14 @@ public:
 	bool ChildrenCheckDuplicate(const Pattern &other) const;
 	void MarkContent(const std::vector<char> &literal, size_t end);
 	virtual const std::string ToString() const;
+	const std::string TimesToString() const;	
 	void ForeachCheckDuplicate(const Pattern &other) const;
 	Rule &GetRule()const;
 	void BestMatchTracePrint() const;
 	void SetParent(const Pattern *parent);
 	void CheckClosedLoop(const Content &content)const;
 	bool IsShortest()const;
-	
+	void GetTraceInfo(std::stringstream &trace)const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
@@ -58,6 +67,7 @@ protected:
 	Rule &m_rule;
 	const Pattern *m_parent = NULL;
 	std::shared_ptr<Pattern> m_next;
+	PATTERN_TYPE m_type = PATTERN_TYPE_AND;
 	
 };
 

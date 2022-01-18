@@ -18,6 +18,8 @@ public:
 	void PopCursor();
 	std::string GetMemInfo();
 	bool NotForward() const;
+	size_t GetLineNO();
+	size_t GetCursor();
 	class CursorsMemento {
 	public:
 		explicit CursorsMemento(Content &content);
