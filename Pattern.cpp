@@ -33,10 +33,10 @@ MATCH_RESULT Pattern::IsMatch(Content &content)const {
 		std::stringstream trace;
 		GetTraceInfo(trace);
 		if (times > m_min_times) {
-			std::cout << "Match:" << *this << "===" << content.GetMemInfo() << trace.str() << std::endl;
+			std::cout << "Match:" << *this << "===" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 		else {
-			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo() << trace.str() << std::endl;
+			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
 	memento.IsMatch(isNextMatch || times > m_min_times);
