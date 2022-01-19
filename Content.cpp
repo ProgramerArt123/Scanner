@@ -97,7 +97,10 @@ bool Content::Next(const Pattern &pattern) {
 	}
 }
 bool Content::IsEnd() {
-	return m_cursor >= m_content.size();
+	if (m_content.empty()) {
+		return true;
+	}
+	return m_cursor >= m_content.size() - 1;
 }
 
 

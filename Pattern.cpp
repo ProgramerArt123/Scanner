@@ -229,13 +229,13 @@ void Pattern::SetParent(const Pattern *parent) {
 }
 
 void Pattern::CheckClosedLoop(const Content &content) const {
-	const Pattern *parent = m_parent;
-	while (parent) {
-		if (parent == this && content.NotForward()) {
-			throw m_content + " Closed Loop";
-		}
-		parent = parent->m_parent;
-	}
+//	const Pattern *parent = m_parent;
+//	while (parent) {
+//		if (parent == this && content.NotForward()) {
+//			throw m_content + " Closed Loop";
+//		}
+//		parent = parent->m_parent;
+//	}
 }
 
 bool Pattern::IsShortest()const {
@@ -243,8 +243,8 @@ bool Pattern::IsShortest()const {
 }
 
 void Pattern::GetTraceInfo(std::stringstream &trace) const {
-	trace << "<-" << GetRule().GetName();
-	if (m_parent) {
-		m_parent->GetTraceInfo(trace);
-	}
+//	trace << "<-" << GetRule().GetName();
+//	if (m_parent) {
+//		m_parent->GetTraceInfo(trace);
+//	}
 }

@@ -38,7 +38,6 @@ int main(){
 		int const j = 0;
 		printf("i=%d,j=%d\n", i, j);
 		int k=0,l=123;
-		//printf("k=%d,l=%d,m=%d,n=%d\n", k, l, m, n);
 		func3();
 		return 0;
 }

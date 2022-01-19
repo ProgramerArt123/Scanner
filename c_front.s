@@ -11,13 +11,13 @@ variable_def:@arbitrarily_type@@ignore@@variable@(@ignore@"="@ignore@@expression
 
 statement:[@return@@goto@@proc_call@@variable_def@@expression@]
 
-expression:@element@(@ignore@@oper_two@@ignore@@element@)*
+expression:[(@oper_one@@ignore@@variable@)(@variable@@ignore@["++""--"])(@element@(@ignore@@oper_two@@ignore@@element@)*)]
 
-element:[@string@@variable@@numeric@@integer@@address@@sizeof@]
+element:[("("@ignore@@expression@@ignore@")")@proc_call@@string@@variable@@numeric@@integer@@address@@sizeof@]
 
 sizeof:[(sizeof@ignore@"("@ignore@@expression@@ignore@")")(sizeof@ignore@@element@)]
 
-oper_two:[@oper_comma@@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
+oper_two:[","@oper_assgin@@oper_logic_or@@oper_logic_and@@oper_bit_or@@oper_bit_xor@@oper_bit_and@@oper_equal@@oper_rela@@oper_mov@@oper_add_sub@@oper_mul_div@]
 
 oper_comma:(",")#SetComma#
 oper_assgin:["=""+=""-=""*=""/=""%=""&=""^=""|=""<<="">>="]
@@ -118,7 +118,7 @@ comma_expression:@expression@(@oper_comma@@expression@)*
 
 for:"for"@ignore@"("@ignore@(@statement@@ignore@(@ignore@@oper_comma@@ignore@@statement@)*)|";"@ignore@@comma_expression@@ignore@|";"@ignore@@comma_expression@@ignore@|")"@ignore@@once@
 
-arguments:@expression@(@ignore@@oper_comma@@ignore@@expression@)*
+arguments:@expression@(@ignore@","@ignore@@expression@)*
 
 proc_call:@variable@@ignore@"("@ignore@@arguments@?@ignore@")"
 
@@ -142,4 +142,4 @@ struct_def:(typedef)?@ignore@struct@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
 
-main:@ignore@@proc_def@@ignore@
+main:@ignore@[@proc_def@]@ignore@
