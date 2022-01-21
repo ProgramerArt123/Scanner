@@ -13,9 +13,9 @@ Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type)
 Pattern::~Pattern() {
 	
 }
-MATCH_RESULT Pattern::IsMatch(Content &content)const {
+MATCH_RESULT Pattern::IsMatch(Content &content)  {
 	CheckClosedLoop(content);
-	Content::CursorsMemento memento(content);
+	Content::CursorsMemento memento(content, *this);
 	bool isNextMatch = false;
 	uint64_t times = 0;
 	while (times++ < m_max_times) {
@@ -229,13 +229,16 @@ void Pattern::SetParent(const Pattern *parent) {
 }
 
 void Pattern::CheckClosedLoop(const Content &content) const {
-//	const Pattern *parent = m_parent;
-//	while (parent) {
-//		if (parent == this && content.NotForward()) {
-//			throw m_content + " Closed Loop";
-//		}
-//		parent = parent->m_parent;
-//	}
+	const Pattern *backward = m_parent;
+	while (backward) {
+		if (backward == this) {
+			if (backward->GetMementoCursor() && content.GetCursor()) {
+				throw m_content + " Closed Loop";
+			}
+			return;
+		}
+		backward = backward->m_parent;
+	}
 }
 
 bool Pattern::IsShortest()const {
@@ -247,4 +250,11 @@ void Pattern::GetTraceInfo(std::stringstream &trace) const {
 //	if (m_parent) {
 //		m_parent->GetTraceInfo(trace);
 //	}
+}
+
+void Pattern::SetMementoCursor(size_t memento) {
+	m_memento_cursor = memento;
+}
+size_t Pattern::GetMementoCursor()const {
+	return m_memento_cursor;
 }

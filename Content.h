@@ -9,12 +9,13 @@ class Content {
 public:
 	class CursorsMemento {
 	public:
-		explicit CursorsMemento(Content &content);
+		explicit CursorsMemento(Content &content, Pattern &pattern);
 		~CursorsMemento();
 		bool IsMatch(bool isMatch);
 	private:
 		friend class Content;
 		Content &m_content;
+		Pattern &m_pattern;
 		bool m_is_match = false;
 		size_t m_cursor = 0;
 		size_t m_line_NO = 1;
@@ -30,8 +31,8 @@ public:
 	void PopCursor();
 	std::string GetMemInfo(const Content::CursorsMemento &memento);
 	bool NotForward() const;
-	size_t GetLineNO();
-	size_t GetCursor();
+	size_t GetLineNO()const;
+	size_t GetCursor()const;
 	
 private:
 	friend class CursorsMemento;
@@ -40,7 +41,6 @@ private:
 	std::vector<char> m_content;
 	size_t m_cursor = 0;
 	size_t m_line_NO = 1;
-	
 	size_t m_best_match_cursor = 0;
 	size_t m_best_match_line_NO = 1;
 	const Pattern *m_best_match_pattern = NULL;

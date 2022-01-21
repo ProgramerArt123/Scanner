@@ -4,12 +4,14 @@
 #include "Config.h"
 #include "Content.h"
 
-Content::CursorsMemento::CursorsMemento(Content &content) :
-	m_content(content){
+Content::CursorsMemento::CursorsMemento(Content &content, Pattern &pattern):
+	m_content(content),m_pattern(pattern){
 		m_line_NO = m_content.GetLineNO();
 		m_cursor = m_content.GetCursor();
+		m_pattern.SetMementoCursor(m_cursor);
 }
 Content::CursorsMemento::~CursorsMemento() {
+	m_pattern.SetMementoCursor(UINT64_MAX);
 	if (!m_is_match) {
 		m_content.m_cursor = m_cursor;
 		m_content.m_line_NO = m_line_NO;
@@ -116,9 +118,9 @@ std::string Content::GetMemInfo(const Content::CursorsMemento &memento) {
 bool Content::NotForward() const {
 	return false; //TODO
 }
-size_t Content::GetLineNO() {
+size_t Content::GetLineNO()const {
 	return m_line_NO;
 }
-size_t Content::GetCursor() {
+size_t Content::GetCursor() const{
 	return m_cursor;
 }

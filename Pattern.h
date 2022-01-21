@@ -25,7 +25,7 @@ class Pattern {
 public:
 	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_AND);
 	virtual ~Pattern();
-	MATCH_RESULT IsMatch(Content &content)const;
+	MATCH_RESULT IsMatch(Content &content);
 	virtual bool IsMatchOnce(Content &content)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
@@ -54,6 +54,8 @@ public:
 	void CheckClosedLoop(const Content &content)const;
 	bool IsShortest()const;
 	void GetTraceInfo(std::stringstream &trace)const;
+	void SetMementoCursor(size_t memento);
+	size_t GetMementoCursor()const;
 	friend std::ostream &operator<<(std::ostream &os, const Pattern &pattern);
 protected:
 	
@@ -68,7 +70,7 @@ protected:
 	const Pattern *m_parent = NULL;
 	std::shared_ptr<Pattern> m_next;
 	PATTERN_TYPE m_type = PATTERN_TYPE_AND;
-	
+	size_t m_memento_cursor = UINT64_MAX;
 };
 
 #endif
