@@ -27,6 +27,11 @@ struct RECTANGLE{
 	double width; 
 };
 
+union TIME{
+	int play;
+	int study;
+};
+
 int main(){
 		int x = 1 % 2 + 5 * 6 + 9 / 3;
 		int y = 1 % 2 + 5 * (6 + 9) / 3;

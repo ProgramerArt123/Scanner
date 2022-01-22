@@ -140,6 +140,6 @@ body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*"}"@ignore@";
 
 struct_def:"struct"@ignore@@body@
 
-union_def:(typedef)?@ignore@union@ignore@@body@
+union_def:"union"@ignore@@body@
 
-main:@ignore@[@proc_def@@enum_def@@struct_def@]@ignore@
+main:@ignore@[@proc_def@@enum_def@@struct_def@@union_def@]@ignore@
