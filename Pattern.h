@@ -51,7 +51,7 @@ public:
 	Rule &GetRule()const;
 	void BestMatchTracePrint() const;
 	void SetParent(const Pattern *parent);
-	void CheckClosedLoop(const Content &content)const;
+	void CheckClosedLoop(const Content &content);
 	bool IsShortest()const;
 	void GetTraceInfo(std::stringstream &trace)const;
 	void SetMementoCursor(size_t memento);
@@ -71,6 +71,8 @@ protected:
 	std::shared_ptr<Pattern> m_next;
 	PATTERN_TYPE m_type = PATTERN_TYPE_AND;
 	size_t m_memento_cursor = UINT64_MAX;
+private:
+	bool m_is_closed_loop = false;
 };
 
 #endif

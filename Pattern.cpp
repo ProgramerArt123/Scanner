@@ -228,17 +228,24 @@ void Pattern::SetParent(const Pattern *parent) {
 	m_parent = parent;
 }
 
-void Pattern::CheckClosedLoop(const Content &content) const {
+void Pattern::CheckClosedLoop(const Content &content)  {
 	const Pattern *backward = m_parent;
 	while (backward) {
 		if (backward == this) {
-			if (backward->GetMementoCursor() && content.GetCursor()) {
-				throw m_content + " Closed Loop";
+			m_is_closed_loop = true;
+			if (backward->GetMementoCursor() == content.GetCursor()) {
+				std::stringstream trace;
+				GetTraceInfo(trace);
+				throw "[" + trace.str() + "] Closed Loop";
 			}
+			return;
+		}
+		if (backward->m_is_closed_loop) {
 			return;
 		}
 		backward = backward->m_parent;
 	}
+	m_is_closed_loop = false;
 }
 
 bool Pattern::IsShortest()const {
@@ -250,6 +257,9 @@ void Pattern::GetTraceInfo(std::stringstream &trace) const {
 	const Pattern *backward = m_parent;
 	while (backward) {
 		if (backward == this) {
+			return;
+		}
+		if (backward->m_is_closed_loop) {
 			return;
 		}
 		trace << "<-" << backward->GetRule().GetName();
