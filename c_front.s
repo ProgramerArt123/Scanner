@@ -38,7 +38,7 @@ type_cast:"("@label@")"
 oper_suffix:[".""->"]
 round:"("@expression@")"
 
-label:[_a-zA-Z][a-zA-Z0-9]*
+label:[_a-zA-Z][_a-zA-Z0-9]*
 
 numeric:@integer@("."@integer@)?
 
@@ -134,7 +134,7 @@ labels:@label@(@ignore@@oper_comma@@ignore@@label@)+)|@label@
 
 assgin_label:@label@@ignore@(@ignore@"="@ignore@@integer@)?
 
-enum_def:(typedef)?@ignore@enum@ignore@@label@@ignore@"{"@ignore@(@assgin_label@(@ignore@@oper_comma@@ignore@@assgin_label@)+)|@assgin_label@|)@ignore@"}"@ignore@@labels@|
+enum_def:("typedef"@ignore@)?"enum"@ignore@@label@@ignore@"{"(@ignore@@assgin_label@@ignore@","?)*@ignore@"}"@ignore@";"
 
 body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*@ignore@"}"@ignore@@labels@|
 
@@ -142,4 +142,4 @@ struct_def:(typedef)?@ignore@struct@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
 
-main:@ignore@[@proc_def@]@ignore@
+main:@ignore@[@proc_def@@enum_def@]@ignore@

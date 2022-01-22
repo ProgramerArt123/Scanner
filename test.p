@@ -14,6 +14,14 @@ void func4(){
 	return;
 }
 
+enum PATTERN_TYPE { 
+	PATTERN_TYPE_NONE,
+	PATTERN_TYPE_AND = 1,
+	PATTERN_TYPE_OR,
+	PATTERN_TYPE_STRING,
+	PATTERN_TYPE_CHAR
+};
+
 int main(){
 		int x = 1 % 2 + 5 * 6 + 9 / 3;
 		int y = 1 % 2 + 5 * (6 + 9) / 3;
