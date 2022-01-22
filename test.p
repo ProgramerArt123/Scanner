@@ -79,5 +79,8 @@ int main(){
 		printf("i=%d,j=%d\n", i, j);
 		int k=0,l=123;
 		func3();
+		int * * * *p;
+		int *p2 = &k;
+		int*p3;
 		return 0;
 }
