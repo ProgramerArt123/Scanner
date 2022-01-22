@@ -246,10 +246,15 @@ bool Pattern::IsShortest()const {
 }
 
 void Pattern::GetTraceInfo(std::stringstream &trace) const {
-//	trace << "<-" << GetRule().GetName();
-//	if (m_parent) {
-//		m_parent->GetTraceInfo(trace);
-//	}
+	trace << "<-" << GetRule().GetName();
+	const Pattern *backward = m_parent;
+	while (backward) {
+		if (backward == this) {
+			return;
+		}
+		trace << "<-" << backward->GetRule().GetName();
+		backward = backward->m_parent;
+	}
 }
 
 void Pattern::SetMementoCursor(size_t memento) {
