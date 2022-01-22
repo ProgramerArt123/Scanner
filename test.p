@@ -25,18 +25,32 @@ enum PATTERN_TYPE {
 struct RECTANGLE{
 	double length;
 	double width; 
-	union INNER{
-		float a;
-		int b; 
+	union TIME{
+		int play;
+		int study;
+	};
+	enum PATTERN_TYPE { 
+		PATTERN_TYPE_NONE,
+		PATTERN_TYPE_AND = 1,
+		PATTERN_TYPE_OR,
+		PATTERN_TYPE_STRING,
+		PATTERN_TYPE_CHAR
 	};
 };
 
 union TIME{
 	int play;
 	int study;
-	struct INNER{
-		double a;
-		float b; 
+	struct RECTANGLE{
+		double length;
+		double width; 
+	};
+	enum PATTERN_TYPE { 
+		PATTERN_TYPE_NONE,
+		PATTERN_TYPE_AND = 1,
+		PATTERN_TYPE_OR,
+		PATTERN_TYPE_STRING,
+		PATTERN_TYPE_CHAR
 	};
 };
 

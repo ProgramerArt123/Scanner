@@ -136,7 +136,7 @@ assgin_label:@label@@ignore@(@ignore@"="@ignore@@integer@)?
 
 enum_def:"enum"@ignore@@label@@ignore@"{"(@ignore@@assgin_label@@ignore@","?)*@ignore@"}"@ignore@";"
 
-body:@label@@ignore@"{"@ignore@([(@variable_def@@ignore@";")@struct_def@@union_def@]@ignore@)*"}"@ignore@";"
+body:@label@@ignore@"{"@ignore@([(@variable_def@@ignore@";")@enum_def@@struct_def@@union_def@]@ignore@)*"}"@ignore@";"
 
 struct_def:"struct"@ignore@@body@
 
