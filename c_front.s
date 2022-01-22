@@ -134,12 +134,12 @@ labels:@label@(@ignore@@oper_comma@@ignore@@label@)+)|@label@
 
 assgin_label:@label@@ignore@(@ignore@"="@ignore@@integer@)?
 
-enum_def:("typedef"@ignore@)?"enum"@ignore@@label@@ignore@"{"(@ignore@@assgin_label@@ignore@","?)*@ignore@"}"@ignore@";"
+enum_def:"enum"@ignore@@label@@ignore@"{"(@ignore@@assgin_label@@ignore@","?)*@ignore@"}"@ignore@";"
 
-body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*@ignore@"}"@ignore@@labels@|
+body:@label@@ignore@"{"@ignore@(@variable_def@@ignore@";"@ignore@)*"}"@ignore@";"
 
-struct_def:(typedef)?@ignore@struct@ignore@@body@
+struct_def:"struct"@ignore@@body@
 
 union_def:(typedef)?@ignore@union@ignore@@body@
 
-main:@ignore@[@proc_def@@enum_def@]@ignore@
+main:@ignore@[@proc_def@@enum_def@@struct_def@]@ignore@

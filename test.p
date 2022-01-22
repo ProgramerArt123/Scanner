@@ -22,6 +22,11 @@ enum PATTERN_TYPE {
 	PATTERN_TYPE_CHAR
 };
 
+struct RECTANGLE{
+	double length;
+	double width; 
+};
+
 int main(){
 		int x = 1 % 2 + 5 * 6 + 9 / 3;
 		int y = 1 % 2 + 5 * (6 + 9) / 3;
