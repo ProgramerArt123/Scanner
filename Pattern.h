@@ -7,6 +7,7 @@
 #include <stdint.h>
 class Content;
 class Rule;
+class Lexical;
 enum MATCH_RESULT { 
 	MATCH_RESULT_NONE = -1,
 	MATCH_RESULT_FAILED = 0,
@@ -25,8 +26,8 @@ class Pattern {
 public:
 	explicit Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type = PATTERN_TYPE_AND);
 	virtual ~Pattern();
-	MATCH_RESULT IsMatch(Content &content);
-	virtual bool IsMatchOnce(Content &content)const;
+	MATCH_RESULT IsMatch(Content &content, Lexical &parent);
+	virtual bool IsMatchOnce(Content &content, Lexical &parent)const;
 	void AddChild(std::shared_ptr<Pattern> child);
 	void SetLastChildTimes(uint64_t minTimes, uint64_t maxTimes);
 	void SetLastChildShortest();

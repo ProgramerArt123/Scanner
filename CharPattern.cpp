@@ -42,7 +42,7 @@ CharPattern::CharPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const char
 }
 CharPattern::~CharPattern() {}
 
-bool CharPattern::IsMatchOnce(Content &content) const {
+bool CharPattern::IsMatchOnce(Content &content, Lexical &parent) const {
 	if (content.IsEnd()) {
 		return false;
 	}

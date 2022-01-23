@@ -5,6 +5,7 @@
 #include "Content.h"
 #include "Config.h"
 #include "Rule.h"
+#include "Lexical.h"
 #include "Pattern.h"
 
 Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type):
@@ -13,18 +14,19 @@ Pattern::Pattern(Rule &rule, uint64_t lineNO, uint64_t colNO, PATTERN_TYPE type)
 Pattern::~Pattern() {
 	
 }
-MATCH_RESULT Pattern::IsMatch(Content &content)  {
+MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	CheckClosedLoop(content);
+	std::shared_ptr<Lexical> lexical(new Lexical);
 	Content::CursorsMemento memento(content, *this);
-	bool isNextMatch = false;
+	uint64_t thisPos = UINT64_MAX;
 	uint64_t times = 0;
 	while (times++ < m_max_times) {
-		if (!IsMatchOnce(content)) {
+		if (!IsMatchOnce(content, *lexical)) {
 			break;
 		}
 		if (IsShortest() && m_next && times > m_min_times) {
-			if (m_next->IsMatch(content)) {
-				isNextMatch = true;
+			if (m_next->IsMatch(content, *lexical)) {
+				thisPos = parent.GetChildrenCount();
 				break;
 			}
 		}
@@ -39,9 +41,12 @@ MATCH_RESULT Pattern::IsMatch(Content &content)  {
 			std::cout << "UnMatch:" << *this << "***" << content.GetMemInfo(memento) << trace.str() << std::endl;
 		}
 	}
-	memento.IsMatch(isNextMatch || times > m_min_times);
-	if (!isNextMatch) {
+	memento.IsMatch(UINT64_MAX != thisPos || times > m_min_times);
+	if (UINT64_MAX == thisPos) {
 		if (times > m_min_times) {
+			lexical->SetContent(content.GetContent(
+				memento.GetCursor(), content.GetCursor()));
+			parent.InsertChild(lexical, thisPos);
 			return MATCH_RESULT_SUCCESS;
 		}
 		else {
@@ -49,14 +54,17 @@ MATCH_RESULT Pattern::IsMatch(Content &content)  {
 		}
 	}
 	else {
+		lexical->SetContent(content.GetContent(
+			memento.GetCursor(), content.GetCursor()));
+		parent.InsertChild(lexical, thisPos);
 		return MATCH_RESULT_SUCCESS_JUMP;
 	}
 }
-bool Pattern::IsMatchOnce(Content &content) const {
+bool Pattern::IsMatchOnce(Content &content, Lexical &parent) const {
 	size_t count = m_children.size();
 	for (size_t index = 0; index < count; index ++) {
 		m_children[index]->SetParent(this);
-		MATCH_RESULT match = m_children[index]->IsMatch(content);
+		MATCH_RESULT match = m_children[index]->IsMatch(content, parent);
 		if (MATCH_RESULT_FAILED == match) {
 			return false;
 		}

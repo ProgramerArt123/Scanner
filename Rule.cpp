@@ -3,6 +3,7 @@
 #include "StringPattern.h"
 #include "OrPattern.h"
 #include "Config.h"
+#include "Content.h"
 #include "Rule.h"
 
 #define ESCAPE '\\'
@@ -206,7 +207,8 @@ Config &Rule::GetConfig() {
 }
 
 bool Rule::IsMatch(Content &content)const {
-	return m_pattern->IsMatch(content);
+	return m_pattern->IsMatch(content, 
+		content.GetLexicalRoot());
 }
 const std::string &Rule::GetName() {
 	return m_name;

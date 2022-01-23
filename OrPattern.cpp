@@ -7,10 +7,10 @@ OrPattern::OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO):
 }
 OrPattern::~OrPattern() {}
 	
-bool OrPattern::IsMatchOnce(Content &content)const {
+bool OrPattern::IsMatchOnce(Content &content, Lexical &parent)const {
 	for (const std::shared_ptr<Pattern> &child : m_children) {
 		child->SetParent(this);
-		if (child->IsMatch(content)) {
+		if (child->IsMatch(content, parent)) {
 			return true;
 		}
 	}

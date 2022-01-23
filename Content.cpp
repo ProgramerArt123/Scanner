@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include "Config.h"
+#include "Lexical.h"
 #include "Content.h"
 
 Content::CursorsMemento::CursorsMemento(Content &content, Pattern &pattern):
@@ -22,8 +23,12 @@ bool Content::CursorsMemento::IsMatch(bool isMatch) {
 	return m_is_match = isMatch;
 }
 
+size_t Content::CursorsMemento::GetCursor() {
+	return m_cursor;
+}
+
 Content::Content(const std::string fileName, const Config &config):
-	m_file_name(fileName), m_config(config){
+	m_file_name(fileName), m_config(config),m_lexical(new Lexical){
 }
 void Content::Load() {
 	std::ifstream file(m_file_name);
@@ -123,4 +128,12 @@ size_t Content::GetLineNO()const {
 }
 size_t Content::GetCursor() const{
 	return m_cursor;
+}
+Lexical &Content::GetLexicalRoot() {
+	return *m_lexical;
+}
+const std::string Content::GetContent(size_t from, size_t to) const {
+	const std::string content(m_content.begin() + from, 
+		m_content.begin() + to);
+	return content;
 }

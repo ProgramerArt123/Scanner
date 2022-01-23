@@ -3,14 +3,17 @@
 #include <vector>
 #include <stack>
 #include <string>
+#include <memory>
 class Config;
 class Pattern;
+class Lexical;
 class Content {
 public:
 	class CursorsMemento {
 	public:
 		explicit CursorsMemento(Content &content, Pattern &pattern);
 		~CursorsMemento();
+		size_t GetCursor();
 		bool IsMatch(bool isMatch);
 	private:
 		friend class Content;
@@ -33,7 +36,8 @@ public:
 	bool NotForward() const;
 	size_t GetLineNO()const;
 	size_t GetCursor()const;
-	
+	Lexical &GetLexicalRoot();
+	const std::string GetContent(size_t from, size_t to) const;
 private:
 	friend class CursorsMemento;
 	const Config &m_config;
@@ -44,6 +48,7 @@ private:
 	size_t m_best_match_cursor = 0;
 	size_t m_best_match_line_NO = 1;
 	const Pattern *m_best_match_pattern = NULL;
+	std::shared_ptr<Lexical> m_lexical;
 };
 
 #endif

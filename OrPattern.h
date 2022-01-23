@@ -6,7 +6,7 @@ class OrPattern : public Pattern {
 public:
 	explicit OrPattern(Rule &rule, uint64_t lineNO, uint64_t colNO);
 	virtual ~OrPattern();
-	bool IsMatchOnce(Content &content) const override;
+	bool IsMatchOnce(Content &content, Lexical &parent) const override;
 	bool Compare(const Pattern &other) const override;
 	const char *GetTypeName() const override;
 	const std::string ToString() const override;

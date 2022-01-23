@@ -7,7 +7,7 @@ StringPattern::StringPattern(Rule &rule, uint64_t lineNO, uint64_t colNO, const 
 	Pattern(rule, lineNO, colNO, PATTERN_TYPE_STRING), m_pattern(pattern) {}
 StringPattern::~StringPattern() {}
 
-bool StringPattern::IsMatchOnce(Content &content) const {
+bool StringPattern::IsMatchOnce(Content &content, Lexical &parent) const {
 	for (const char c : m_pattern) {
 		if (content.IsEnd()) {
 			return false;
