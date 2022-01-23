@@ -25,7 +25,7 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 			break;
 		}
 		if (IsShortest() && m_next && times > m_min_times) {
-			if (m_next->IsMatch(content, *lexical)) {
+			if (m_next->IsMatch(content, parent)) {
 				thisPos = parent.GetChildrenCount();
 				break;
 			}
@@ -44,9 +44,12 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 	memento.IsMatch(UINT64_MAX != thisPos || times > m_min_times);
 	if (UINT64_MAX == thisPos) {
 		if (times > m_min_times) {
-			lexical->SetContent(content.GetContent(
-				memento.GetCursor(), content.GetCursor()));
-			parent.InsertChild(lexical, thisPos);
+			if (m_rule.GetName() != "ignore" && 
+				m_rule.GetName() != "segmentation") {
+				lexical->SetContent(content.GetContent(
+					memento.GetCursor(),content.GetCursor()));
+				parent.InsertChild(lexical, thisPos);
+			}
 			return MATCH_RESULT_SUCCESS;
 		}
 		else {
@@ -54,9 +57,13 @@ MATCH_RESULT Pattern::IsMatch(Content &content, Lexical &parent) {
 		}
 	}
 	else {
-		lexical->SetContent(content.GetContent(
-			memento.GetCursor(), content.GetCursor()));
-		parent.InsertChild(lexical, thisPos);
+		if (m_rule.GetName() != "ignore" && 
+			m_rule.GetName() != "segmentation") {
+			lexical->SetContent(content.GetContent(
+				memento.GetCursor(),
+				content.GetCursor()));
+			parent.InsertChild(lexical, thisPos);
+		}
 		return MATCH_RESULT_SUCCESS_JUMP;
 	}
 }
@@ -228,7 +235,7 @@ std::ostream &operator<<(std::ostream &os, const Pattern &pattern) {
 
 void Pattern::BestMatchTracePrint() const {
 	std::cout << *this << std::endl;
-	if (m_parent) {
+	if (m_parent && !m_parent->m_is_closed_loop) {
 		m_parent->BestMatchTracePrint();
 	}
 }

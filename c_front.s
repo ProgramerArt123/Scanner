@@ -1,7 +1,7 @@
 
 annotation:"//".*$
 
-string:\"^\"*\"
+string:\"[("\"\")^\"]*\"
 
 ignore:[@annotation@\s*]
 
